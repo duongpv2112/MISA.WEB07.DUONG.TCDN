@@ -1,0 +1,91 @@
+{
+  "version": 3,
+  "targets": {
+    "net6.0": {
+      "MISA.WEB07.DUONGPV.TCDN.Common/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/MISA.WEB07.DUONGPV.TCDN.Common.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MISA.WEB07.DUONGPV.TCDN.Common.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "MISA.WEB07.DUONGPV.TCDN.Common/1.0.0": {
+      "type": "project",
+      "path": "../MISA.WEB07.DUONGPV.TCDN.Common/MISA.WEB07.DUONGPV.TCDN.Common.csproj",
+      "msbuildProject": "../MISA.WEB07.DUONGPV.TCDN.Common/MISA.WEB07.DUONGPV.TCDN.Common.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net6.0": [
+      "MISA.WEB07.DUONGPV.TCDN.Common >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\duong\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "F:\\MISA_GITHUB\\MISA.WEB07.DUONG.TCDN\\MISA.WEB07.DUONG.TCDN.BE\\MISA.WEB07.DUONGPV.TCDN\\MISA.WEB07.DUONGPV.TCDN.DL\\MISA.WEB07.DUONGPV.TCDN.DL.csproj",
+      "projectName": "MISA.WEB07.DUONGPV.TCDN.DL",
+      "projectPath": "F:\\MISA_GITHUB\\MISA.WEB07.DUONG.TCDN\\MISA.WEB07.DUONG.TCDN.BE\\MISA.WEB07.DUONGPV.TCDN\\MISA.WEB07.DUONGPV.TCDN.DL\\MISA.WEB07.DUONGPV.TCDN.DL.csproj",
+      "packagesPath": "C:\\Users\\duong\\.nuget\\packages\\",
+      "outputPath": "F:\\MISA_GITHUB\\MISA.WEB07.DUONG.TCDN\\MISA.WEB07.DUONG.TCDN.BE\\MISA.WEB07.DUONGPV.TCDN\\MISA.WEB07.DUONGPV.TCDN.DL\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\duong\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net6.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "projectReferences": {
+            "F:\\MISA_GITHUB\\MISA.WEB07.DUONG.TCDN\\MISA.WEB07.DUONG.TCDN.BE\\MISA.WEB07.DUONGPV.TCDN\\MISA.WEB07.DUONGPV.TCDN.Common\\MISA.WEB07.DUONGPV.TCDN.Common.csproj": {
+              "projectPath": "F:\\MISA_GITHUB\\MISA.WEB07.DUONG.TCDN\\MISA.WEB07.DUONG.TCDN.BE\\MISA.WEB07.DUONGPV.TCDN\\MISA.WEB07.DUONGPV.TCDN.Common\\MISA.WEB07.DUONGPV.TCDN.Common.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net6.0": {
+        "targetAlias": "net6.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
