@@ -10,4 +10,13 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MISA.WEB07.DUONGPV.TCDN.BL\MISA.WEB07.DUONGPV.TCDN.BL.csproj" />
+    <ProjectReference Include="..\MISA.WEB07.DUONGPV.TCDN.Common\MISA.WEB07.DUONGPV.TCDN.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>

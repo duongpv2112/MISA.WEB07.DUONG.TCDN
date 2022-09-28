@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MISA.WEB07.DUONGPV.TCDN.Common\MISA.WEB07.DUONGPV.TCDN.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="BaseDL\" />
+  </ItemGroup>
+
 </Project>
