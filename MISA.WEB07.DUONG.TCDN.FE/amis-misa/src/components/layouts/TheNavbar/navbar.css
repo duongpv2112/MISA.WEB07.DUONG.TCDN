@@ -1,0 +1,73 @@
+/* 
+ * CSS Navbar page
+ * Author: DUONGPV (29/07/2022)
+ */
+
+.navbar-page {
+    background-color: #38393d;
+    padding-top: 14px;
+    height: calc(100vh - var(--height-row-grid));
+    overflow-y: auto;
+}
+
+.navbar-page .navbar-list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.navbar-page .navbar-list .navbar-item {
+    list-style: none;
+    width: 100%;
+}
+
+.navbar-page .navbar-list .navbar-item a {
+    text-decoration: none;
+    width: 100%;
+    height: 42px;
+    color: #fff;
+    background-color: inherit;
+    padding: 0 0 0 12px;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color ease-in-out 0.2s;
+}
+
+.navbar-page .navbar-list .navbar-item:hover {
+    background-color: rgba(212, 215, 220, 0.2);
+}
+
+.navbar-page .navbar-list .navbar-item__name {
+    padding-left: 6px;
+}
+
+.navbar-page .navbar-item__icon {
+    height: 24px;
+    width: 24px;
+}
+
+.navbar-page .navbar-list a.router-link-active {
+    font-weight: 600;
+    background-color: rgba(212, 215, 220, 0.2) !important;
+    color: #fff !important;
+    position: relative;
+}
+
+.navbar-page .navbar-list a.router-link-active::after {
+    content: "";
+    width: 6px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    background-color: #2ca01c;
+    transition: all ease-in-out 0.2s;
+}
+
+.navbar-page .navbar-list .navbar-item--active:hover {
+    background-color: rgba(212, 215, 220, 0.2);
+    color: #fff;
+}

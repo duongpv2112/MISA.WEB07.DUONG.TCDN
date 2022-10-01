@@ -1,0 +1,227 @@
+/* 
+ * CSS Icon
+ * Author: DUONGPV (29/07/2022)
+ */
+
+.icon {
+    background-image: url("../assets/img/Sprites.64af8f61.svg");
+}
+
+/* ICON HEADER */
+.icon-square-menu {
+    background-position: -424px -86px;
+}
+
+.icon-logo {
+    background-position: -330px -3487px;
+}
+
+.icon-bars {
+    background-position: -843px -30px;
+}
+
+.icon-bars-responsive {
+    background-position: -312px -32px;
+}
+
+.icon-notice {
+    background-position: -788px -30px;
+}
+
+.icon-notice:hover {
+    background-position: -256px -88px;
+}
+
+.icon-down {
+    background-position: -1076px -32px;
+}
+
+/* ICON NAVBAR */
+.icon-dashboard {
+    background-position: -30px -1628px;
+}
+
+.navbar-list .router-link-active .icon-dashboard {
+    background-position: -30px -1585px;
+}
+
+.icon-cash {
+    background-position: -73px -1628px;
+}
+
+.navbar-list .router-link-active .icon-cash {
+    background-position: -73px -1585px;
+}
+
+.icon-deposits {
+    background-position: -117px -1628px;
+}
+
+.navbar-list .router-link-active .icon-deposits {
+    background-position: -117px -1585px;
+}
+
+.icon-buy {
+    background-position: -161px -1628px;
+}
+
+.navbar-list .router-link-active .icon-buy {
+    background-position: -161px -1585px;
+}
+
+.icon-sell {
+    background-position: -204px -1628px;
+}
+
+.navbar-list .router-link-active .icon-sell {
+    background-position: -204px -1585px;
+}
+
+.icon-invoice {
+    background-position: -249px -1628px;
+}
+
+.navbar-list .router-link-active .icon-invoice {
+    background-position: -249px -1585px;
+}
+
+.icon-warehouse {
+    background-position: -291px -1628px;
+}
+
+.navbar-list .router-link-active .icon-warehouse {
+    background-position: -291px -1585px;
+}
+
+.icon-tool {
+    background-position: -336px -1628px;
+}
+
+.navbar-list .router-link-active .icon-tool {
+    background-position: -336px -1585px;
+}
+
+.icon-fixed-assets {
+    background-position: -378px -1630px;
+}
+
+.navbar-list .router-link-active .icon-fixed-assets {
+    background-position: -378px -1587px;
+}
+
+.icon-tax {
+    background-position: -423px -1630px;
+}
+
+.navbar-list .router-link-active .icon-tax {
+    background-position: -423px -1587px;
+}
+
+.icon-price {
+    background-position: -467px -1628px;
+}
+
+.navbar-list .router-link-active .icon-price {
+    background-position: -467px -1585px;
+}
+
+.icon-synthesize {
+    background-position: -510px -1628px;
+}
+
+.navbar-list .router-link-active .icon-synthesize {
+    background-position: -510px -1585px;
+}
+
+.icon-budget {
+    background-position: -378px -1659px;
+}
+
+.navbar-list .router-link-active .icon-budget {
+    background-position: -422px -1659px;
+}
+
+.icon-report {
+    background-position: -547px -1628px;
+}
+
+.navbar-list .router-link-active .icon-report {
+    background-position: -547px -1585px;
+}
+
+.icon-financial-analysis {
+    background-position: -204px -1664px;
+}
+
+.navbar-list .router-link-active .icon-financial-analysis {
+    background-position: -204px -1664px;
+}
+
+/* ICON CONTAINER */
+.icon-refresh {
+    background-position: -423px -201px;
+}
+
+.icon-refresh:hover {
+    background-position: -1097px -88px;
+}
+
+.icon-search {
+    background-position: -992px -360px;
+}
+
+.icon-downcaret-down {
+    background-position: -896px -359px;
+}
+
+.icon-times {
+    background-position: -144px -144px;
+}
+
+.icon-support {
+    background-position: -89px -144px;
+}
+
+.icon-question {
+    background-position: -826px -456px;
+}
+
+.icon-arrow-down {
+    background-position: -1752px -310px;
+}
+
+.icon-calendar {
+    background-position: -120px -304px;
+}
+
+.icon-exclamation-error {
+    background-position: -24px -954px;
+}
+
+.icon-exclamation-warning {
+    background-position: -592px -456px;
+}
+
+.icon-dropdown {
+    background-position: -560px -359px;
+}
+
+.icon-checkbox {
+    background-position: -1224px -360px;
+}
+
+.icon-excel {
+    background-position: -704px -200px;
+}
+
+.icon-excel:hover {
+    background-position: -704px -256px;
+}
+
+.icon-toast-success {
+    background-position: -1600px -256px;
+}
+
+.icon-dropdown-grey-triangle {
+    background-position: -1752px -312px;
+}

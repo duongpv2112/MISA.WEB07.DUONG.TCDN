@@ -1,0 +1,55 @@
+/* CSS Font */
+@font-face {
+    font-family: MISA_AMIS_REGULAR;
+    src: url("../assets/fonts/notosans-regular.2cb88a13.woff2");
+}
+
+@font-face {
+    font-family: MISA_AMIS_BOLD;
+    src: url("../assets/fonts/notosans-bold.3ede5aff.woff2");
+}
+
+@font-face {
+    font-family: MISA_AMIS_ITALIC;
+    src: url("../assets/fonts/notosans-italic.1c1aaac9.woff2");
+}
+
+@font-face {
+    font-family: MISA_AMIS_SEMIBOLD;
+    src: url("../assets/fonts/notosans-semibold.df3e6dc4.woff2");
+}
+
+:root {
+    --height-row-grid: 48px;
+    --width-column-grid: 180px;
+    --width-column-grid-responsive: 48px;
+    --height-select-box-selected: 32px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-size: 13px;
+    font-family: MISA_AMIS_REGULAR;
+}
+
+.main {
+    display: grid;
+    grid-template-columns: var(--width-column-grid) calc(
+            100% - var(--width-column-grid)
+        );
+    grid-template-rows: var(--height-row-grid) calc(
+            100vh - var(--height-row-grid)
+        );
+}
+
+.main__responsive {
+    grid-template-columns: var(--width-column-grid-responsive) calc(
+            100% - var(--width-column-grid-responsive)
+        );
+    transition: all linear 0.2s;
+}
