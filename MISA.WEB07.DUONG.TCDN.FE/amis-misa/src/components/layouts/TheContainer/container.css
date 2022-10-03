@@ -11,15 +11,13 @@
 }
 .container-page {
     background-color: #eceef1;
-    padding: 20px 20px 12px;
+    padding: 20px 40px 12px 20px;
     display: flex;
     flex-direction: column;
     height: calc(100vh - var(--height-row-grid));
 }
 
 .container-page .container-page__top {
-    display: flex;
-    justify-content: space-between;
     padding-bottom: 20px;
     margin-bottom: 10px;
 }

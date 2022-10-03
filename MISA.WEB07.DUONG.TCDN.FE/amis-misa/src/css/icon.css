@@ -9,7 +9,7 @@
 
 /* ICON HEADER */
 .icon-square-menu {
-    background-position: -424px -86px;
+    background-position: -425px -87px;
 }
 
 .icon-logo {
@@ -224,4 +224,64 @@
 
 .icon-dropdown-grey-triangle {
     background-position: -1752px -312px;
+}
+
+.icon-process-cash {
+    background-image: url("../assets/img/qt_TienMat.1f64b87b.svg");
+}
+
+.icon-process-customer {
+    background-position: -872px -200px;
+}
+
+.icon-process-provider {
+    background-position: -928px -200px;
+}
+
+.icon-process-employee {
+    background-position: -984px -200px;
+}
+
+.icon-calculate {
+    background-position: -1376px -256px;
+}
+
+.icon-setting {
+    background-position: -648px -200px;
+}
+
+.icon-help-header {
+    background-position: -731px -30px;
+}
+
+.icon-help-header:hover {
+    background-position: -200px -88px;
+}
+
+.icon-chat-header {
+    background-position: -899px -30px;
+}
+
+.icon-chat-header:hover {
+    background-position: -368px -88px;
+}
+
+.icon-setting-header {
+    background-position: -675px -30px;
+}
+
+.icon-setting-header:hover {
+    background-position: -144px -88px;
+}
+
+.icon-category-header {
+    background-position: -568px -30px;
+}
+
+.icon-category-header:hover {
+    background-position: -568px -76px;
+}
+
+.icon-chevron-left-primary {
+    background-position: -224px -360px;
 }

@@ -1,0 +1,348 @@
+/* 
+ * CSS Component Table
+ * Author: DUONGPV (29/07/2022)
+ */
+
+.table-container {
+    position: relative;
+    flex: 1;
+    overflow: auto;
+}
+
+.table {
+    width: 100%;
+    border-spacing: 0;
+}
+
+.table .table-head tr {
+    position: sticky;
+    top: 0;
+    z-index: 9;
+}
+
+.table th,
+.table td {
+    border-bottom: 1px solid #c7c7c7 !important;
+    border-right: 1px dotted #c7c7c7 !important;
+}
+
+.table .table-head th {
+    font-size: 12px;
+    height: 35px !important;
+    text-align: left !important;
+    background-color: #e5e8ec;
+    border-top: none;
+    text-transform: uppercase;
+    padding: 0 10px;
+    border-right: 1px solid #c7c7c7 !important;
+    border-bottom: 1px solid #c7c7c7 !important;
+    cursor: pointer;
+}
+
+.table .table-head th:nth-child(2) {
+    min-width: 140px;
+}
+
+.table .table-head th:nth-child(3) {
+    min-width: 164px;
+}
+
+.table .table-head th:nth-child(4) {
+    min-width: 100px;
+}
+
+.table .table-head th:nth-child(5) {
+    min-width: 140px;
+}
+
+.table .table-head th:nth-child(6) {
+    min-width: 180px;
+}
+
+.table .table-head th:nth-child(7) {
+    min-width: 180px;
+}
+
+.table .table-head th:nth-child(8) {
+    min-width: 220px;
+}
+
+.table .table-head th:nth-child(9) {
+    min-width: 154px;
+}
+
+.table .table-head th:nth-child(10) {
+    min-width: 250px;
+}
+
+.table .table-head th:nth-child(11) {
+    min-width: 150px;
+}
+
+.table .table-head th:nth-child(12) {
+    min-width: 120px;
+    text-align: center !important;
+}
+
+.table .table-head th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 8;
+    border-left: none !important;
+    background-color: #e5e8ec;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.table .table-head th:last-child {
+    position: sticky;
+    right: 0;
+    border-left: 1px solid #c7c7c7;
+    border-right: none !important;
+    z-index: 8;
+}
+
+.table .table-body td {
+    height: 44px;
+    max-height: 44px;
+    text-align: left !important;
+    padding: 0 10px;
+}
+
+.table .table-body td[property-name="dateOfBirth"],
+.table .table-body td[property-name="action"] {
+    text-align: center !important;
+}
+
+.table .table-body td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border-right: 1px dotted #c7c7c7;
+}
+
+.table .table-body td:last-child {
+    position: sticky;
+    right: 0;
+    border-left: 1px dotted #c7c7c7;
+    border-right: none !important;
+    background-color: #fff;
+}
+
+.table .table-body tr:hover,
+.table .table-body tr:hover td:first-child,
+.table .table-body tr:hover td:last-child {
+    background-color: #f2f9ff;
+}
+
+.table .table__row--checked,
+.table .table__row--checked td:first-child,
+.table .table__row--checked td:last-child {
+    background-color: #e5f3ff !important;
+}
+
+.table .table-checkbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.table input[type="checkbox"] {
+    display: none;
+}
+
+.table input[type="checkbox"]:checked ~ .table-checkbox .table-checkbox__icon {
+    border: 1px solid #2ca01c;
+    background-image: url("../assets/img/Sprites.64af8f61.svg");
+    background-position: -1224px -360px;
+    transform: rotate(0deg);
+}
+
+.table .table-checkbox__icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 2px;
+    transform: rotate(-90deg);
+    transition: transform 0.1s linear;
+    color: #fff;
+}
+
+.table .table-content__menu {
+    cursor: pointer;
+}
+
+.table .table-content__menu--action {
+    padding: 6px 1px 6px 16px !important;
+    border: transparent;
+    background-color: inherit;
+    border-radius: 3px 0 0 3px;
+    height: 36px;
+    color: #0075c0;
+    cursor: pointer;
+}
+
+.table .table-content__menu--action span {
+    padding: 2px 6px;
+}
+
+.table .table-content__menu--choose {
+    width: 46px;
+    color: #0075c0;
+    border-radius: 0 3px 3px 0;
+    height: 36px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    border: transparent;
+    background-color: inherit;
+    cursor: pointer;
+}
+
+.table .table-content__menu--action:focus span,
+.table .table-content__menu--choose:focus span {
+    outline: 1px solid #0075c0;
+}
+
+.table .table-content__sub-menu {
+    position: absolute;
+    top: auto;
+    bottom: auto;
+    left: -20%;
+    right: 10%;
+    background-color: #fff;
+    border: 1px solid #c7c7c7;
+    text-align: left;
+    cursor: pointer;
+    animation: growUp ease-in 0.15s;
+}
+
+.table .table-content__sub-menu .sub-menu__list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.table .table-content__sub-menu .sub-menu__item {
+    padding: 8px 12px;
+}
+
+.table .table-content__sub-menu .sub-menu__item:hover {
+    background-color: #eee;
+    color: #019160;
+}
+
+/* CSS Navigation Table */
+.table-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    height: 30px;
+    position: relative;
+}
+
+.table-navigation .navigation-action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.table-navigation .navigation-action__combobox {
+    height: 100%;
+    padding: 0 24px 0 12px;
+    border-radius: 4px;
+    border: 1px solid #bbb;
+}
+
+.table-navigation .navigation-action__list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin-left: 12px;
+}
+
+.table-navigation .navigation-action__list a {
+    padding: 3px 8px;
+    cursor: pointer;
+}
+
+.navigation-action__list .first-page,
+.navigation-action__list .last-page {
+    color: #9e9e9e;
+    cursor: default !important;
+    pointer-events: none;
+}
+
+.navigation-action__list a:hover {
+    color: inherit;
+    font-weight: 700;
+}
+
+.table-navigation .navigation-action__number .active {
+    border: 1px solid #e0e0e0;
+    color: inherit;
+    font-weight: 700;
+}
+
+.table-navigation .navigation-action__number a:hover {
+    color: #000;
+    font-weight: 700;
+}
+
+/* Table loading */
+.table-cell-loader .loading-animation {
+    margin: 10px;
+    padding: 10px;
+}
+
+.table-cell-loader:first-child .loading-animation {
+    margin: 0;
+    padding: 0;
+    height: 20px;
+    width: 20px;
+}
+
+.loading-animation {
+    background: linear-gradient(to right, #eee, #fff, #ddd, #eee);
+    background-size: 500px 100px;
+    animation: gradient 1s linear infinite forwards;
+}
+
+.table-nodata {
+    position: sticky;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 35px;
+}
+
+.table-nodata .table-nodata__content {
+    flex-direction: column;
+    margin: 50px 50px 30px;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: -250px 0;
+    }
+    100% {
+        background-position: 250px 0;
+    }
+}

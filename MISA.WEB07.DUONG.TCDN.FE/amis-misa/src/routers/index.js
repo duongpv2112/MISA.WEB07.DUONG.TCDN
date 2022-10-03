@@ -5,6 +5,7 @@ import DashBoard from "../views/Dashboard/DashBoard.vue";
 import CashPage from "../views/CashPage/CashPage.vue";
 import ProcessPage from "../views/CashPage/Process/Process.vue";
 import ReceiptPayment from "../views/CashPage/ReceiptPayment/ReceiptPayment.vue";
+import SupplierPage from "../views/Supplier/SupplierContainer.vue";
 
 /* Khai báo các router */
 const routes = [
@@ -17,6 +18,9 @@ const routes = [
     {
         path: "/app",
         name: "app",
+        redirect: {
+            name: "CAProcess",
+        },
         component: TheContainer,
         children: [
             { path: "dashboard", name: "dashboard", component: DashBoard },
@@ -41,9 +45,9 @@ const routes = [
                 ],
             },
             {
-                path: "receiptpayment",
-                name: "receiptpayment",
-                component: ReceiptPayment,
+                path: "supplier",
+                name: "supplier",
+                component: SupplierPage,
             },
         ],
     },

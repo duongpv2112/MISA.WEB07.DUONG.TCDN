@@ -3,7 +3,7 @@
  -- Author: DUONGPV (05/08/2022)
 -->
 <template>
-    <div >
+    <div style="background-color: #eceef1">
         <router-view></router-view>
     </div>
 </template>
@@ -15,4 +15,5 @@ export default {
 </script>
 
 <style>
-@import url("./
+@import url("./container.css");
+</style>

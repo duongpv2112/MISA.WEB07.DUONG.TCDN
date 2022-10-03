@@ -49,6 +49,38 @@ export default {
                     EmployeeID: "NV-0006",
                     EmployeeName: "Phạm Việt Dương 5",
                 },
+                {
+                    EmployeeID: "NV-0006",
+                    EmployeeName: "Phạm Việt Dương 5",
+                },
+                {
+                    EmployeeID: "NV-0006",
+                    EmployeeName: "Phạm Việt Dương 5",
+                },
+                {
+                    EmployeeID: "NV-0006",
+                    EmployeeName: "Phạm Việt Dương 5",
+                },
+                {
+                    EmployeeID: "NV-0006",
+                    EmployeeName: "Phạm Việt Dương 5",
+                },
+                {
+                    EmployeeID: "NV-0006",
+                    EmployeeName: "Phạm Việt Dương 5",
+                },
+                {
+                    EmployeeID: "NV-0006",
+                    EmployeeName: "Phạm Việt Dương 5",
+                },
+                {
+                    EmployeeID: "NV-0006",
+                    EmployeeName: "Phạm Việt Dương 5",
+                },
+                {
+                    EmployeeID: "NV-0006",
+                    EmployeeName: "Phạm Việt Dương 5",
+                },
             ],
             dataReady: true,
         };
@@ -67,4 +99,6 @@ export default {
     },
 };
 </script>
-<style scoped></style>
+<style scoped>
+@import url("../../../css/table.css");
+</style>

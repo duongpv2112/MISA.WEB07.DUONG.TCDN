@@ -40,6 +40,11 @@
     padding-bottom: 20px !important;
 }
 
+/* Height CSS */
+.h-340 {
+    height: 340px !important;
+}
+
 /* Display CSS */
 .d-none {
     display: none !important;
@@ -59,12 +64,29 @@
     align-items: center !important;
 }
 
+.flex-column {
+    flex-direction: column !important;
+}
+
 .justify-space-between {
     justify-content: space-between !important;
 }
 
 .justify-center {
     justify-content: center !important;
+}
+
+.flex-grow {
+    flex-grow: 1 !important;
+}
+
+.w-100 {
+    width: 100% !important;
+}
+
+/* Tag a CSS */
+.text-decoration-none {
+    text-decoration: none;
 }
 
 /* Margin CSS */
@@ -108,6 +130,10 @@
 
 .pr-26 {
     padding-right: 26px !important;
+}
+
+.pr-20 {
+    padding-right: 20px !important;
 }
 
 /* CSS Square Block */

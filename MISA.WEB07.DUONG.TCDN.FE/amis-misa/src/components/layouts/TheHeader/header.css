@@ -85,7 +85,7 @@
     height: 100%;
 }
 
-.header-right .account-info .account-info__notice {
+.header-right .account-info .account-button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -93,9 +93,10 @@
     padding: 10px;
     height: 100%;
     position: relative;
+    cursor: pointer;
 }
 
-.header-right .account-info .account-info__notice::after {
+.header-right .account-info .account-button::after {
     content: "";
     display: none;
     border-width: 8px 22px;
@@ -105,26 +106,69 @@
     top: 100%;
 }
 
-.header-right .account-info .account-info__notice:hover {
+.header-right .account-info .account-button.bg-succes::after {
+    content: "";
+    display: none;
+    border-width: 8px 22px;
+    border-style: solid;
+    border-color: #2ca01c transparent transparent transparent;
+    position: absolute;
+    top: 100%;
+}
+
+.header-right .account-info .account-button:hover {
     background-color: #000;
 }
 
-.header-right .account-info__notice:hover::after {
+.header-right .account-button:hover::after {
     display: block;
 }
 
-.header-right .account-info .account-info__notice:hover .icon-notice {
+.header-right .account-button.bg-succes:hover::after {
+    display: block;
+}
+
+.header-right .account-info .account-button__notice:hover .icon-notice {
     background-position: -256px -88px;
     animation: ring ease-in-out 0.3s;
 }
 
+.header-right .account-info .account-button.bg-succes:hover {
+    background-color: #2ca01c !important;
+}
+
+.header-right
+    .account-info
+    .account-button__category:hover
+    .icon-category-header {
+    background-position: -568px -76px;
+}
+
+.header-right
+    .account-info
+    .account-button__setting:hover
+    .icon-setting-header {
+    background-position: -144px -88px;
+}
+
+.header-right .account-info .account-button__chat:hover .icon-chat-header {
+    background-position: -368px -88px;
+}
+
+.header-right .account-info .account-button__help:hover .icon-help-header {
+    background-position: -200px -88px;
+}
+
 .header-right .account-info .account-info__avatar {
-    height: 30px;
+    height: 34px;
+    width: 34px;
     border: 1px solid #eee;
     border-radius: 50%;
     background-color: #eee;
     overflow: hidden;
     margin-left: 10px;
+    cursor: pointer;
+    margin-left: 16px;
 }
 
 .header-right .account-info .account-info__avatar img {
@@ -156,6 +200,9 @@
 
 .drop-down .drop-down__content--show > span {
     margin-right: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
 }
 
 .drop-down .drop-down__content--show .icon-down {
