@@ -11,8 +11,4 @@
     <ProjectReference Include="..\MISA.WEB07.DUONGPV.TCDN.DL\MISA.WEB07.DUONGPV.TCDN.DL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="BaseBL\" />
-  </ItemGroup>
-
 </Project>

@@ -11,6 +11,7 @@
                 scope="col"
                 v-for="column in columns"
                 :key="column.fieldName"
+                :style="column.styleObject"
                 @click="sortField(column.dataField)"
             >
                 <div class="d-flex">

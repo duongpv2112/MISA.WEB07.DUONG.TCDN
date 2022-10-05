@@ -1,5 +1,12 @@
 <template>
-    <BaseGrid :columns="columns" :data="data" :dataReady="dataReady" />
+    <BaseGrid
+        :columns="columns"
+        :data="data"
+        :dataReady="dataReady"
+        :total="totalCount"
+        :currentPage="currentPage"
+        :pageSize="currentRecord"
+    />
 </template>
 <script>
 import BaseGrid from "@/components/bases/BaseGrid/BaseGrid.vue";
@@ -7,95 +14,74 @@ import BaseGrid from "@/components/bases/BaseGrid/BaseGrid.vue";
 export default {
     name: "SupplierGrid",
     components: { BaseGrid },
+    props: {
+        dataReady: Boolean,
+        data: Array,
+        totalCount: Number,
+        currentPage: Number,
+        currentRecord: Number,
+    },
     data() {
         return {
             columns: [
                 {
-                    fieldName: "Mã nhân viên",
-                    dataField: "EmployeeID",
-                    isHidden: true,
+                    fieldName: "Mã nhà cung cấp",
+                    dataField: "account_object_code",
+                    styleObject: {
+                        "min-width": "237px !important",
+                    },
+                    isHidden: false,
                 },
                 {
-                    fieldName: "Tên nhân viên",
-                    dataField: "EmployeeName",
+                    fieldName: "Tên nhà cung cấp",
+                    dataField: "account_object_name",
+                    styleObject: {
+                        "min-width": "237px !important",
+                    },
+                    isHidden: false,
                 },
                 {
                     fieldName: "Địa chỉ",
-                    dataField: "Address",
+                    dataField: "address",
+                    styleObject: {
+                        "min-width": "237px !important",
+                    },
+                    isHidden: false,
+                },
+                {
+                    fieldName: "Mã số thuế",
+                    dataField: "tax_code",
+                    styleObject: {
+                        "min-width": "237px !important",
+                    },
+                    isHidden: false,
+                },
+                {
+                    fieldName: "Điện thoại",
+                    dataField: "phone_number",
+                    styleObject: {
+                        "min-width": "140px !important",
+                    },
+                    isHidden: false,
+                },
+                {
+                    fieldName: "Website",
+                    dataField: "website",
+                    styleObject: {
+                        "min-width": "120px !important",
+                    },
+                    isHidden: false,
+                },
+                {
+                    fieldName: "Số CMND",
+                    dataField: "identity_number",
+                    styleObject: {
+                        "min-width": "100px !important",
+                    },
+                    isHidden: false,
                 },
             ],
-            data: [
-                {
-                    EmployeeID: "NV-0001",
-                    EmployeeName: "Phạm Việt Dương",
-                },
-                {
-                    EmployeeID: "NV-0002",
-                    EmployeeName: "Phạm Việt Dương 1",
-                },
-                {
-                    EmployeeID: "NV-0003",
-                    EmployeeName: "Phạm Việt Dương 2",
-                },
-                {
-                    EmployeeID: "NV-0004",
-                    EmployeeName: "Phạm Việt Dương 3",
-                },
-                {
-                    EmployeeID: "NV-0005",
-                    EmployeeName: "Phạm Việt Dương 4",
-                },
-                {
-                    EmployeeID: "NV-0006",
-                    EmployeeName: "Phạm Việt Dương 5",
-                },
-                {
-                    EmployeeID: "NV-0006",
-                    EmployeeName: "Phạm Việt Dương 5",
-                },
-                {
-                    EmployeeID: "NV-0006",
-                    EmployeeName: "Phạm Việt Dương 5",
-                },
-                {
-                    EmployeeID: "NV-0006",
-                    EmployeeName: "Phạm Việt Dương 5",
-                },
-                {
-                    EmployeeID: "NV-0006",
-                    EmployeeName: "Phạm Việt Dương 5",
-                },
-                {
-                    EmployeeID: "NV-0006",
-                    EmployeeName: "Phạm Việt Dương 5",
-                },
-                {
-                    EmployeeID: "NV-0006",
-                    EmployeeName: "Phạm Việt Dương 5",
-                },
-                {
-                    EmployeeID: "NV-0006",
-                    EmployeeName: "Phạm Việt Dương 5",
-                },
-                {
-                    EmployeeID: "NV-0006",
-                    EmployeeName: "Phạm Việt Dương 5",
-                },
-            ],
-            dataReady: true,
         };
-    },
-    methods: {
-        setDataReady() {
-            try {
-                this.dataReady = false;
-            } catch (error) {
-                console.log(error);
-            }
-        },
-    },
-    created() {
-        this.setDataReady();
     },
 };
 </script>

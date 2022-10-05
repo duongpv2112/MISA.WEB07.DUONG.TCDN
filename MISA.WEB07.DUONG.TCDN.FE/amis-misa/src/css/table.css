@@ -39,7 +39,7 @@
     cursor: pointer;
 }
 
-.table .table-head th:nth-child(2) {
+/* .table .table-head th:nth-child(2) {
     min-width: 140px;
 }
 
@@ -82,7 +82,7 @@
 .table .table-head th:nth-child(12) {
     min-width: 120px;
     text-align: center !important;
-}
+} */
 
 .table .table-head th:first-child {
     position: sticky;

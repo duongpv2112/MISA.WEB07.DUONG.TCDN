@@ -1,3 +1,4 @@
+using MISA.WEB07.DUONGPV.TCDN.BL;
 using MISA.WEB07.DUONGPV.TCDN.DL;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,10 @@ builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped(typeof(IBaseBL<>), typeof(BaseBL<>));
+builder.Services.AddScoped(typeof(IBaseDL<>), typeof(BaseDL<>));
+builder.Services.AddScoped<IAccountObjectBL, AccountObjectBL>();
+builder.Services.AddScoped<IAccountObjectDL, AccountObjectDL>();
 
 builder.Services.AddCors(options =>
 {

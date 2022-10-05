@@ -57,18 +57,74 @@
                 </div>
             </div>
             <div class="container-page__table">
-                <SupplierGrid />
+                <SupplierGrid
+                    :key="keyGrid"
+                    :dataReady="dataReady"
+                    :data="data"
+                    :totalCount="totalCount"
+                    :currentPage="currentPage"
+                    :currentRecord="currentRecord"
+                />
             </div>
         </div>
     </main>
-    <SupplierForm />
+    <SupplierForm v-if="false" />
 </template>
 <script>
 import SupplierGrid from "./components/SupplierGrid.vue";
 import SupplierForm from "./components/SupplierForm.vue";
+import { API } from "./constants/api";
+import api from "@/services/api";
 export default {
     name: "SupplierContainer",
     components: { SupplierGrid, SupplierForm },
+    data() {
+        return {
+            dataReady: Boolean,
+            totalCount: Number,
+            totalPage: Number,
+            currentPage: Number,
+            currentRecord: Number,
+            keyWord: String,
+            data: [],
+            keyGrid: 0,
+        };
+    },
+    methods: {
+        async getSuppliers(pageSize, pageNumber, keyword, orderBy) {
+            try {
+                let urlFilter = `${API.PAGING_DATA_SUPPLIER}?pageSize=${pageSize}&pageNumber=${pageNumber}`;
+                if (keyword) {
+                    urlFilter += `&keyword=${keyword}`;
+                }
+                if (orderBy) {
+                    urlFilter += `&orderBy=${orderBy}`;
+                }
+                await api
+                    .get(urlFilter)
+                    .then((data) => {
+                        this.data = data.data;
+                        this.totalCount = data.totalCount;
+                        this.currentPage = data.currentPage;
+                        this.totalPage = data.totalPage;
+                        this.keyWord = data.keyWord;
+                        this.keyGrid += 1;
+                    })
+                    .finally(() => {
+                        this.dataReady = false;
+                    });
+            } catch (error) {
+                console.log(error);
+            }
+        },
+    },
+    created() {
+        this.dataReady = true;
+        this.totalCount = 0;
+        this.currentRecord = 20;
+        this.currentPage = 1;
+        this.getSuppliers(this.currentRecord, this.currentPage);
+    },
 };
 </script>
 <style scoped>

@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "sc837KyiNdTtMaXXejX2He9ycq0D1ecP2PBjNgLMDwj28pUE83hFYj2iDVJzaRD5Wz3mLCCGaC6nchXXYWrP6w==",
+  "dgSpecHash": "PErOyQ4H14gAICPbzXC64hqnwH7b3Vn+tHW0I2IIUCPEHFUgisu8qZE7HK7f0tuCPWuPEJ297auXRJqXatOEnw==",
   "success": true,
   "projectFilePath": "F:\\MISA_GITHUB\\MISA.WEB07.DUONG.TCDN\\MISA.WEB07.DUONG.TCDN.BE\\MISA.WEB07.DUONGPV.TCDN\\MISA.WEB07.DUONGPV.TCDN.DL\\MISA.WEB07.DUONGPV.TCDN.DL.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\duong\\.nuget\\packages\\dapper\\2.0.123\\dapper.2.0.123.nupkg.sha512",
+    "C:\\Users\\duong\\.nuget\\packages\\npgsql\\6.0.7\\npgsql.6.0.7.nupkg.sha512",
+    "C:\\Users\\duong\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
+  ],
   "logs": []
 }
