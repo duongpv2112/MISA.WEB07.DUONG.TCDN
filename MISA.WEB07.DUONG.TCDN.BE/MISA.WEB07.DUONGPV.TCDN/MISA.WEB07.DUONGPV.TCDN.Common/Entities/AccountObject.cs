@@ -14,7 +14,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
     /// Đối tượng
     /// </summary>
     [Table("AccountObject")]
-    public class T
+    public class AccountObject
     {
         #region Property
         /// <summary>
@@ -30,7 +30,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         public string account_object_code { get; set; }
 
         /// <summary>
-        /// Mã đối tượng
+        /// Tên đối tượng
         /// </summary>
         [Required]
         public string account_object_name { get; set; }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WEB07.DUONGPV.TCDN.BL
 {
-    public class AccountObjectBL : BaseBL<T>, IAccountObjectBL
+    public class AccountObjectBL : BaseBL<AccountObject>, IAccountObjectBL
     {
         #region Field
 

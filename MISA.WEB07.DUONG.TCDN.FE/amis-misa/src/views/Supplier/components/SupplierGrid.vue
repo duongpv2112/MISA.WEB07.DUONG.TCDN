@@ -6,6 +6,8 @@
         :total="totalCount"
         :currentPage="currentPage"
         :pageSize="currentRecord"
+        :onHandlePageChange="onHandlePageChange"
+        :onHandlePageSizeChange="onHandlePageSizeChange"
     />
 </template>
 <script>
@@ -20,6 +22,8 @@ export default {
         totalCount: Number,
         currentPage: Number,
         currentRecord: Number,
+        onHandlePageChange: Function,
+        onHandlePageSizeChange: Function,
     },
     data() {
         return {

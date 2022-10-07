@@ -11,7 +11,7 @@ using System.Data;
 
 namespace MISA.WEB07.DUONGPV.TCDN.API.Controllers
 {
-    public class AccountObjectsController : BasesController<T>
+    public class AccountObjectsController : BasesController<AccountObject>
     {
         #region Field
 

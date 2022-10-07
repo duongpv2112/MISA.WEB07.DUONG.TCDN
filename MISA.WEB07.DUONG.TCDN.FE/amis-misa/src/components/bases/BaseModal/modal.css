@@ -1,0 +1,244 @@
+/* 
+ * CSS Component Modal
+ * Author: DUONGPV (29/07/2022)
+ */
+
+.modal {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 98;
+}
+
+/* Modal Dialog */
+.modal .modal__dialog {
+    margin: 100px 0;
+    background-color: #fff;
+    border: 1px solid #bbb;
+    box-sizing: border-box;
+    width: 900px;
+    max-width: calc(100% - 32px);
+    min-height: 200px;
+    position: relative;
+    border-radius: 4px;
+}
+
+/* Modal Header */
+.modal .modal__header {
+    display: flex;
+    align-items: center;
+    padding: 24px 30px 0 30px;
+}
+
+.modal .modal__tittle {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.modal .modal__option {
+    display: flex;
+    align-items: center;
+}
+
+.modal .option-item {
+    display: flex;
+    align-items: center;
+}
+
+.modal .option-item input[type="checkbox"] {
+    display: none;
+}
+
+.modal .option-item input[type="radio"] {
+    display: none;
+}
+
+.modal .modal__radio {
+    margin: 0 10px 0 0;
+    height: 18px;
+    width: 18px;
+    border: 1px solid #afafaf;
+    border-radius: 50%;
+}
+
+.modal .modal__checkbox {
+    margin: 0 10px 0 0;
+    height: 18px;
+    width: 18px;
+    border: 1px solid #afafaf;
+    background-image: url("../../../assets/img/Sprites.64af8f61.svg");
+    border-radius: 2px;
+    transform: rotate(-90deg);
+    transition: transform 0.1s linear;
+}
+
+.modal .option-item input[type="checkbox"]:checked ~ .modal__checkbox {
+    background-position: -1224px -360px;
+    border: 1px solid #2ca01c;
+    transform: rotate(0deg);
+}
+
+.modal .option-item input[type="radio"]:checked ~ .modal__radio {
+    background-image: url("../../../assets/radio.svg");
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    border: none;
+}
+
+.modal .modal__lable {
+    font-size: 13px;
+}
+
+/* Modal Body */
+.modal__body {
+    padding: 24px 30px;
+}
+
+.modal__body .modal__row {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    margin-left: -4px;
+    margin-right: -4px;
+}
+
+.modal__row .modal__col {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+/* Modal Form */
+.modal__group {
+    margin-bottom: 1rem;
+}
+
+.modal__group .modal__label {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.modal__group .modal__control {
+    width: 100%;
+    height: 32px;
+    border-radius: 2px;
+    padding: 0 12px 0 10px;
+    border: 1px solid #bbb;
+    box-sizing: border-box;
+}
+
+.modal__group .modal__control:hover {
+    outline: 1px solid #e2e2e2;
+}
+
+.modal__group .modal__control:focus {
+    border: 1px solid #019160 !important;
+    outline: none !important;
+}
+
+.modal__group .modal__radio {
+    display: flex;
+    align-items: center;
+    height: 32px;
+}
+
+.modal__group .modal__radio .modal__radio--item {
+    margin-left: 10px;
+    display: flex;
+}
+
+.modal__group .modal__radio .modal__radio--item:first-child {
+    margin-left: 0;
+}
+
+.modal__radio .modal__radio--item input[type="radio"] {
+    margin-right: 16px;
+}
+
+.modal__radio .modal__radio--item input[type="radio"]::after {
+    content: "";
+    display: block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 1px solid #bbb;
+    cursor: pointer;
+}
+
+.modal__radio .modal__radio--item input[type="radio"]:checked::after {
+    content: "";
+    width: 18px;
+    height: 18px;
+    background-image: url("../../../assets/radio.svg");
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+}
+
+.modal .modal__datepicker::placeholder {
+    font-family: MISA_AMIS_ITALIC;
+    font-size: 12px;
+}
+
+.modal .modal-icon__calendar {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+/* Modal Footer */
+.modal .modal__footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 30px 24px 30px;
+}
+
+.modal .modal__button {
+    height: 34px;
+    background-color: #fff;
+    padding: 6px 16px;
+    border-radius: 4px;
+    border: 1px solid #bbb;
+    cursor: pointer;
+    color: #111;
+    font-weight: 600;
+    transition: all ease-in 0.2s;
+}
+
+.modal .modal__footer .modal__button:hover {
+    background-color: #d2d3d6;
+}
+
+.modal .modal__button--success {
+    background-color: #2ca01c;
+    color: #fff;
+}
+
+.modal .modal__button--success:hover {
+    background-color: #35bf22 !important;
+}
+
+/* Modal Action */
+.modal .modal__action {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 12px 12px 0 12px;
+}
+
+.modal__action .modal__button {
+    border: none;
+    padding: 0 4px;
+}
+
+.modal__action .modal__button i {
+    display: block;
+}
+
+.modal__action .modal__button:hover {
+    color: gray;
+}

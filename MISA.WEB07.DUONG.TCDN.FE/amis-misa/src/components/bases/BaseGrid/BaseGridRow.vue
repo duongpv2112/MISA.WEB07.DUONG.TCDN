@@ -1,5 +1,5 @@
 <template>
-    <tbody class="table-body" v-if="!dataReady">
+    <tbody class="table-body" v-if="dataReady">
         <tr
             class="table-row"
             v-for="(item, index) in data"
@@ -35,7 +35,7 @@
             </td>
         </tr>
     </tbody>
-    <tbody class="table-body" v-if="dataReady">
+    <tbody class="table-body" v-if="!dataReady">
         <tr v-for="(item, index) of 10" :key="index">
             <td class="table-cell-loader">
                 <div class="loading-animation"></div>
@@ -70,7 +70,7 @@
             <td class="table-cell-loader">
                 <div class="loading-animation"></div>
             </td>
-            <td class="table-cell-loader" property-name="action">
+            <td class="table-cell-loader" style="min-width: 120px">
                 <div class="loading-animation"></div>
             </td>
         </tr>

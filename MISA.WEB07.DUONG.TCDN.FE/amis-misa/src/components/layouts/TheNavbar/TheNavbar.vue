@@ -14,7 +14,7 @@
                 </router-link>
             </li>
             <li class="navbar-item">
-                <router-link :to="{ name: 'CA' }" class="tooltip">
+                <router-link :to="{ name: 'app' }" class="tooltip">
                     <div class="navbar-item__icon icon icon-cash"></div>
                     <span class="navbar-item__name" v-if="!isResponsive">
                         Tiền mặt

@@ -1,6 +1,6 @@
 <template>
     <div class="modal__group modal__col" :class="className">
-        <label :for="'Input_' + dataField" class="modal__label mb-6">
+        <label v-if="!isHideLable" :for="'Input_' + dataField" class="modal__label mb-6">
             {{ lable }}
             <span class="text-danger" v-if="isRequired"> * </span>
         </label>
@@ -18,13 +18,14 @@
             @change="handleChange(dataField, $event)"
             @blur="handleBlur($event)"
         />
-        <span v-if="checkData.isValid">{{ checkData.errorMessage }}</span>
+        <span v-if="checkData.isInValid">{{ checkData.errorMessage }}</span>
     </div>
 </template>
 <script>
 export default {
     name: "BaseInput",
     props: {
+        isHideLable: Boolean,
         lable: String,
         className: String,
         type: String,
@@ -41,7 +42,7 @@ export default {
     data() {
         return {
             checkData: {
-                isValid: true,
+                isInValid: false,
                 errorMessage: "",
             },
         };
@@ -57,11 +58,11 @@ export default {
         handleBlur(event) {
             try {
                 if (!event.target.value) {
-                    this.checkData.isValid = true;
+                    this.checkData.isInValid = true;
                     this.checkData.errorMessage =
                         "Trường này không được để trống!";
                 } else {
-                    this.checkData.isValid = false;
+                    this.checkData.isInValid = false;
                     this.checkData.errorMessage = "";
                 }
             } catch (error) {

@@ -15,6 +15,7 @@ const routes = [
             name: "dashboard",
         },
     },
+    { path: "/dashboard", name: "dashboard", component: DashBoard },
     {
         path: "/app",
         name: "app",
@@ -23,7 +24,6 @@ const routes = [
         },
         component: TheContainer,
         children: [
-            { path: "dashboard", name: "dashboard", component: DashBoard },
             {
                 path: "CA",
                 name: "CA",

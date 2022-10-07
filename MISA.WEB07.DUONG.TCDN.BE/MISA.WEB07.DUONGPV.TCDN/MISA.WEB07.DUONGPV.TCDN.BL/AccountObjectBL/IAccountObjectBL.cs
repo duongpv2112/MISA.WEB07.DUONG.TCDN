@@ -2,7 +2,7 @@
 
 namespace MISA.WEB07.DUONGPV.TCDN.BL
 {
-    public interface IAccountObjectBL : IBaseBL<T>
+    public interface IAccountObjectBL : IBaseBL<AccountObject>
     {
     }
 }

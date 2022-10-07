@@ -3,8 +3,9 @@
         <a
             :class="{
                 'first-page': currentPage == 1,
-                'disabled-text': dataReady,
+                'disabled-text': !dataReady,
             }"
+            @click="onHandlePageChange(currentPage - 1)"
         >
             Trước
         </a>
@@ -14,14 +15,14 @@
                 :key="index + '_' + pageNumber"
                 :class="{
                     active: pageNumber.numberPage == currentPage,
-                    'disabled-text': dataReady,
+                    'disabled-text': !dataReady,
                     nextPage: pageNumber.nextPage,
                     prevPage: pageNumber.prevPage,
                 }"
                 @click="
                     pageNumber.numberPage == '...'
                         ? clickDotted(pageSize, total)
-                        : null
+                        : onHandlePageChange(pageNumber.numberPage)
                 "
             >
                 {{ pageNumber.numberPage }}
@@ -29,9 +30,10 @@
         </div>
         <a
             :class="{
-                'last-page': currentPage == total,
-                'disabled-text': dataReady,
+                'last-page': currentPage == Math.ceil(total / pageSize),
+                'disabled-text': !dataReady,
             }"
+            @click="onHandlePageChange(currentPage + 1)"
         >
             Sau
         </a>
@@ -45,22 +47,25 @@ export default {
         currentPage: Number,
         pageSize: Number,
         total: Number,
+        onHandlePageChange: Function,
     },
     data() {
         return {
             pageNumbers: [],
             tempPage: 0,
+            isClickDotted: false,
         };
     },
-    created() {
-        this.tempPage = this.currentPage;
-        this.renderPagination(this.pageSize, this.total);
+    beforeUpdate() {
+        if (this.dataReady && !this.isClickDotted) {
+            this.tempPage = this.currentPage;
+            this.renderPagination(this.pageSize, this.total);
+        } else this.isClickDotted = false;
     },
     methods: {
         renderPagination(pageSize, total) {
             try {
                 var totalPage = Math.ceil(total / pageSize);
-
                 if (totalPage >= 5) {
                     if (this.currentPage == 1 || this.currentPage == 2) {
                         this.pageNumbers = [
@@ -103,8 +108,8 @@ export default {
                             },
                             {
                                 numberPage: "...",
-                                nextPage: true,
-                                prevPage: false,
+                                nextPage: false,
+                                prevPage: true,
                             },
                             {
                                 numberPage: `${totalPage - 2}`,
@@ -122,9 +127,54 @@ export default {
                                 prevPage: false,
                             },
                         ];
+                    } else {
+                        this.pageNumbers = [
+                            {
+                                numberPage: "1",
+                                nextPage: false,
+                                prevPage: false,
+                            },
+                            {
+                                numberPage: "...",
+                                nextPage: false,
+                                prevPage: true,
+                            },
+                            {
+                                numberPage: `${this.currentPage}`,
+                                nextPage: false,
+                                prevPage: false,
+                            },
+                            {
+                                numberPage: `${this.currentPage + 1}`,
+                                nextPage: false,
+                                prevPage: false,
+                            },
+                            {
+                                numberPage: `${this.currentPage + 2}`,
+                                nextPage: false,
+                                prevPage: false,
+                            },
+                            {
+                                numberPage: "...",
+                                nextPage: true,
+                                prevPage: false,
+                            },
+                            {
+                                numberPage: `${totalPage}`,
+                                nextPage: false,
+                                prevPage: false,
+                            },
+                        ];
                     }
                 } else {
-                    this.pages = totalPage;
+                    this.pageNumbers = [];
+                    for (var i = 1; i <= totalPage; i++) {
+                        this.pageNumbers.push({
+                            numberPage: i,
+                            nextPage: false,
+                            prevPage: false,
+                        });
+                    }
                 }
             } catch (error) {
                 console.log(error);
@@ -133,6 +183,7 @@ export default {
 
         clickDotted(pageSize, total) {
             try {
+                this.isClickDotted = true;
                 var totalPage = Math.ceil(total / pageSize);
                 if (event.target.classList.contains("nextPage")) {
                     this.pageNumbers = [
@@ -202,7 +253,7 @@ export default {
                                 prevPage: false,
                             },
                         ];
-                    } else
+                    } else {
                         this.pageNumbers = [
                             {
                                 numberPage: "1",
@@ -240,7 +291,8 @@ export default {
                                 prevPage: true,
                             },
                         ];
-                    this.tempPage = this.tempPage - 3;
+                        this.tempPage = this.tempPage - 3;
+                    }
                 }
             } catch (error) {
                 console.log(error);

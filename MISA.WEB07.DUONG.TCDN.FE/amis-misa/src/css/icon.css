@@ -5,6 +5,7 @@
 
 .icon {
     background-image: url("../assets/img/Sprites.64af8f61.svg");
+    cursor: pointer;
 }
 
 /* ICON HEADER */
@@ -284,4 +285,28 @@
 
 .icon-chevron-left-primary {
     background-position: -224px -360px;
+}
+
+.icon-setting-list {
+    background-position: -88px -200px;
+}
+
+.icon-setting-list:hover {
+    background-position: -88px -256px;
+}
+
+.icon-arrow-up--white {
+    background-position: -848px -359px;
+}
+
+.icon-arrow-up--black {
+    background-position: -560px -359px;
+}
+
+.icon-tour {
+    background-position: -984px -144px;
+}
+
+.icon-arrow-check-all {
+    background-position: -256px -143px;
 }

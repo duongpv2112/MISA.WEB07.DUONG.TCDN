@@ -11,7 +11,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities.DTO
         /// <summary>
         /// Nhà cung cấp 
         /// </summary>
-        public T? Supplier { get; set; }
+        public AccountObject? Supplier { get; set; }
         /// <summary>
         /// Mảng nhóm nhà cung cấp 
         /// </summary>
