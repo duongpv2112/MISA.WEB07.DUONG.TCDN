@@ -94,6 +94,10 @@
 }
 
 /* Margin CSS */
+.mb-control-group {
+    margin-bottom: 0.5rem !important;
+}
+
 .mb-6 {
     margin-bottom: 6px !important;
 }
@@ -122,6 +126,11 @@
 .px-6 {
     padding-left: 1.5rem !important;
     padding-right: 1.5rem !important;
+}
+
+.px-3 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
 }
 
 .pr-4 {
@@ -192,6 +201,11 @@
 /* CSS Z-INDEX */
 .z-index1 {
     z-index: 1 !important;
+}
+
+/* Order CSS */
+.order-1 {
+    order: 1 !important;
 }
 
 /* CSS TRANSFORM */

@@ -1,0 +1,20 @@
+.textarea__control {
+    resize: none;
+    border-radius: 3px;
+    border: 1px solid #babec5;
+    font-family: inherit;
+    display: block;
+    padding: 9px;
+    color: #000;
+    font-size: 13px;
+    width: 100%;
+    outline: none;
+}
+
+.textarea__control:hover {
+    outline: 1px solid #e2e2e2;
+}
+
+.textarea__control:focus {
+    border: 1px solid #2ca01c;
+}

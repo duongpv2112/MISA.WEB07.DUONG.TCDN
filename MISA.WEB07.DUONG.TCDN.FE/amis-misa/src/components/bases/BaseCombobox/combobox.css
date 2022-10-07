@@ -67,14 +67,15 @@
     left: -1px;
     right: -1px;
     animation: growUp linear 0.2s;
+    z-index: 10;
 }
 
 .combobox .combobox-data.absolute-bottom {
-    top: var(--height-combobox-selected);
+    top: calc(100% + 15%);
     left: -1px;
     right: -1px;
-    min-width: 385px;
     animation: growUp linear 0.2s;
+    z-index: 10;
 }
 
 .combobox .combobox-table {
@@ -136,4 +137,9 @@
 .combobox .combobox-data__default .combobox-options__item--active:hover {
     background-color: #2ca01c;
     color: #fff;
+}
+
+.combobox-loading-bg {
+    border-color: #babec5;
+    background-color: #ececec;
 }

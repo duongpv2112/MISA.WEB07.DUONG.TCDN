@@ -1,6 +1,10 @@
 <template>
-    <div class="modal__group modal__col" :class="className">
-        <label v-if="!isHideLable" :for="'Input_' + dataField" class="modal__label mb-6">
+    <div :class="className">
+        <label
+            v-if="!isHideLable"
+            :for="'Input_' + dataField"
+            class="modal__label mb-6"
+        >
             {{ lable }}
             <span class="text-danger" v-if="isRequired"> * </span>
         </label>
@@ -27,7 +31,7 @@ export default {
     props: {
         isHideLable: Boolean,
         lable: String,
-        className: String,
+        className: Array,
         type: String,
         dataField: String,
         valueField: String,
@@ -50,7 +54,7 @@ export default {
     methods: {
         handleChange(dataField, event) {
             try {
-                this.$emit("setValue", dataField, event.target.value);
+                this.$emit("setValue", event.target.value, dataField);
             } catch (error) {
                 console.log(error);
             }

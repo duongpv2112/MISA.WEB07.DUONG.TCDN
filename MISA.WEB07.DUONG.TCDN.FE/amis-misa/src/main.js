@@ -5,8 +5,7 @@ import router from "./routers";
 /* Sử dụng */
 const app = createApp(App);
 app.directive("clickoutside", {
-    mounted: (el, binding, vnode) => {
-        console.log(vnode);
+    mounted: (el, binding) => {
         el.clickOutsideEvent = function (event) {
             if (
                 !(

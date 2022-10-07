@@ -198,6 +198,9 @@
         :titleHeader="RESOURCE.SUPPLIER_MODAL_PAGE_HEADER"
         :onClose="onHandleShowHideModal"
     >
+        <template v-slot:header>
+            <SupplierFormHeader />
+        </template>
         <template v-slot:body>
             <SupplierForm />
         </template>
@@ -206,10 +209,11 @@
 <script>
 import SupplierGrid from "./components/SupplierGrid.vue";
 import SupplierForm from "./components/SupplierForm.vue";
-import { API } from "./constants/api";
-import api from "@/services/api";
 import BaseButton from "@/components/bases/BaseButton/BaseButton.vue";
 import BaseModal from "@/components/bases/BaseModal/BaseModal.vue";
+import SupplierFormHeader from "./components/SupplierFormHeader.vue";
+import api from "@/services/api";
+import { API } from "./constants/api";
 import { SUPPLIER_TEXT_CONFIG } from "@/views/Supplier/constants/resource";
 export default {
     name: "SupplierContainer",
@@ -218,6 +222,7 @@ export default {
         SupplierForm,
         BaseButton,
         BaseModal,
+        SupplierFormHeader,
     },
     data() {
         return {

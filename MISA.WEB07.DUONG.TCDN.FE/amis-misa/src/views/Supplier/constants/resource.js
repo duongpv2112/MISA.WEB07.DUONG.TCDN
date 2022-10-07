@@ -14,7 +14,7 @@ export const SUPPLIER_TEXT_CONFIG = {
     SUPPLIER_SAVE_ADN_ADD_BTN: 'Cất và thêm',
     SUPPLIER_CANCEL_BTN: 'Hủy',
 
-    SUPPLIER_ID_FIELD_LBL: 'Mã nhà cung cấp',
+    SUPPLIER_CODE_FIELD_LBL: 'Mã nhà cung cấp',
     SUPPLIER_NAME_FIELD_LBL: 'Tên nhà cung cấp',
     SUPPLIER_TAXCODE_FIELD_LBL: 'Mã số thuế',
     SUPPLIER_PHONE_FIELD_LBL: 'Điện thoại',
@@ -28,4 +28,7 @@ export const SUPPLIER_TEXT_CONFIG = {
     SUPPLIER_ACCOUNT_PAYABLE_FIELD_LBL: 'Tài khoản công nợ phải trả',
     SUPPLIER_CONTACT_NAME_FIELD_LBL: 'Người liên hệ',
     SUPPLIER_REPRESENTATIVE_FIELD_LBL: 'Đại diện theo PL',
+    SUPPLIER_REPRESENTATIVE_NAME_FIELD_LBL: 'Họ và tên',
+    SUPPLIER_VOCATIVE_FIELD_LBL: 'Xưng hô',
+    SUPPLIER_EMAIL_FIELD_LBL: 'Email',
 }

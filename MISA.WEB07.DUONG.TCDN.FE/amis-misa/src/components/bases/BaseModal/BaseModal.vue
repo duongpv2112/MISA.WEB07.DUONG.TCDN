@@ -4,57 +4,7 @@
             <div class="modal__dialog modal__lg">
                 <div class="modal__header cursor-grab">
                     <div class="modal__tittle">{{ titleHeader }}</div>
-                    <div class="modal__option">
-                        <div class="option-item px-6">
-                            <label for="isGroup">
-                                <input
-                                    type="radio"
-                                    name="typeSuppier"
-                                    id="isGroup"
-                                    checked
-                                />
-                                <div class="modal__radio cursor-pointer"></div>
-                            </label>
-                            <label
-                                class="modal__lable cursor-pointer"
-                                for="isGroup"
-                            >
-                                {{ RESOURCE.SUPPLIER_GROUP_RADIO }}
-                            </label>
-                        </div>
-                        <div class="option-item px-6">
-                            <label for="isIndividual">
-                                <input
-                                    type="radio"
-                                    name="typeSuppier"
-                                    id="isIndividual"
-                                />
-                                <div class="modal__radio cursor-pointer"></div>
-                            </label>
-                            <label
-                                class="modal__lable cursor-pointer"
-                                for="isIndividual"
-                            >
-                                {{ RESOURCE.SUPPLIER_INDIVIDUAL_RADIO }}
-                            </label>
-                        </div>
-                    </div>
-                    <div class="option-item ml-20 px-6">
-                        <label for="isCustomer">
-                            <input
-                                type="checkbox"
-                                name="isCustomer"
-                                id="isCustomer"
-                            />
-                            <div class="modal__checkbox cursor-pointer"></div>
-                        </label>
-                        <label
-                            class="modal__lable cursor-pointer"
-                            for="isCustomer"
-                        >
-                            {{ RESOURCE.SUPPLIER_COSTOMER_CHECKBOX }}
-                        </label>
-                    </div>
+                    <slot name="header"></slot>
                 </div>
                 <div class="modal__body">
                     <div class="line-bottom">
@@ -128,4 +78,5 @@ export default {
 </script>
 <style scoped>
 @import url("./modal.css");
+@import url("../../../css/flexbox.css");
 </style>
