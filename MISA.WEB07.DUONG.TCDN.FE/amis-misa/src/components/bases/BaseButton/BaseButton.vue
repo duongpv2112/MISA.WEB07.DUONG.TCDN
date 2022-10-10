@@ -6,12 +6,14 @@
         @click="functionz"
     >
         {{ title }}
+        <BaseTooltip :content="contentTooltip" :className="classNameTooltip" />
     </button>
     <button v-if="isIcon" class="button" :class="className" @click="functionz">
         <div class="d-flex flex-center button-icon">
             <span class="icon" :class="classNameIcon"></span>
             <div class="button-line"></div>
         </div>
+        <BaseTooltip :content="contentTooltip" :className="classNameTooltip" />
     </button>
     <button
         v-if="isIconText"
@@ -23,9 +25,11 @@
             <span class="pr-4">{{ title }}</span>
             <span class="icon" :class="classNameIcon"></span>
         </div>
+        <BaseTooltip :content="contentTooltip" :className="classNameTooltip" />
     </button>
 </template>
 <script>
+import BaseTooltip from "../BaseTooltip/BaseTooltip";
 export default {
     name: "BaseButton",
     props: {
@@ -35,7 +39,17 @@ export default {
         isIcon: Boolean,
         isIconText: Boolean,
         classNameIcon: Object,
+        classNameTooltip: Array,
+        contentTooltip: String,
     },
+
+    data() {
+        return {};
+    },
+
+    components: { BaseTooltip },
+
+    methods: {},
 };
 </script>
 <style scoped>

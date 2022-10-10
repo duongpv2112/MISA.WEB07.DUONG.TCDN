@@ -3,6 +3,7 @@ using MISA.WEB07.DUONGPV.TCDN.Common.Entities;
 using MISA.WEB07.DUONGPV.TCDN.Common.Entities.DTO;
 using MISA.WEB07.DUONGPV.TCDN.Common.Utilities;
 using Npgsql;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 
 namespace MISA.WEB07.DUONGPV.TCDN.DL

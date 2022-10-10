@@ -8,7 +8,7 @@ import { inject } from "vue";
 
 export default {
     name: "BaseTabItem",
-    props: ["name"],
+    props: ["name","typeSuppier"],
     setup() {
         const selectedName = inject("selectedName");
 

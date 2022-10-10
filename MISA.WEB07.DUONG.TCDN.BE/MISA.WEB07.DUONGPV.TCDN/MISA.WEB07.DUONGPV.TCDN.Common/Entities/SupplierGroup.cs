@@ -1,4 +1,5 @@
-﻿using MISA.WEB07.DUONGPV.TCDN.Common.Enums;
+﻿using MISA.WEB07.DUONGPV.TCDN.Common.Attributes;
+using MISA.WEB07.DUONGPV.TCDN.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,7 +13,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
     /// <summary>
     /// Nhóm nhà cung cấp
     /// </summary>
-    [Table("SupplierGroup")]    
+    [MISATable("SupplierGroup")]    
     public class SupplierGroup
     {
         #region Property

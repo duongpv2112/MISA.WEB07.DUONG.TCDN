@@ -11,6 +11,7 @@
                     :placeholder="placeholder"
                     :tabindex="tabindex"
                     :readonly="isReadOnly"
+                    @input="onHandleInputChange"
                     @click="isLoading || !isReadOnly ? null : btnShowListData()"
                 />
             </div>
@@ -35,7 +36,7 @@
         >
             <ul class="combobox-options">
                 <li
-                    v-for="(item, index) of listData"
+                    v-for="(item, index) of dataFilter"
                     :key="index"
                     class="combobox-options__item"
                     :class="{
@@ -51,6 +52,8 @@
     </div>
 </template>
 <script>
+import { common } from "@/libs/common/common";
+
 export default {
     name: "BaseComboboxDefault",
 
@@ -79,6 +82,7 @@ export default {
          * @author: DUONGPV (08/09/2022)
          */
         btnShowListData() {
+            this.dataFilter = this.listData;
             this.isShowListData = !this.isShowListData;
         },
 
@@ -101,6 +105,25 @@ export default {
          */
         hideListData() {
             this.isShowListData = false;
+        },
+
+        onHandleInputChange() {
+            try {
+                this.dataFilter = this.listData.filter((e) => {
+                    let text = common
+                        .removeVietnameseTones(this.textInput)
+                        .toLowerCase()
+                        .replace(" ", "");
+                    let textOfItem = common
+                        .removeVietnameseTones(e.value_show)
+                        .toLowerCase()
+                        .replace(" ", "");
+                    return textOfItem.includes(text);
+                });
+                this.isShowListData = true;
+            } catch (error) {
+                console.log(error);
+            }
         },
     },
     created() {
@@ -136,6 +159,7 @@ export default {
             dataCombobox: Array,
             textInput: String,
             isShowListData: Boolean,
+            dataFilter: Array,
         };
     },
     mounted() {

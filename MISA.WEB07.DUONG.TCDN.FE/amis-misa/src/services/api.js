@@ -37,9 +37,29 @@ export default {
     post(url, data) {
         try {
             let lastUrl = CONFIG_API.BASE_DOMAIN + CONFIG_API.BASE_URL + url;
-            return axios.post(lastUrl, data).then((response) => {
-                return response.data;
-            });
+            // return axios.post(lastUrl, data).then((response) => {
+            //     return response.data;
+            // });
+
+            var dataBody = JSON.stringify(data);
+
+            var config = {
+                method: "POST",
+                url: lastUrl,
+                headers: {
+                    accept: "*/*",
+                    "Content-Type": "application/json",
+                },
+                data: dataBody,
+            };
+
+            return axios(config)
+                .then(function (response) {
+                    return response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         } catch (error) {
             console.log(error);
         }

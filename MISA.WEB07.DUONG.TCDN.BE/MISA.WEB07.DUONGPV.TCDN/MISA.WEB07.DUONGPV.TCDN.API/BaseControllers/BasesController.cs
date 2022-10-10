@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MISA.WEB07.DUONGPV.TCDN.BL;
+using MISA.WEB07.DUONGPV.TCDN.Common.Entities.DTO;
 
 namespace MISA.WEB07.DUONGPV.TCDN.API.BaseControllers
 {

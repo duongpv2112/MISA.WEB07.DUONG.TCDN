@@ -5,6 +5,7 @@
             <BaseGridRow
                 :data="data"
                 :columns="columns"
+                :columnActions="columnActions"
                 :dataReady="dataReady"
             />
         </table>
@@ -62,6 +63,7 @@ export default {
     },
     props: {
         columns: Array,
+        columnActions: Object,
         data: Array,
         total: Number,
         dataReady: Boolean,

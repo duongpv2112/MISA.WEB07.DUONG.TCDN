@@ -10,55 +10,82 @@
         </label>
         <input
             :id="'Input_' + dataField"
-            :class="{ modal__control: true }"
+            :class="{ modal__control: true, 'input-number': isInputNumber }"
             :type="type"
             :ref="dataField"
             :name="dataField"
-            :value="valueField"
+            :value="
+                isInputNumber
+                    ? common.formatCurrency(valueInput || '0')
+                    : valueInput
+            "
             :tabindex="tabindex"
             :placeholder="fieldName"
             :maxlength="maxlength"
             :autocomplete="autocomplete"
-            @change="handleChange(dataField, $event)"
+            step="1"
+            @input="onHandleInput(dataField, $event)"
             @blur="handleBlur($event)"
         />
         <span v-if="checkData.isInValid">{{ checkData.errorMessage }}</span>
     </div>
 </template>
 <script>
+import { common } from "@/libs/common/common";
 export default {
     name: "BaseInput",
+
     props: {
         isHideLable: Boolean,
         lable: String,
         className: Array,
         type: String,
         dataField: String,
-        valueField: String,
+        valueField: null,
         tabindex: String,
         fieldName: String,
         maxlength: Number,
         autocomplete: String,
         isRequired: Boolean,
         errorMessage: String,
+        isInputNumber: Boolean,
     },
+
     emits: ["setValue"],
+
     data() {
         return {
             checkData: {
                 isInValid: false,
                 errorMessage: "",
             },
+            valueInput: null,
+            common: common,
         };
     },
+
+    created() {
+        try {
+            this.valueInput = this.valueField;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
     methods: {
-        handleChange(dataField, event) {
+        onHandleInput(dataField, event) {
             try {
-                this.$emit("setValue", event.target.value, dataField);
+                this.valueInput = event.target.value;
+                if (this.isInputNumber) {
+                    console.log("a");
+                    this.valueInput = this.valueInput.replace(/\D+/g, "");
+                }
+                this.$emit("setValue", this.valueInput, dataField);
             } catch (error) {
                 console.log(error);
             }
         },
+
         handleBlur(event) {
             try {
                 if (!event.target.value) {

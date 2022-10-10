@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MISA.WEB07.DUONGPV.TCDN.Common.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,12 +10,12 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities.DTO
     public class SupplierDTO
     {
         /// <summary>
-        /// Nhà cung cấp 
+        /// Thông tin bản ghi nhà cung cấp
         /// </summary>
-        public AccountObject? Supplier { get; set; }
+        public AccountObject? accountObject { get; set; }
         /// <summary>
-        /// Mảng nhóm nhà cung cấp 
+        /// Danh sách bản ghi phụ
         /// </summary>
-        public List<dynamic> SupplierGroups { get; set; } = new List<dynamic>();
+        public List<SupplierConstraint>? supplierConstraints { get; set; } = new List<SupplierConstraint>();
     }
 }

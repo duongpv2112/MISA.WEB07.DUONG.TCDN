@@ -2,7 +2,13 @@
     <BaseModalHeader>
         <div class="option-item px-3">
             <label for="isGroup">
-                <input type="radio" name="typeSuppier" id="isGroup" checked />
+                <input
+                    v-model="typeVendor"
+                    type="radio"
+                    name="typeSuppier"
+                    id="isGroup"
+                    value="0"
+                />
                 <div class="modal__radio cursor-pointer"></div>
             </label>
             <label class="modal__lable cursor-pointer" for="isGroup">
@@ -11,7 +17,13 @@
         </div>
         <div class="option-item px-3">
             <label for="isIndividual">
-                <input type="radio" name="typeSuppier" id="isIndividual" />
+                <input
+                    v-model="typeVendor"
+                    type="radio"
+                    name="typeSuppier"
+                    id="isIndividual"
+                    value="1"
+                />
                 <div class="modal__radio cursor-pointer"></div>
             </label>
             <label class="modal__lable cursor-pointer" for="isIndividual">
@@ -34,11 +46,35 @@ import { SUPPLIER_TEXT_CONFIG } from "@/views/Supplier/constants/resource";
 import BaseModalHeader from "@/components/bases/BaseModal/BaseModalHeader.vue";
 export default {
     name: "SupplierFormHeader",
+    components: { BaseModalHeader },
+
+    emits: ["setValue"],
+
     data() {
         return {
             RESOURCE: SUPPLIER_TEXT_CONFIG,
+            typeVendor: Number,
         };
     },
-    components: { BaseModalHeader },
+
+    methods: {
+        onHandleChangeTypeVendor() {
+            try {
+                this.$emit("setValue", this.typeVendor);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+    },
+
+    mounted() {
+        this.typeVendor = 0;
+    },
+
+    watch: {
+        typeVendor(newValue) {
+            this.$emit("setValue", newValue);
+        },
+    },
 };
 </script>

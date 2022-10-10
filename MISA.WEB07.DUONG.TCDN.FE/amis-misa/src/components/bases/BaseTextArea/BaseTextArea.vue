@@ -42,7 +42,7 @@ export default {
     methods: {
         handleChange(dataField, event) {
             try {
-                this.$emit("setValue", dataField, event.target.value);
+                this.$emit("setValue", event.target.value, dataField);
             } catch (error) {
                 console.log(error);
             }

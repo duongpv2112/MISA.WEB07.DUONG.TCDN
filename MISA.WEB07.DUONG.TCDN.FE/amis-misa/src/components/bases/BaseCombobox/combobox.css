@@ -9,7 +9,6 @@
 
 .combobox .combobox-selected {
     display: flex;
-    align-items: center;
     height: 100%;
 }
 
@@ -59,7 +58,9 @@
     border: 1px solid #babec5;
     border-radius: 2px;
     background-color: #fff;
-    overflow: hidden;
+    max-height: 160px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .combobox .combobox-data.absolute-top {
@@ -86,6 +87,8 @@
 
 .combobox .combobox-table thead {
     background-color: #f4f5f8;
+    position: sticky;
+    top: 0;
 }
 
 .combobox .combobox-table th,
@@ -96,6 +99,13 @@
 
 .combobox .combobox-table th:nth-child(2) {
     width: 250px;
+}
+
+.combobox .combobox-table tbody {
+    max-height: 160px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 2px 1px;
 }
 
 .combobox .combobox-table tbody tr {
@@ -142,4 +152,93 @@
 .combobox-loading-bg {
     border-color: #babec5;
     background-color: #ececec;
+}
+
+.combobox.combobox-tag {
+    height: auto !important;
+}
+
+.combobox.combobox-tag .combobox-selected {
+    display: flex;
+    min-height: 32px;
+    border-radius: 2px;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.combobox.combobox-tag .combobox-selected .combobox-selected--icon {
+    width: 32px;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.combobox.combobox-tag .combobox-selected .combobox-selected--input {
+    display: flex;
+    min-height: 32px;
+    flex-basis: 100%;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    width: calc(100% - 32px);
+    align-items: center;
+    padding: 0 0 0 10px;
+}
+
+.combobox.combobox-tag
+    .combobox-selected
+    .combobox-selected--input
+    input[type="text"] {
+    width: auto !important;
+    min-width: 50px;
+}
+
+.combobox
+    .combobox-selected
+    .combobox-selected--input
+    .selected-item:not(:last-child) {
+    margin-right: 2px;
+}
+
+.combobox .combobox-selected .combobox-selected--input .selected-item {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background-color: #f0f0f0;
+    padding: 2px 3px 2px 5px;
+    margin: 3px;
+    max-width: calc(100% - 50px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.combobox.combobox-tag .selected-item .selected-item__content {
+    display: flex;
+}
+
+.combobox.combobox-tag
+    .selected-item
+    .selected-item__content
+    .selected-item__text {
+    font-size: 12px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.combobox.combobox-tag
+    .selected-item
+    .selected-item__content
+    .selected-item__icon {
+    margin-left: 4px;
+}
+
+.combobox-selected--icon-br {
+    border-right: 1px solid #babec5;
+}
+
+.combobox.combobox-tag .combobox-selected .combobox-selected--icon:hover {
+    background-color: #e0e0e0;
+    border-color: #e0e0e0;
 }

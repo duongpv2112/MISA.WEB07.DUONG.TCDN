@@ -1,4 +1,5 @@
 ﻿using MISA.WEB07.DUONGPV.TCDN.Common.Entities;
+using MISA.WEB07.DUONGPV.TCDN.Common.Entities.DTO;
 using MISA.WEB07.DUONGPV.TCDN.DL;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,40 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL
         #endregion
 
         #region Method
+
+        /// <summary>
+        /// Thêm mới thông tin một bản ghi
+        /// </summary>
+        /// <param name="record">Đối tượng bản ghi cần thêm mới</param>
+        /// <returns>Bản ghi insert thành công hay thất bại (True, False)</returns>
+        /// Author: DUONGPV (04/10/2022)
+        public async Task<bool> InsertOneRecord(SupplierDTO record)
+        {
+            return await _accountObjectDL.InsertOneRecord(record);
+        }
+
+        /// <summary>
+        /// Lấy thông tin chi tiết một bản ghi
+        /// </summary>
+        /// <param name="id">ID của bản ghi cần lấy</param>
+        /// <returns>Thông tin chi tiết một bản ghi</returns>
+        /// Author: DUONGPV (04/10/2022)
+        public async Task<dynamic> GetOneRecord(Guid id)
+        {
+            return await _accountObjectDL.GetOneRecord(id);
+        }
+
+        /// <summary>
+        /// Cập nhật thông tin chi tiết một bản ghi
+        /// </summary>
+        /// <param name="id">ID của bản ghi cần lấy</param>
+        /// <param name="record">Đối tượng bản ghi cần thêm mới</param>
+        /// <returns>Thông tin chi tiết một bản ghi</returns>
+        /// Author: DUONGPV (04/10/2022)
+        public async Task<bool> UpdateOneRecord(Guid id, SupplierDTO record)
+        {
+            return await _accountObjectDL.UpdateOneRecord(id, record);
+        }
 
         #endregion
     }

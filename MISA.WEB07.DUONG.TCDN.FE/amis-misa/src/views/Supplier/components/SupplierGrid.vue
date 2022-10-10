@@ -1,6 +1,7 @@
 <template>
     <BaseGrid
         :columns="columns"
+        :columnActions="columnActions"
         :data="data"
         :dataReady="dataReady"
         :total="totalCount"
@@ -24,6 +25,10 @@ export default {
         currentRecord: Number,
         onHandlePageChange: Function,
         onHandlePageSizeChange: Function,
+        onEdit: Function,
+        onDelete: Function,
+        onDetail: Function,
+        onReplication: Function,
     },
     data() {
         return {
@@ -85,7 +90,34 @@ export default {
                     isHidden: false,
                 },
             ],
+
+            columnActions: {
+                actionPrimary: {
+                    nameAction: "Sửa",
+                    functionAction: this.onEdit,
+                },
+                actionChild: [
+                    {
+                        nameAction: "Xem",
+                        functionAction: this.onDetail,
+                    },
+                    {
+                        nameAction: "Xóa",
+                        functionAction: this.onDelete,
+                    },
+                    {
+                        nameAction: "Nhân bản",
+                        functionAction: this.onReplication,
+                    },
+                ],
+            },
         };
+    },
+
+    methods: {
+        functionA() {
+            console.log("a");
+        },
     },
 };
 </script>

@@ -1,4 +1,5 @@
-﻿using MISA.WEB07.DUONGPV.TCDN.Common.Enums;
+﻿using MISA.WEB07.DUONGPV.TCDN.Common.Attributes;
+using MISA.WEB07.DUONGPV.TCDN.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +14,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
     /// <summary>
     /// Đối tượng
     /// </summary>
-    [Table("AccountObject")]
+    [MISATable("AccountObject", "SupplierConstraint")]
     public class AccountObject
     {
         #region Property
@@ -43,7 +44,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// Website
         /// </summary>
-        public string? Website { get; set; }
+        public string? website { get; set; }
 
         /// <summary>
         /// Mã số thuế
@@ -68,7 +69,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// Ngày cấp CMND
         /// </summary>
-        public DateTime? identity_date { get; set; }
+        public string? identity_date { get; set; }
 
         /// <summary>
         /// Nơi cấp CMND 
@@ -79,11 +80,6 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// ID Nhân viên mua hàng
         /// </summary>
         public Guid? employee_id  { get; set; }
-
-        /// <summary>
-        /// Tên nhân viên mua hàng
-        /// </summary>
-        public string? employee_name { get; set; }
 
         /// <summary>
         /// Loại nhà cung cấp
@@ -141,9 +137,19 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         public string? department_name { get; set; }
 
         /// <summary>
+        /// Là nhà cung cấp
+        /// </summary>
+        public bool? is_supplier { get; set; }
+
+        /// <summary>
+        /// Là nhân viên
+        /// </summary>
+        public bool? is_employee { get; set; }
+
+        /// <summary>
         /// Ngày tạo
         /// </summary>
-        public DateTime created_date { get; set; }
+        public string created_date { get; set; }
 
         /// <summary>
         /// Người tạo
@@ -153,7 +159,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// Ngày sửa gần nhất
         /// </summary>
-        public DateTime modified_date { get; set; }
+        public string modified_date { get; set; }
 
         /// <summary>
         /// Người sửa gần nhất

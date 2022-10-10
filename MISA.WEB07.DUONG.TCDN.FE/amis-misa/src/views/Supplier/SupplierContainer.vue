@@ -189,6 +189,10 @@
                     :currentRecord="currentRecord"
                     :onHandlePageChange="onHandlePageChange"
                     :onHandlePageSizeChange="onHandlePageSizeChange"
+                    :onEdit="onEdit"
+                    :onDelete="onDelete"
+                    :onDetail="onDetail"
+                    :onReplication="onReplication"
                 />
             </div>
         </div>
@@ -196,13 +200,17 @@
     <BaseModal
         v-if="isShowModal"
         :titleHeader="RESOURCE.SUPPLIER_MODAL_PAGE_HEADER"
-        :onClose="onHandleShowHideModal"
     >
         <template v-slot:header>
-            <SupplierFormHeader />
+            <SupplierFormHeader @setValue="onChangTypeSupplier" />
         </template>
         <template v-slot:body>
-            <SupplierForm />
+            <SupplierForm
+                :typeSupplier="typeSupplier"
+                :supplierValue="supplierData"
+                :onClose="onHandleShowHideModal"
+                :onSave="onSaveSupplier"
+            />
         </template>
     </BaseModal>
 </template>
@@ -213,8 +221,9 @@ import BaseButton from "@/components/bases/BaseButton/BaseButton.vue";
 import BaseModal from "@/components/bases/BaseModal/BaseModal.vue";
 import SupplierFormHeader from "./components/SupplierFormHeader.vue";
 import api from "@/services/api";
-import { API } from "./constants/api";
+import { API_RESOURCE } from "./constants/api";
 import { SUPPLIER_TEXT_CONFIG } from "@/views/Supplier/constants/resource";
+
 export default {
     name: "SupplierContainer",
     components: {
@@ -236,12 +245,14 @@ export default {
             keyGrid: 0,
             RESOURCE: SUPPLIER_TEXT_CONFIG,
             isShowModal: Boolean,
+            typeSupplier: Number,
+            supplierData: null,
         };
     },
     methods: {
         async getSuppliers(pageSize, pageNumber, keyword, orderBy) {
             try {
-                let urlFilter = `${API.PAGING_DATA_SUPPLIER}?pageSize=${pageSize}&pageNumber=${pageNumber}`;
+                let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}?pageSize=${pageSize}&pageNumber=${pageNumber}`;
                 if (keyword) {
                     urlFilter += `&keyword=${keyword}`;
                 }
@@ -322,7 +333,106 @@ export default {
                 console.log(error);
             }
         },
+
+        onChangTypeSupplier(value) {
+            try {
+                this.typeSupplier = value;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async onEdit(value) {
+            try {
+                let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}/${value.account_object_id}`;
+                await api.get(urlFilter).then((data) => {
+                    this.supplierData = data;
+                    this.onChangTypeSupplier(data.accountObject.supplier_type);
+                });
+                this.isShowModal = true;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        onDelete(value) {
+            try {
+                console.log(value);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        onDetail(value) {
+            try {
+                console.log(value);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        onReplication(value) {
+            try {
+                console.log(value);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async onSaveSupplier(supplier, supplierConstraints) {
+            try {
+                // Object.keys(supplier).forEach((key) => {
+                //     if (
+                //         !supplier[key] ||
+                //         (typeof supplier[key] === "string" &&
+                //             supplier[key] === "")
+                //     ) {
+                //         supplier[key] = null;
+                //     }
+                // });
+                if (supplier.vocative_contact) {
+                    supplier.vocative_contact = Number(
+                        supplier.vocative_contact
+                    );
+                }
+                if (supplier.vocative_supplier) {
+                    supplier.vocative_supplier = Number(
+                        supplier.vocative_supplier
+                    );
+                }
+                supplier.supplier_type = Number(this.typeSupplier);
+                supplier.maximum_debt_amount = Number(
+                    supplier.maximum_debt_amount
+                );
+                supplier.number_day_owed = Number(supplier.number_day_owed);
+                supplier.is_supplier = true;
+                supplier.is_employee = false;
+                var bodyData = {
+                    accountObject: supplier,
+                    supplierConstraints: supplierConstraints,
+                };
+                if (supplier.account_object_id) {
+                    let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}/${supplier.account_object_id}`;
+                    await api.put(urlFilter, bodyData).then((response) => {
+                        if (response) {
+                            this.isShowModal = false;
+                        }
+                    });
+                } else {
+                    let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}`;
+                    await api.post(urlFilter, bodyData).then((response) => {
+                        if (response) {
+                            this.isShowModal = false;
+                        }
+                    });
+                }
+                this.onHandleReload();
+            } catch (error) {
+                console.log(error);
+            }
+        },
     },
+
     created() {
         this.isShowModal = false;
         this.dataReady = false;

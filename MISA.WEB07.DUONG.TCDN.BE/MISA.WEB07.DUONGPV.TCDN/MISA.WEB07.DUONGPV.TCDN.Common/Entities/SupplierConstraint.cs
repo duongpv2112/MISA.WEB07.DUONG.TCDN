@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MISA.WEB07.DUONGPV.TCDN.Common.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,13 +12,14 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
     /// <summary>
     /// Chi tiết nhà cung cấp
     /// </summary>
-    [Table("SupplierConstraint")]
+    [MISATable("SupplierConstraint")]
     public class SupplierConstraint
     {
         #region Property
         /// <summary>
         /// ID Nhà cung cấp
         /// </summary>
+        [Key]
         public Guid supplier_id { get; set; }
 
         /// <summary>
@@ -28,7 +30,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// Ngày tạo
         /// </summary>
-        public DateTime created_date { get; set; }
+        public string? created_date { get; set; }
 
         /// <summary>
         /// Người tạo
@@ -38,7 +40,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// Ngày sửa gần nhất
         /// </summary>
-        public DateTime modified_date { get; set; }
+        public string? modified_date { get; set; }
 
         /// <summary>
         /// Người sửa gần nhất
