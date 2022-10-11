@@ -10,6 +10,8 @@
 .combobox .combobox-selected {
     display: flex;
     height: 100%;
+    border: 1px solid #bbb;
+    border-radius: 2px;
 }
 
 .combobox .combobox-selected .combobox-selected--input {
@@ -21,6 +23,14 @@
     height: 100%;
     align-items: center;
     padding: 0 0 0 10px;
+}
+
+.combobox .combobox-selected .combobox__control {
+    width: 100%;
+    height: 30px;
+    border-radius: 2px;
+    border: 1px solid #bbb;
+    box-sizing: border-box;
 }
 
 .combobox .combobox-selected .combobox-selected--input input {
@@ -37,6 +47,11 @@
 
 .combobox .combobox-selected .combobox-selected--input input:read-only {
     cursor: pointer;
+}
+
+.combobox .combobox-selected .combobox-selected--input input::placeholder {
+    font-family: MISA_AMIS_ITALIC;
+    font-size: 12px;
 }
 
 .combobox .combobox-selected .combobox-selected--icon {
@@ -61,6 +76,10 @@
     max-height: 160px;
     overflow-x: hidden;
     overflow-y: auto;
+}
+
+.combobox .overflow-none ~ .combobox-data {
+    overflow: unset !important;
 }
 
 .combobox .combobox-data.absolute-top {
@@ -113,14 +132,21 @@
 }
 
 .combobox .combobox-table tbody tr:hover,
-.combobox .selectbox__item--focus {
+.combobox .combobox__item--focus {
     color: #35bf22;
-    background-color: #ebedf0;
+    background-color: #ebedf0 !important;
 }
 
-.combobox .selectbox__item--selected {
+.combobox .combobox__item--selected {
     color: #fff;
-    background-color: #2ca01c;
+    background-color: #2ca01c !important;
+}
+
+.combobox
+    .combobox-data__default
+    .combobox-options__item.combobox__item--selected:hover {
+    color: #fff;
+    background-color: #2ca01c !important;
 }
 
 .combobox .combobox-data__default .combobox-options__item {
@@ -160,7 +186,7 @@
 
 .combobox.combobox-tag .combobox-selected {
     display: flex;
-    min-height: 32px;
+    min-height: 30px;
     border-radius: 2px;
     background-color: #fff;
     overflow: hidden;
@@ -177,11 +203,11 @@
 
 .combobox.combobox-tag .combobox-selected .combobox-selected--input {
     display: flex;
-    min-height: 32px;
+    min-height: 30px;
     flex-basis: 100%;
     flex-grow: 1;
     flex-wrap: wrap;
-    width: calc(100% - 32px);
+    width: calc(100% - 30px);
     align-items: center;
     padding: 0 0 0 10px;
 }

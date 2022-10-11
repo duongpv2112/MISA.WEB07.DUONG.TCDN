@@ -1,3 +1,7 @@
 .input-number {
     text-align: right;
 }
+
+input:read-only {
+    background-color: #eff0f2;
+}

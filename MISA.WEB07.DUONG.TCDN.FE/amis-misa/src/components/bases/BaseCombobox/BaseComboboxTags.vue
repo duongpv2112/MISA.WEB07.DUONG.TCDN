@@ -1,6 +1,9 @@
 <template>
-    <div class="combobox border-radius-2 combobox-tag" :class="className">
-        <div class="combobox-selected">
+    <div class="combobox border-radius-2 combobox-tag">
+        <div
+            class="combobox-selected"
+            :class="[className, isReadOnly ? 'bg-readonly' : '']"
+        >
             <div class="combobox-selected--input">
                 <div
                     class="selected-item"
@@ -13,6 +16,7 @@
                         </div>
                         <div
                             class="icon square-16 icon-close--small selected-item__icon"
+                            @click="onHandleRemoveItemSelected(item)"
                         ></div>
                     </div>
                 </div>
@@ -20,7 +24,10 @@
                     type="text"
                     :tabindex="tabindex"
                     :readonly="isReadOnly"
-                    @keypress.enter="onHandleSearch($event.target.value)"
+                    :placeholder="dataInput.length > 0 ? '' : placeholder"
+                    :ref="propValue"
+                    @keyup="onHandleSearch($event.target.value)"
+                    @keydown="selecItemUpDown"
                     @input="onHandleChangeInputData"
                 />
             </div>
@@ -30,7 +37,7 @@
                 </div>
                 <div
                     class="combobox-selected--icon"
-                    @click="btnSelectDataOnClick"
+                    @click="!isReadOnly ? btnSelectDataOnClick() : null"
                 >
                     <i
                         class="icon icon-dropdown square-16"
@@ -56,16 +63,22 @@
                         <th
                             scope="col"
                             v-for="(item, index) in nameRow"
+                            :style="item.stypeColumn"
                             :key="index"
                         >
                             {{ item.fieldName }}
                         </th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr
                         v-for="(data, index) in dataCombobox"
                         :key="'row_' + index"
+                        :ref="'toFocus_' + index"
+                        :class="{
+                            'combobox__item--focus': index == indexItemFocus,
+                        }"
                         @click="onHandleSelected(data)"
                     >
                         <td
@@ -73,6 +86,15 @@
                             :key="'col_' + colIndex"
                         >
                             {{ data[col.dataField] }}
+                        </td>
+                        <td>
+                            <div
+                                class="icon square-16 icon-selected--tags selected-item__icon"
+                                v-if="
+                                    listSelected &&
+                                    listSelected.includes(data[propText])
+                                "
+                            ></div>
                         </td>
                     </tr>
                 </tbody>
@@ -83,6 +105,14 @@
 <script>
 import api from "@/services/api";
 import { common } from "@/libs/common/common";
+
+const keyCode = {
+    Enter: 13,
+    ArrowUp: 38,
+    ArrowDown: 40,
+    ESC: 27,
+    Tab: 9,
+};
 
 export default {
     name: "BaseComboboxTable",
@@ -110,6 +140,9 @@ export default {
         this.getData(this.pageNumber);
         if (this.value) {
             this.dataInput = this.value;
+            this.listSelected = this.value.map((e) => {
+                return e.valueShow;
+            });
         }
     },
 
@@ -122,6 +155,9 @@ export default {
             pageSize: Number,
             keyWord: String,
             isDataNull: Boolean,
+            listSelected: [],
+            indexItemFocus: null,
+            indexItemSelected: null,
         };
     },
 
@@ -150,9 +186,11 @@ export default {
             }
         },
 
-        onHandleScroll({ target: { scrollTop, clientHeight, scrollHeight } }) {
+        onHandleScroll() {
             if (
-                scrollTop + clientHeight >= scrollHeight - 10 &&
+                this.$refs.scrollComponent.scrollTop +
+                    this.$refs.scrollComponent.clientHeight >=
+                    this.$refs.scrollComponent.scrollHeight - 2 &&
                 !this.isDataNull
             ) {
                 this.pageNumber += 1;
@@ -160,9 +198,24 @@ export default {
             }
         },
 
-        onHandleSearch(keyWord) {
-            this.pageNumber = 1;
-            this.getData(this.pageNumber, keyWord, false);
+        async onHandleSearch(keyWord) {
+            if (
+                event.keyCode != keyCode.ArrowDown &&
+                event.keyCode != keyCode.ArrowUp &&
+                event.keyCode != keyCode.Enter &&
+                event.keyCode != keyCode.ESC &&
+                event.keyCode != keyCode.Tab
+            ) {
+                if (this.timer) {
+                    clearTimeout(this.timer);
+                    this.timer = null;
+                }
+                this.timer = setTimeout(async () => {
+                    this.pageNumber = 1;
+                    await this.getData(this.pageNumber, keyWord, false);
+                    this.isShowListData = true;
+                }, 400);
+            }
         },
 
         /**
@@ -171,6 +224,7 @@ export default {
          */
         btnSelectDataOnClick() {
             this.isShowListData = !this.isShowListData;
+            this.$refs[this.propValue].focus();
         },
 
         /**
@@ -202,13 +256,43 @@ export default {
                         valueField: item[this.dataField],
                         valueShow: item[this.propText],
                     });
+                    this.listSelected.push(item[this.propText]);
                 } else {
                     var indexValue = this.dataInput.findIndex((e) => {
                         return e.valueShow == item[this.propText];
                     });
+                    var indexSelectedValue = this.listSelected.findIndex(
+                        (e) => {
+                            return e == item[this.propText];
+                        }
+                    );
                     this.dataInput.splice(indexValue, 1);
+                    this.listSelected.splice(indexSelectedValue, 1);
                 }
                 this.$emit("setValueList", this.dataInput);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        /**
+         * Nhấn vào button thì hiển thị hoặc ẩn List Item
+         * @author: DUONGPV (08/09/2022)
+         */
+        onHandleRemoveItemSelected(item) {
+            try {
+                if (this.checkValueInclude(item.valueShow, this.dataInput)) {
+                    var indexValue = this.dataInput.findIndex((e) => {
+                        return e.valueShow == item.valueShow;
+                    });
+                    var indexSelectedValue = this.listSelected.findIndex(
+                        (e) => {
+                            return e == item.valueShow;
+                        }
+                    );
+                    this.dataInput.splice(indexValue, 1);
+                    this.listSelected.splice(indexSelectedValue, 1);
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -241,6 +325,70 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+        },
+
+        /**
+         * Lựa chọn item bằng cách nhấn các phím lên, xuống trên bàn phím
+         * @author: DUONGPV (08/09/2022)
+         */
+        selecItemUpDown() {
+            try {
+                var keyCodePress = event.keyCode;
+                var elToFocus = null;
+                switch (keyCodePress) {
+                    case keyCode.ESC:
+                        this.isShowListData = false;
+                        break;
+                    case keyCode.ArrowDown:
+                        this.isShowListData = true;
+                        elToFocus =
+                            this.$refs[`toFocus_${this.indexItemFocus + 1}`];
+                        if (
+                            this.indexItemFocus == null ||
+                            !elToFocus ||
+                            elToFocus.length == 0
+                        ) {
+                            this.indexItemFocus = 0;
+                        } else {
+                            this.indexItemFocus += 1;
+                            this.fixScrolling();
+                        }
+
+                        break;
+                    case keyCode.ArrowUp:
+                        this.isShowListData = true;
+                        elToFocus =
+                            this.$refs[`toFocus_${this.indexItemFocus - 1}`];
+                        if (
+                            this.indexItemFocus == null ||
+                            !elToFocus ||
+                            elToFocus.length == 0
+                        ) {
+                            this.indexItemFocus = this.dataFilter.length - 1;
+                        } else {
+                            this.indexItemFocus -= 1;
+                            this.fixScrolling();
+                        }
+                        break;
+                    case keyCode.Enter:
+                        elToFocus =
+                            this.$refs[`toFocus_${this.indexItemFocus}`];
+                        if (elToFocus && elToFocus.length > 0) {
+                            elToFocus[0].click();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        fixScrolling() {
+            var height =
+                this.$refs[`toFocus_${this.indexItemFocus}`][0].clientHeight;
+            this.$refs.scrollComponent.scrollTop = height * this.indexItemFocus;
         },
     },
 };

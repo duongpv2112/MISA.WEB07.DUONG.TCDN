@@ -1,22 +1,23 @@
 <template>
     <div :class="className">
-        <label
-            :for="'Input_' + dataField"
-            class="modal__label mb-6"
-        >
+        <label :for="'Input_' + dataField" class="modal__label mb-6">
             {{ lable }}
         </label>
         <textarea
             :id="'Input_' + dataField"
-            :class="{ textarea__control: true }"
             :ref="dataField"
             :name="dataField"
             :value="valueField"
             :tabindex="tabindex"
             :placeholder="fieldName"
             :autocomplete="autocomplete"
+            :readonly="isReadonly"
             :maxlength="maxlength"
             :rows="numberRow"
+            :class="{
+                'bg-readonly': fieldReadonly,
+                textarea__control: true,
+            }"
             @change="handleChange(dataField, $event)"
         ></textarea>
     </div>
@@ -29,6 +30,7 @@ export default {
         className: Array,
         dataField: String,
         valueField: String,
+        isReadonly: Boolean,
         tabindex: String,
         fieldName: String,
         maxlength: Number,
@@ -36,9 +38,13 @@ export default {
         autocomplete: String,
     },
     emits: ["setValue"],
+
     data() {
-        return {};
+        return {
+            fieldReadonly: false,
+        };
     },
+
     methods: {
         handleChange(dataField, event) {
             try {
@@ -47,6 +53,10 @@ export default {
                 console.log(error);
             }
         },
+    },
+
+    created() {
+        this.fieldReadonly = this.isReadonly;
     },
 };
 </script>

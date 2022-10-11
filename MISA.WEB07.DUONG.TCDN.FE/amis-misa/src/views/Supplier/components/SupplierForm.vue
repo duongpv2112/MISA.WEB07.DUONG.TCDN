@@ -2,118 +2,136 @@
     <div class="modal__body">
         <div class="line-bottom">
             <div class="modal__row">
-                <div class="d-flex flex-wrap pr-26 col-6">
-                    <BaseInput
-                        :className="[
-                            'modal__group',
-                            'modal__col',
-                            'col-4',
-                            typeSupplier == 1 ? 'order-1' : '',
-                        ]"
-                        :lable="RESOURCE.SUPPLIER_TAXCODE_FIELD_LBL"
-                        :type="TYPE_INPUT.TYPE_TEXT"
-                        :dataField="listField.tax_code"
-                        :valueField="account_object.tax_code"
-                        :fieldName="RESOURCE.SUPPLIER_TAXCODE_FIELD_LBL"
-                        :maxlength="20"
-                        @setValue="setValue"
-                    />
+                <div class="col-6 pr-26">
+                    <div class="d-flex px-1">
+                        <BaseInput
+                            :className="[
+                                'modal__group',
+                                'modal__col',
+                                'col-4',
+                                typeSupplier == 1 ? 'order-1' : '',
+                            ]"
+                            :lable="RESOURCE.SUPPLIER_TAXCODE_FIELD_LBL"
+                            :type="TYPE_INPUT.TYPE_TEXT"
+                            :dataField="listField.tax_code"
+                            :valueField="account_object.tax_code"
+                            :fieldName="RESOURCE.SUPPLIER_TAXCODE_FIELD_LBL"
+                            :maxlength="20"
+                            :isReadonly="isViewDetail"
+                            :firstFocus="true"
+                            @setValue="setValue"
+                        />
 
-                    <BaseInput
-                        :className="['modal__group', 'modal__col', 'col-8']"
-                        :lable="RESOURCE.SUPPLIER_CODE_FIELD_LBL"
-                        :type="TYPE_INPUT.TYPE_TEXT"
-                        :dataField="listField.account_object_code"
-                        :valueField="account_object.account_object_code"
-                        :fieldName="RESOURCE.SUPPLIER_CODE_FIELD_LBL"
-                        :maxlength="20"
-                        :isRequired="true"
-                        @setValue="setValue"
-                    />
+                        <BaseInput
+                            :className="['modal__group', 'modal__col', 'col-8']"
+                            :lable="RESOURCE.SUPPLIER_CODE_FIELD_LBL"
+                            :type="TYPE_INPUT.TYPE_TEXT"
+                            :dataField="listField.account_object_code"
+                            :valueField="account_object.account_object_code"
+                            :fieldName="RESOURCE.SUPPLIER_CODE_FIELD_LBL"
+                            :maxlength="20"
+                            :isRequired="true"
+                            :isReadonly="isViewDetail"
+                            @setValue="setValue"
+                        />
+                    </div>
+                    <div class="d-flex flex-wrap px-1">
+                        <BaseInput
+                            v-if="typeSupplier != 1"
+                            :className="[
+                                'modal__group',
+                                'modal__col',
+                                'col-12',
+                            ]"
+                            :lable="RESOURCE.SUPPLIER_NAME_FIELD_LBL"
+                            :type="TYPE_INPUT.TYPE_TEXT"
+                            :dataField="listField.account_object_name"
+                            :valueField="account_object.account_object_name"
+                            :fieldName="RESOURCE.SUPPLIER_NAME_FIELD_LBL"
+                            :isRequired="true"
+                            :isReadonly="isViewDetail"
+                            @setValue="setValue"
+                        />
 
-                    <BaseInput
-                        v-if="typeSupplier != 1"
-                        :className="['modal__group', 'modal__col', 'col-12']"
-                        :lable="RESOURCE.SUPPLIER_NAME_FIELD_LBL"
-                        :type="TYPE_INPUT.TYPE_TEXT"
-                        :dataField="listField.account_object_name"
-                        :valueField="account_object.account_object_name"
-                        :fieldName="RESOURCE.SUPPLIER_NAME_FIELD_LBL"
-                        :isRequired="true"
-                        @setValue="setValue"
-                    />
+                        <div
+                            v-if="typeSupplier == 1"
+                            class="d-flex col-12"
+                            :class="{ 'order-2': typeSupplier == 1 }"
+                        >
+                            <div class="modal__col col-12">
+                                <label class="modal__label mb-6">
+                                    {{ RESOURCE.SUPPLIER_NAME_FIELD_LBL }}
+                                </label>
+                                <div class="modal__row">
+                                    <div class="modal__group modal__col col-4">
+                                        <BaseComboboxDefault
+                                            :className="[
+                                                'col-12',
+                                            ]"
+                                            :dataField="
+                                                listField.vocative_supplier
+                                            "
+                                            :value="
+                                                VOCATIVE[
+                                                    account_object
+                                                        .vocative_supplier
+                                                ]
+                                            "
+                                            :listData="listVocative"
+                                            :placeholder="
+                                                RESOURCE.SUPPLIER_VOCATIVE_FIELD_LBL
+                                            "
+                                            :isHideLable="true"
+                                            :isBottom="true"
+                                            :isReadOnly="isViewDetail"
+                                            @setValue="setValue"
+                                        />
+                                    </div>
 
-                    <div
-                        v-if="typeSupplier == 1"
-                        class="d-flex col-12"
-                        :class="{ 'order-2': typeSupplier == 1 }"
-                    >
-                        <div class="modal__col col-12">
-                            <label class="modal__label mb-6">
-                                {{ RESOURCE.SUPPLIER_NAME_FIELD_LBL }}
-                            </label>
-                            <div class="modal__row">
-                                <div class="modal__group modal__col col-4">
-                                    <BaseComboboxDefault
+                                    <BaseInput
                                         :className="[
-                                            'modal__control',
-                                            'col-12',
+                                            'modal__group',
+                                            'modal__col',
+                                            'col-8',
                                         ]"
-                                        :dataField="listField.vocative_supplier"
-                                        :value="
-                                            VOCATIVE[
-                                                account_object.vocative_supplier
-                                            ]
+                                        :type="TYPE_INPUT.TYPE_TEXT"
+                                        :dataField="
+                                            listField.account_object_name
                                         "
-                                        :listData="listVocative"
-                                        :placeholder="
-                                            RESOURCE.SUPPLIER_VOCATIVE_FIELD_LBL
+                                        :valueField="
+                                            account_object.account_object_name
+                                        "
+                                        :fieldName="
+                                            RESOURCE.SUPPLIER_REPRESENTATIVE_NAME_FIELD_LBL
                                         "
                                         :isHideLable="true"
-                                        :isBottom="true"
+                                        :isReadonly="isViewDetail"
                                         @setValue="setValue"
                                     />
                                 </div>
-
-                                <BaseInput
-                                    :className="[
-                                        'modal__group',
-                                        'modal__col',
-                                        'col-8',
-                                    ]"
-                                    :type="TYPE_INPUT.TYPE_TEXT"
-                                    :dataField="listField.account_object_name"
-                                    :valueField="
-                                        account_object.account_object_name
-                                    "
-                                    :fieldName="
-                                        RESOURCE.SUPPLIER_REPRESENTATIVE_NAME_FIELD_LBL
-                                    "
-                                    :isHideLable="true"
-                                    @setValue="setValue"
-                                />
                             </div>
                         </div>
-                    </div>
 
-                    <BaseTextArea
-                        :className="[
-                            'modal__group',
-                            'modal__col',
-                            'col-12',
-                            typeSupplier == 1 ? 'order-3' : '',
-                        ]"
-                        :lable="RESOURCE.SUPPLIER_ADDRESS_FIELD_LBL"
-                        :dataField="listField.address"
-                        :valueField="account_object.address"
-                        :fieldName="RESOURCE.SUPPLIER_ADDRESS_FIELD_LBL"
-                        :numberRow="2"
-                        @setValue="setValue"
-                    />
+                        <BaseTextArea
+                            :className="[
+                                'modal__group',
+                                'modal__col',
+                                'col-12',
+                                typeSupplier == 1 ? 'order-3' : '',
+                            ]"
+                            :lable="RESOURCE.SUPPLIER_ADDRESS_FIELD_LBL"
+                            :dataField="listField.address"
+                            :valueField="account_object.address"
+                            :fieldName="RESOURCE.SUPPLIER_ADDRESS_FIELD_LBL"
+                            :numberRow="2"
+                            :isReadonly="isViewDetail"
+                            @setValue="setValue"
+                        />
+                    </div>
                 </div>
 
                 <div class="col-6">
-                    <div class="d-flex">
+                    <div class="d-flex px-1">
                         <BaseInput
                             v-if="typeSupplier != 1"
                             :className="['modal__group', 'modal__col', 'col-4']"
@@ -122,6 +140,7 @@
                             :dataField="listField.telephone_number"
                             :valueField="account_object.telephone_number"
                             :fieldName="RESOURCE.SUPPLIER_PHONE_FIELD_LBL"
+                            :isReadonly="isViewDetail"
                             @setValue="setValue"
                         />
 
@@ -133,81 +152,86 @@
                             :dataField="listField.website"
                             :valueField="account_object.website"
                             :fieldName="RESOURCE.SUPPLIER_WEBSITE_FIELD_LBL"
+                            :isReadonly="isViewDetail"
                             @setValue="setValue"
                         />
                     </div>
 
-                    <div class="modal__group modal__col col-12">
-                        <label class="modal__label mb-6">
-                            {{ RESOURCE.SUPPLIER_GROUP_FIELD_LBL }}
-                        </label>
-                        <BaseComboboxTags
-                            :url="API.PAGING_DATA_SUPPLIER_GROUP"
-                            :propValue="'supplier_group_id'"
-                            :className="[
-                                'modal__col',
-                                'modal__control',
-                                'col-12',
-                            ]"
-                            :dataField="'supplier_group_id'"
-                            :propText="'supplier_group_code'"
-                            :value="valueSupplierConstraints"
-                            :isReadOnly="false"
-                            :isBottom="true"
-                            :placeholder="RESOURCE.SUPPLIER_GROUP_FIELD_LBL"
-                            :nameRow="[
-                                {
-                                    fieldName: 'Mã nhóm KH, NCC',
-                                    dataField: 'supplier_group_code',
-                                },
-                                {
-                                    fieldName: 'Tên nhóm KH, NCC',
-                                    dataField: 'supplier_group_name',
-                                },
-                            ]"
-                            @setValueList="setValueList"
-                        />
-                    </div>
+                    <div class="d-flex flex-wrap px-1">
+                        <div class="modal__group modal__col col-12">
+                            <label class="modal__label mb-6">
+                                {{ RESOURCE.SUPPLIER_GROUP_FIELD_LBL }}
+                            </label>
+                            <BaseComboboxTags
+                                :url="API.PAGING_DATA_SUPPLIER_GROUP"
+                                :propValue="'supplier_group_id'"
+                                :className="[
+                                    'col-12',
+                                ]"
+                                :dataField="'supplier_group_id'"
+                                :propText="'supplier_group_code'"
+                                :value="valueSupplierConstraints"
+                                :isReadOnly="isViewDetail"
+                                :isBottom="true"
+                                :placeholder="RESOURCE.SUPPLIER_GROUP_FIELD_LBL"
+                                :nameRow="[
+                                    {
+                                        fieldName: 'Mã nhóm KH, NCC',
+                                        dataField: 'supplier_group_code',
+                                        stypeColumn: {
+                                            'min-width': '150px !important',
+                                        },
+                                    },
+                                    {
+                                        fieldName: 'Tên nhóm KH, NCC',
+                                        dataField: 'supplier_group_name',
+                                        stypeColumn: {},
+                                    },
+                                ]"
+                                @setValueList="setValueList"
+                            />
+                        </div>
 
-                    <div class="modal__group modal__col col-12">
-                        <label class="modal__label mb-6">
-                            {{ RESOURCE.SUPPLIER_EMPLOYEE_FIELD_LBL }}
-                        </label>
-                        <BaseComboboxTable
-                            :url="API.PAGING_DATA_EMPLOYEE"
-                            :propValue="'employee_id'"
-                            :propText="'employee_name'"
-                            :dataField="'account_object_id'"
-                            :dataText="'account_object_name'"
-                            :className="[
-                                'modal__group',
-                                'modal__col',
-                                'modal__control',
-                                'col-12',
-                            ]"
-                            :value="account_object.employee_name"
-                            :isReadOnly="false"
-                            :isBottom="true"
-                            :placeholder="RESOURCE.SUPPLIER_EMPLOYEE_FIELD_LBL"
-                            :nameRow="[
-                                {
-                                    fieldName: 'Mã nhân viên',
-                                    dataField: 'account_object_code',
-                                },
-                                {
-                                    fieldName: 'Tên nhân viên',
-                                    dataField: 'account_object_name',
-                                },
-                            ]"
-                            @setValue="setValue"
-                        />
+                        <div class="modal__group modal__col col-12">
+                            <label class="modal__label mb-6">
+                                {{ RESOURCE.SUPPLIER_EMPLOYEE_FIELD_LBL }}
+                            </label>
+                            <BaseComboboxTable
+                                :url="API.PAGING_DATA_EMPLOYEE"
+                                :propValue="'employee_id'"
+                                :propText="'employee_name'"
+                                :dataField="'account_object_id'"
+                                :dataText="'account_object_name'"
+                                :className="[
+                                    'modal__group',
+                                    'col-12',
+                                ]"
+                                :value="account_object.employee_name"
+                                :isReadOnly="isViewDetail"
+                                :isBottom="true"
+                                :placeholder="
+                                    RESOURCE.SUPPLIER_EMPLOYEE_FIELD_LBL
+                                "
+                                :nameRow="[
+                                    {
+                                        fieldName: 'Mã nhân viên',
+                                        dataField: 'account_object_code',
+                                    },
+                                    {
+                                        fieldName: 'Tên nhân viên',
+                                        dataField: 'account_object_name',
+                                    },
+                                ]"
+                                @setValue="setValue"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
 
             <BaseTabs>
                 <BaseTabItem name="Thông tin liên hệ">
-                    <div v-if="!isHide" class="modal__row">
+                    <div v-if="typeSupplier != 1" class="modal__row">
                         <div class="d-flex pr-26 col-6">
                             <div class="modal__group modal__col col-12">
                                 <label class="modal__label mb-6">
@@ -223,7 +247,6 @@
                                         >
                                             <BaseComboboxDefault
                                                 :className="[
-                                                    'modal__control',
                                                     'col-12',
                                                 ]"
                                                 :dataField="
@@ -241,6 +264,7 @@
                                                 "
                                                 :isHideLable="true"
                                                 :isBottom="true"
+                                                :isReadOnly="isViewDetail"
                                                 @setValue="setValue"
                                             />
                                         </div>
@@ -261,6 +285,7 @@
                                                 RESOURCE.SUPPLIER_CONTACT_NAME_PLACEHOLDER
                                             "
                                             :isHideLable="true"
+                                            :isReadonly="isViewDetail"
                                             @setValue="setValue"
                                         />
                                     </div>
@@ -278,6 +303,7 @@
                                             RESOURCE.SUPPLIER_EMAIL_FIELD_LBL
                                         "
                                         :isHideLable="true"
+                                        :isReadonly="isViewDetail"
                                         @setValue="setValue"
                                     />
                                     <BaseInput
@@ -296,6 +322,7 @@
                                             RESOURCE.SUPPLIER_PHONE_FIELD_LBL
                                         "
                                         :isHideLable="true"
+                                        :isReadonly="isViewDetail"
                                         @setValue="setValue"
                                     />
                                 </div>
@@ -318,11 +345,12 @@
                                 :fieldName="
                                     RESOURCE.SUPPLIER_REPRESENTATIVE_FIELD_LBL
                                 "
+                                :isReadonly="isViewDetail"
                                 @setValue="setValue"
                             />
                         </div>
                     </div>
-                    <div v-if="isHide" class="modal__row">
+                    <div v-if="typeSupplier == 1" class="modal__row">
                         <div class="d-flex flex-wrap pr-26 col-6">
                             <div class="modal__group modal__col mb-0 col-12">
                                 <label class="modal__label mb-6">
@@ -345,6 +373,7 @@
                                         :fieldName="
                                             RESOURCE.SUPPLIER_EMAIL_FIELD_LBL
                                         "
+                                        :isReadonly="isViewDetail"
                                         :isHideLable="true"
                                         @setValue="setValue"
                                     />
@@ -365,6 +394,7 @@
                                             :fieldName="
                                                 RESOURCE.SUPPLIER_MOBILEPHONE_FIELD_LBL
                                             "
+                                            :isReadonly="isViewDetail"
                                             :isHideLable="true"
                                             @setValue="setValue"
                                         />
@@ -387,6 +417,7 @@
                                             :fieldName="
                                                 RESOURCE.SUPPLIER_TELEPHONE_FIELD_LBL
                                             "
+                                            :isReadonly="isViewDetail"
                                             :isHideLable="true"
                                             @setValue="setValue"
                                         />
@@ -416,6 +447,7 @@
                                         :fieldName="
                                             RESOURCE.SUPPLIER_REPRESENTATIVE_FIELD_LBL
                                         "
+                                        :isReadonly="isViewDetail"
                                         @setValue="setValue"
                                     />
                                 </div>
@@ -448,28 +480,59 @@
                                                 RESOURCE.SUPPLIER_IDENTITY_NUMBER_FIELD_LBL
                                             "
                                             :isHideLable="true"
+                                            :isReadonly="isViewDetail"
                                             @setValue="setValue"
                                         />
                                     </div>
                                     <div class="d-block col-12">
-                                        <BaseInput
-                                            :className="[
-                                                'modal__group',
-                                                'modal__col',
-                                                'mb-control-group',
-                                                'col-6',
-                                            ]"
-                                            :type="TYPE_INPUT.TYPE_TEXT"
-                                            :dataField="listField.identity_date"
-                                            :valueField="
+                                        <vc-date-picker
+                                            v-model="
                                                 account_object.identity_date
                                             "
-                                            :fieldName="
-                                                RESOURCE.SUPPLIER_IDENTITY_DATE_FIELD_LBL
-                                            "
-                                            :isHideLable="true"
-                                            @setValue="setValue"
-                                        />
+                                            :popover="{
+                                                visibility: 'focus',
+                                            }"
+                                            :attributes="datepicker"
+                                        >
+                                            <template
+                                                v-slot="{
+                                                    inputValue,
+                                                    inputEvents,
+                                                }"
+                                            >
+                                                <label
+                                                    :for="
+                                                        listField.identity_date
+                                                    "
+                                                    class="d-block p-relative"
+                                                    :class="[
+                                                        'modal__group',
+                                                        'modal__col',
+                                                        'mb-control-group',
+                                                        'col-6',
+                                                    ]"
+                                                >
+                                                    <div
+                                                        class="square-32 cursor-pointer modal-icon__calendar"
+                                                    >
+                                                        <span
+                                                            class="square-32 icon icon-calendar"
+                                                        ></span>
+                                                    </div>
+                                                    <input
+                                                        class="modal__control modal__datepicker"
+                                                        v-on="inputEvents"
+                                                        :value="inputValue"
+                                                        :id="
+                                                            listField.identity_date
+                                                        "
+                                                        :placeholder="
+                                                            RESOURCE.SUPPLIER_IDENTITY_DATE_FIELD_LBL
+                                                        "
+                                                    />
+                                                </label>
+                                            </template>
+                                        </vc-date-picker>
                                     </div>
                                     <BaseInput
                                         :className="[
@@ -487,6 +550,7 @@
                                             RESOURCE.SUPPLIER_IDENTITY_PLACE_FIELD_LBL
                                         "
                                         :isHideLable="true"
+                                        :isReadonly="isViewDetail"
                                         @setValue="setValue"
                                     />
                                 </div>
@@ -506,7 +570,6 @@
                                     </label>
                                     <BaseComboboxDefault
                                         :className="[
-                                            'modal__control',
                                             'col-12',
                                         ]"
                                         :dataField="listField.payment_term"
@@ -521,6 +584,7 @@
                                         "
                                         :isHideLable="true"
                                         :isBottom="true"
+                                        :isReadOnly="isViewDetail"
                                         :onHandleEvent="setValue"
                                         @setValue="setValue"
                                     />
@@ -544,6 +608,7 @@
                                 "
                                 :maxlength="18"
                                 :isInputNumber="true"
+                                :isReadonly="isViewDetail"
                                 @setValue="setValue"
                             />
                             <BaseInput
@@ -560,6 +625,7 @@
                                     RESOURCE.SUPPLIER_MAX_DEBT_FIELD_LBL
                                 "
                                 :maxlength="18"
+                                :isReadonly="isViewDetail"
                                 :isInputNumber="true"
                                 @setValue="setValue"
                             />
@@ -580,6 +646,7 @@
                                 :fieldName="
                                     RESOURCE.SUPPLIER_ACCOUNT_PAYABLE_FIELD_LBL
                                 "
+                                :isReadonly="isViewDetail"
                                 @setValue="setValue"
                             />
                         </div>
@@ -606,6 +673,7 @@
                     'button-text-bold',
                     'button-border-modal',
                 ]"
+                :isButtonCancel="true"
                 :functionz="onClose"
             />
         </div>
@@ -646,7 +714,7 @@
         </button>
         <button
             class="modal__button modal__button--close tooltip"
-            @click="onClose"
+            @click.stop="onClose(0)"
         >
             <i class="square-24 icon icon-times"></i>
             <BaseTooltip
@@ -692,6 +760,7 @@ export default {
         supplierValue: null,
         onClose: Function,
         onSave: Function,
+        isViewDetail: Boolean,
     },
 
     data() {
@@ -705,6 +774,14 @@ export default {
             PAYMENT_TERM: PAYMENT_TERM,
 
             API: API_RESOURCE,
+
+            datepicker: [
+                {
+                    key: "today",
+                    highlight: "red",
+                    dates: new Date(),
+                },
+            ],
 
             account_object: {
                 account_object_code: "",
@@ -808,8 +885,6 @@ export default {
             ],
 
             valueSupplierConstraints: [],
-
-            isHide: false,
         };
     },
     methods: {
@@ -833,7 +908,6 @@ export default {
                         modified_by: "Admin",
                     });
                 }
-                console.log(this.supplier_constraints);
             } catch (error) {
                 console.log(error);
             }
@@ -881,10 +955,6 @@ export default {
                     });
             }
         }
-    },
-
-    beforeUpdate() {
-        this.isHide = this.typeSupplier == 1;
     },
 };
 </script>

@@ -1,6 +1,8 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./routers";
+import VCalendar from "v-calendar";
+import 'v-calendar/dist/style.css';
 
 /* Sử dụng */
 const app = createApp(App);
@@ -28,5 +30,10 @@ app.directive("clickoutside", {
         event.stopPropagation();
     },
 });
+
+app.use(VCalendar, {
+    componentPrefix: "vc",
+});
+
 app.use(router);
 app.mount("#app");

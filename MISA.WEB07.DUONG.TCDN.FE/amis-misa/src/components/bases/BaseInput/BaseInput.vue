@@ -1,5 +1,5 @@
 <template>
-    <div :class="className">
+    <div :class="className" class="tooltip">
         <label
             v-if="!isHideLable"
             :for="'Input_' + dataField"
@@ -10,7 +10,11 @@
         </label>
         <input
             :id="'Input_' + dataField"
-            :class="{ modal__control: true, 'input-number': isInputNumber }"
+            :class="{
+                modal__control: true,
+                'input-number': isInputNumber,
+                'border-red': checkData.isInValid,
+            }"
             :type="type"
             :ref="dataField"
             :name="dataField"
@@ -23,15 +27,21 @@
             :placeholder="fieldName"
             :maxlength="maxlength"
             :autocomplete="autocomplete"
+            :readonly="isReadonly"
             step="1"
             @input="onHandleInput(dataField, $event)"
             @blur="handleBlur($event)"
         />
-        <span v-if="checkData.isInValid">{{ checkData.errorMessage }}</span>
+        <BaseTooltip
+            v-if="checkData.isInValid"
+            :content="checkData.errorMessage"
+            :className="['tooltip-default', 'tooltip-input__validate']"
+        />
     </div>
 </template>
 <script>
 import { common } from "@/libs/common/common";
+import BaseTooltip from "../BaseTooltip/BaseTooltip";
 export default {
     name: "BaseInput",
 
@@ -49,6 +59,8 @@ export default {
         isRequired: Boolean,
         errorMessage: String,
         isInputNumber: Boolean,
+        isReadonly: Boolean,
+        firstFocus: Boolean,
     },
 
     emits: ["setValue"],
@@ -72,6 +84,12 @@ export default {
         }
     },
 
+    mounted() {
+        if (this.firstFocus) {
+            this.$refs[this.dataField].focus();
+        }
+    },
+
     methods: {
         onHandleInput(dataField, event) {
             try {
@@ -85,13 +103,11 @@ export default {
                 console.log(error);
             }
         },
-
         handleBlur(event) {
             try {
-                if (!event.target.value) {
+                if (!event.target.value && this.isRequired) {
                     this.checkData.isInValid = true;
-                    this.checkData.errorMessage =
-                        "Trường này không được để trống!";
+                    this.checkData.errorMessage = `${this.fieldName} không được để trống.`;
                 } else {
                     this.checkData.isInValid = false;
                     this.checkData.errorMessage = "";
@@ -101,6 +117,8 @@ export default {
             }
         },
     },
+
+    components: { BaseTooltip },
 };
 </script>
 <style scoped>

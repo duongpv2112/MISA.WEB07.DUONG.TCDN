@@ -1,0 +1,80 @@
+/* 
+ * CSS Component Popup
+ * Author: DUONGPV (29/07/2022)
+ */
+
+.popup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup .popup__dialog {
+    background-color: #fff;
+    border: 1px solid #bbb;
+    box-sizing: border-box;
+    max-width: 430px;
+    position: relative;
+    border-radius: 4px;
+    padding: 32px;
+}
+
+.popup .popup__body {
+    padding-bottom: 12px;
+}
+
+.popup .popup__notice {
+    display: flex;
+    align-items: center;
+}
+
+.popup .popup__icon {
+    font-size: 34px;
+    padding: 0 14px 0 0;
+}
+
+.popup .popup__footer {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #bbb;
+    padding: 20px 0 0 0;
+    width: 100%;
+}
+
+.popup .popup__button {
+    height: 34px;
+    background-color: #fff;
+    padding: 6px 16px;
+    border-radius: 3px;
+    border: 1px solid #bbb;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.popup .popup__button:hover {
+    background-color: #eee;
+}
+
+.popup .popup__button.button-right:not(:last-child) {
+    margin-right: 10px;
+}
+
+.popup .popup__button.btn-confirm {
+    background-color: #2ca01c;
+    color: #fff;
+    border: none;
+}
+
+.popup .popup__button.btn-confirm:hover {
+    background-color: #35bf22;
+}
+
+.popup .popup__button.btn-danger {
+    background-color: #2ca01c;
+    color: #fff;
+    border: none;
+}
+
+.popup .popup__button.btn-danger:hover {
+    background-color: #35bf22;
+}

@@ -328,3 +328,19 @@
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+/* Background Readonly */
+.bg-readonly {
+    background-color: #eff0f2 !important;
+}
+
+.pointer-event-none {
+    pointer-events: none;
+}
+
+.no-data--combobox {
+    display: flex;
+    line-height: 32px;
+    width: 175px;
+    padding: 0 10px;
+}

@@ -3,12 +3,17 @@
         v-if="!isIcon && !isIconText"
         class="button"
         :class="className"
-        @click="functionz"
+        @click="isButtonCancel ? this.functionz(1) : this.functionz()"
     >
         {{ title }}
         <BaseTooltip :content="contentTooltip" :className="classNameTooltip" />
     </button>
-    <button v-if="isIcon" class="button" :class="className" @click="functionz">
+    <button
+        v-if="isIcon"
+        class="button"
+        :class="className"
+        @click="this.functionz()"
+    >
         <div class="d-flex flex-center button-icon">
             <span class="icon" :class="classNameIcon"></span>
             <div class="button-line"></div>
@@ -19,7 +24,7 @@
         v-if="isIconText"
         class="button"
         :class="className"
-        @click="functionz"
+        @click="this.functionz()"
     >
         <div class="d-flex flex-center">
             <span class="pr-4">{{ title }}</span>
@@ -41,6 +46,7 @@ export default {
         classNameIcon: Object,
         classNameTooltip: Array,
         contentTooltip: String,
+        isButtonCancel: Boolean,
     },
 
     data() {

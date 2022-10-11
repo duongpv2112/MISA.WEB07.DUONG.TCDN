@@ -11,6 +11,11 @@
     outline: none;
 }
 
+.textarea__control::placeholder {
+    font-family: MISA_AMIS_ITALIC;
+    font-size: 12px;
+}
+
 .textarea__control:hover {
     outline: 1px solid #e2e2e2;
 }

@@ -1,0 +1,4 @@
+export const TYPE_CLOSE = {
+    TYPE_CLOSE_CHECK_CHANGE: 0,
+    TYPE_CLOSE_DEFAULT: 1,
+};

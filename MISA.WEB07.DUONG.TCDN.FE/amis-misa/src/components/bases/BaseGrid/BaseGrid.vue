@@ -25,9 +25,10 @@
         </span>
         <div class="navigation-action">
             <BaseComboboxDefault
-                style="height: 100%; border: 1px solid #ccc"
+                style="height: 100%"
                 :value="pageSize + ' bản ghi trên 1 trang'"
                 :isReadOnly="true"
+                :isComboboxPaging="true"
                 :isTop="true"
                 :dataField="'number_page_size'"
                 :isLoading="!dataReady"
@@ -35,6 +36,7 @@
                 :currentPageRecords="pageSize"
                 :onHandleEvent="onHandlePageSizeChange"
                 :nameTemp="'bản ghi trên 1 trang'"
+                :className="['overflow-none']"
                 @setValue="onHandlePageSizeChange"
             />
             <BasePagination

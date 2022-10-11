@@ -179,15 +179,31 @@
     cursor: pointer;
 }
 
-.modal .modal__datepicker::placeholder {
+.modal .modal__datepicker::placeholder,
+.modal .modal__control::placeholder {
     font-family: MISA_AMIS_ITALIC;
     font-size: 12px;
 }
 
 .modal .modal-icon__calendar {
     position: absolute;
-    right: 0;
+    right: 4px;
     top: 0;
+}
+.modal .modal-icon__calendar:hover {
+    background-color: #e0e0e0;
+    border: 1px solid #bbb;
+    border-left: none;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+.modal .modal-icon__calendar:hover .icon-calendar {
+    background-position: -120px -305px;
+}
+
+.modal .modal-icon__calendar:hover ~ input {
+    outline: 1px solid #e2e2e2;
 }
 
 /* Modal Footer */
@@ -241,4 +257,9 @@
 
 .modal__action .modal__button:hover {
     color: gray;
+}
+
+.px-1 {
+    padding-left: 1px !important;
+    padding-right: 1px !important;
 }

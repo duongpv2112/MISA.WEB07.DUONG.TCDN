@@ -1,0 +1,5 @@
+export const POPUP_TYPE = {
+    POPUP_TYPE_INFO: 0,
+    POPUP_TYPE_DANGER: 1,
+    POPUP_TYPE_WARNING: 2,
+};

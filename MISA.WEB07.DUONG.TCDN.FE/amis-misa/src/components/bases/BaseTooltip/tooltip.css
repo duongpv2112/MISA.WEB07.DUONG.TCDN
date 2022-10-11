@@ -22,6 +22,31 @@
     transform: translateX(-50%);
 }
 
+.tooltip-text.tooltip-default--header {
+    top: calc(100% + 50%);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.tooltip-text.tooltip-input__validate {
+    background-color: #f77;
+    color: #fff;
+    font-size: 13px;
+    box-shadow: 2px 2px 2px 0 #d4d7dc;
+}
+
+.tooltip-text.tooltip-input__validate::after {
+    content: "";
+    display: block;
+    position: absolute;
+    border-width: 6px 5px;
+    border-style: solid;
+    border-color: transparent transparent #ff7777 transparent;
+    top: -11px;
+    left: 50%;
+}
+
 .tooltip:hover .tooltip-text {
     display: block;
 }

@@ -1,14 +1,20 @@
 <template>
-    <div class="combobox border-radius-2" :class="className">
-        <div class="combobox-selected">
+    <div class="combobox border-radius-2">
+        <div
+            class="combobox-selected"
+            :class="[className, isReadOnly ? 'bg-readonly' : '']"
+        >
             <div class="combobox-selected--input">
                 <input
+                    class="combobox__control"
                     v-model="textInput"
                     type="text"
                     :placeholder="placeholder"
                     :tabindex="tabindex"
                     :readonly="isReadOnly"
-                    @keypress.enter="onHandleSearch($event.target.value)"
+                    :ref="propValue"
+                    @keyup="onHandleSearch($event.target.value)"
+                    @keydown="selecItemUpDown"
                     @input="onHandleChangeInputData"
                 />
             </div>
@@ -18,7 +24,7 @@
                 </div>
                 <div
                     class="combobox-selected--icon"
-                    @click="btnSelectDataOnClick"
+                    @click="isReadOnly ? null : btnSelectDataOnClick()"
                 >
                     <i
                         class="icon icon-dropdown square-16"
@@ -54,6 +60,13 @@
                     <tr
                         v-for="(data, index) in dataCombobox"
                         :key="'row_' + index"
+                        :ref="'toFocus_' + index"
+                        :class="{
+                            'combobox__item--focus': index == indexItemFocus,
+                            'combobox__item--selected':
+                                index == indexItemSelected ||
+                                data[dataText] == textInput,
+                        }"
                         @click="onHandleSelected(data)"
                     >
                         <td
@@ -70,6 +83,14 @@
 </template>
 <script>
 import api from "@/services/api";
+
+const keyCode = {
+    Enter: 13,
+    ArrowUp: 38,
+    ArrowDown: 40,
+    ESC: 27,
+    Tab: 9,
+};
 
 export default {
     name: "BaseComboboxTable",
@@ -99,12 +120,6 @@ export default {
         this.getData(this.pageNumber);
     },
 
-    beforeUpdate() {
-        if (this.value) {
-            this.textInput = this.value;
-        }
-    },
-
     data() {
         return {
             dataCombobox: [],
@@ -114,6 +129,9 @@ export default {
             pageSize: Number,
             keyWord: String,
             isDataNull: Boolean,
+            borderFocus: Boolean,
+            indexItemFocus: null,
+            indexItemSelected: null,
         };
     },
 
@@ -148,9 +166,11 @@ export default {
             }
         },
 
-        onHandleScroll({ target: { scrollTop, clientHeight, scrollHeight } }) {
+        onHandleScroll() {
             if (
-                scrollTop + clientHeight >= scrollHeight - 10 &&
+                this.$refs.scrollComponent.scrollTop +
+                    this.$refs.scrollComponent.clientHeight >=
+                    this.$refs.scrollComponent.scrollHeight - 2 &&
                 !this.isDataNull
             ) {
                 this.pageNumber += 1;
@@ -158,9 +178,25 @@ export default {
             }
         },
 
-        onHandleSearch(keyWord) {
-            this.pageNumber = 1;
-            this.getData(this.pageNumber, keyWord, false);
+        async onHandleSearch(keyWord) {
+            console.log(event.keyCode);
+            if (
+                event.keyCode != keyCode.ArrowDown &&
+                event.keyCode != keyCode.ArrowUp &&
+                event.keyCode != keyCode.Enter &&
+                event.keyCode != keyCode.ESC &&
+                event.keyCode != keyCode.Tab
+            ) {
+                if (this.timer) {
+                    clearTimeout(this.timer);
+                    this.timer = null;
+                }
+                this.timer = setTimeout(async () => {
+                    this.pageNumber = 1;
+                    await this.getData(this.pageNumber, keyWord, false);
+                    this.isShowListData = true;
+                }, 400);
+            }
         },
 
         /**
@@ -169,6 +205,7 @@ export default {
          */
         btnSelectDataOnClick() {
             this.isShowListData = !this.isShowListData;
+            this.$refs[this.propValue].focus();
         },
 
         /**
@@ -197,7 +234,6 @@ export default {
                 const value = item[this.dataField];
                 this.textInput = text;
                 this.isShowListData = false;
-                this.isShowListData = false;
                 this.$emit("setValue", value, this.propValue);
                 if (this.propText) {
                     this.$emit("setValue", text, this.propText);
@@ -205,6 +241,71 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+        },
+
+        /**
+         * Lựa chọn item bằng cách nhấn các phím lên, xuống trên bàn phím
+         * @author: DUONGPV (08/09/2022)
+         */
+        selecItemUpDown() {
+            try {
+                var keyCodePress = event.keyCode;
+                var elToFocus = null;
+                switch (keyCodePress) {
+                    case keyCode.ESC:
+                        this.isShowListData = false;
+                        break;
+                    case keyCode.ArrowDown:
+                        this.isShowListData = true;
+                        elToFocus =
+                            this.$refs[`toFocus_${this.indexItemFocus + 1}`];
+                        if (
+                            this.indexItemFocus == null ||
+                            !elToFocus ||
+                            elToFocus.length == 0
+                        ) {
+                            this.indexItemFocus = 0;
+                        } else {
+                            this.indexItemFocus += 1;
+                            this.fixScrolling();
+                        }
+
+                        break;
+                    case keyCode.ArrowUp:
+                        this.isShowListData = true;
+                        elToFocus =
+                            this.$refs[`toFocus_${this.indexItemFocus - 1}`];
+                        if (
+                            this.indexItemFocus == null ||
+                            !elToFocus ||
+                            elToFocus.length == 0
+                        ) {
+                            this.indexItemFocus = this.dataFilter.length - 1;
+                        } else {
+                            this.indexItemFocus -= 1;
+                            this.fixScrolling();
+                        }
+                        break;
+                    case keyCode.Enter:
+                        elToFocus =
+                            this.$refs[`toFocus_${this.indexItemFocus}`];
+                        if (elToFocus && elToFocus.length > 0) {
+                            elToFocus[0].click();
+                            this.isShowListData = false;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        fixScrolling() {
+            var height =
+                this.$refs[`toFocus_${this.indexItemFocus}`][0].clientHeight;
+            this.$refs.scrollComponent.scrollTop = height * this.indexItemFocus;
         },
     },
 };

@@ -35,7 +35,7 @@
                                 'button-primary',
                                 'button-radius-left',
                             ]"
-                            :functionz="onHandleShowHideModal"
+                            :functionz="onHandleShowModal"
                         />
                         <BaseButton
                             :isIcon="true"
@@ -53,10 +53,19 @@
                 </div>
             </div>
 
-            <a href="#" class="text-decoration-none back-page">
-                <span class="icon square-16 icon-chevron-left-primary"></span>
-                Tất cả danh mục
-            </a>
+            <div class="d-flex">
+                <div>
+                    <router-link
+                        :to="{ name: 'app' }"
+                        class="text-decoration-none back-page"
+                    >
+                        <span
+                            class="icon square-16 icon-chevron-left-primary"
+                        ></span>
+                        Quay lại
+                    </router-link>
+                </div>
+            </div>
         </div>
 
         <div class="container-page__overview">
@@ -69,7 +78,12 @@
                         <div class="lable-overview">Nợ quá hạn</div>
                     </div>
                     <div class="overview-line"></div>
-                    <div class="icon funnel-icon"></div>
+                    <div class="icon funnel-icon tooltip">
+                        <BaseTooltip
+                            :content="'Bấm vào để lọc'"
+                            :className="['tooltip-default--header']"
+                        />
+                    </div>
                 </div>
 
                 <div
@@ -80,7 +94,12 @@
                         <div class="lable-overview">Tổng nợ phải trả</div>
                     </div>
                     <div class="overview-line"></div>
-                    <div class="icon funnel-icon"></div>
+                    <div class="icon funnel-icon tooltip">
+                        <BaseTooltip
+                            :content="'Bấm vào để lọc'"
+                            :className="['tooltip-default--header']"
+                        />
+                    </div>
                 </div>
 
                 <div class="overview-item overview-item__payment bg-payment">
@@ -166,17 +185,32 @@
                             class="toolbar-search__icon icon icon-search"
                         ></label>
                     </div>
-                    <button class="toolbar-button" @click="onHandleReload">
+                    <button
+                        class="toolbar-button tooltip"
+                        @click="onHandleReload"
+                    >
                         <span class="d-block square-24 icon icon-refresh">
                         </span>
+                        <BaseTooltip
+                            :content="'Lấy lại dữ liệu'"
+                            :className="['tooltip-default--header']"
+                        />
                     </button>
-                    <button class="toolbar-button">
+                    <button class="toolbar-button tooltip">
                         <span class="d-block square-24 icon icon-excel"></span>
+                        <BaseTooltip
+                            :content="'Xuất ra Excel'"
+                            :className="['tooltip-default--header']"
+                        />
                     </button>
-                    <button class="toolbar-button">
+                    <button class="toolbar-button tooltip">
                         <span
                             class="d-block square-24 icon icon-setting-list"
                         ></span>
+                        <BaseTooltip
+                            :content="'Tùy chỉnh giao diện'"
+                            :className="['tooltip-default--header']"
+                        />
                     </button>
                 </div>
             </div>
@@ -202,17 +236,28 @@
         :titleHeader="RESOURCE.SUPPLIER_MODAL_PAGE_HEADER"
     >
         <template v-slot:header>
-            <SupplierFormHeader @setValue="onChangTypeSupplier" />
+            <SupplierFormHeader
+                :isViewDetail="isViewDetail"
+                :typeSupplier="typeSupplier"
+                @setValue="onChangTypeSupplier"
+            />
         </template>
         <template v-slot:body>
             <SupplierForm
+                :isViewDetail="isViewDetail"
                 :typeSupplier="typeSupplier"
                 :supplierValue="supplierData"
-                :onClose="onHandleShowHideModal"
+                :onClose="onHandleHideModal"
                 :onSave="onSaveSupplier"
             />
         </template>
     </BaseModal>
+    <BasePopup
+        v-if="popupData && isShowPopup"
+        :typePopup="popupData.typePopup"
+        :footerPopup="popupData.footerPopup"
+        :noticeMessage="popupData.noticeMessage"
+    />
 </template>
 <script>
 import SupplierGrid from "./components/SupplierGrid.vue";
@@ -223,6 +268,9 @@ import SupplierFormHeader from "./components/SupplierFormHeader.vue";
 import api from "@/services/api";
 import { API_RESOURCE } from "./constants/api";
 import { SUPPLIER_TEXT_CONFIG } from "@/views/Supplier/constants/resource";
+import { TYPE_CLOSE } from "@/views/Supplier/constants/type-close";
+import BasePopup from "@/components/bases/BasePopup/BasePopup.vue";
+import BaseTooltip from "@/components/bases/BaseTooltip/BaseTooltip.vue";
 
 export default {
     name: "SupplierContainer",
@@ -232,6 +280,8 @@ export default {
         BaseButton,
         BaseModal,
         SupplierFormHeader,
+        BasePopup,
+        BaseTooltip,
     },
     data() {
         return {
@@ -245,8 +295,11 @@ export default {
             keyGrid: 0,
             RESOURCE: SUPPLIER_TEXT_CONFIG,
             isShowModal: Boolean,
+            isShowPopup: Boolean,
             typeSupplier: Number,
             supplierData: null,
+            popupData: null,
+            isViewDetail: false,
         };
     },
     methods: {
@@ -304,19 +357,23 @@ export default {
             }
         },
 
-        onHandleSearch(searchParams) {
+        async onHandleSearch(searchParams) {
             try {
                 this.dataReady = false;
-                this.getSuppliers(this.currentRecord, 1, searchParams.trim());
+                await this.getSuppliers(
+                    this.currentRecord,
+                    1,
+                    searchParams.trim()
+                );
             } catch (error) {
                 console.log(error);
             }
         },
 
-        onHandleReload() {
+        async onHandleReload() {
             try {
                 this.dataReady = false;
-                this.getSuppliers(
+                await this.getSuppliers(
                     this.currentRecord,
                     this.currentPage,
                     this.keyWord
@@ -326,9 +383,63 @@ export default {
             }
         },
 
-        onHandleShowHideModal() {
+        onHandleShowModal() {
             try {
-                this.isShowModal = !this.isShowModal;
+                this.isShowModal = true;
+                this.supplierData = null;
+                this.typeSupplier = 0;
+                this.isViewDetail = false;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        onHandleHideModal(typeClose) {
+            try {
+                if (typeClose == TYPE_CLOSE.TYPE_CLOSE_CHECK_CHANGE) {
+                    this.isShowPopup = true;
+                    this.popupData = {
+                        typePopup: 0,
+                        footerPopup: {
+                            footerLeft: [
+                                {
+                                    buttonName: "Hủy",
+                                    buttonAction: this.onHandleHidePopup,
+                                    classButton: "",
+                                    valueFunction: "",
+                                },
+                            ],
+                            footerRight: [
+                                {
+                                    buttonName: "Không",
+                                    buttonAction: this.onHandleHideModal,
+                                    classButton: "",
+                                    valueFunction: 1,
+                                },
+                                {
+                                    buttonName: "Có",
+                                    buttonAction: "",
+                                    classButton: ["btn-confirm"],
+                                    valueFunction: "",
+                                },
+                            ],
+                        },
+
+                        noticeMessage:
+                            "Dữ liệu đã bị thay đổi. Bạn có muốn cất không?",
+                    };
+                } else if (typeClose == TYPE_CLOSE.TYPE_CLOSE_DEFAULT) {
+                    this.isShowModal = false;
+                    this.isShowPopup = false;
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        onHandleHidePopup() {
+            try {
+                this.isShowPopup = false;
             } catch (error) {
                 console.log(error);
             }
@@ -349,6 +460,7 @@ export default {
                     this.supplierData = data;
                     this.onChangTypeSupplier(data.accountObject.supplier_type);
                 });
+                this.isViewDetail = false;
                 this.isShowModal = true;
             } catch (error) {
                 console.log(error);
@@ -357,15 +469,52 @@ export default {
 
         onDelete(value) {
             try {
-                console.log(value);
+                this.popupData = {
+                    typePopup: 2,
+                    footerPopup: {
+                        footerLeft: [
+                            {
+                                buttonName: "Đóng",
+                                buttonAction: this.onHandleHidePopup,
+                                classButton: "",
+                                valueFunction: "",
+                            },
+                        ],
+                        footerRight: [
+                            {
+                                buttonName: "Đồng ý",
+                                buttonAction: this.onHandleDelete,
+                                classButton: ["btn-confirm"],
+                                valueFunction: value.account_object_id,
+                            },
+                        ],
+                    },
+
+                    noticeMessage: `Bạn có thực sự muốn xóa nhân viên <${value.account_object_code}> không?`,
+                };
+                this.isShowPopup = true;
             } catch (error) {
                 console.log(error);
             }
         },
 
-        onDetail(value) {
+        onHandleDelete(id) {
             try {
-                console.log(value);
+                console.log(id);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async onDetail(value) {
+            try {
+                this.isViewDetail = true;
+                let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}/${value.account_object_id}`;
+                await api.get(urlFilter).then((data) => {
+                    this.supplierData = data;
+                    this.onChangTypeSupplier(data.accountObject.supplier_type);
+                });
+                this.isShowModal = true;
             } catch (error) {
                 console.log(error);
             }
@@ -434,7 +583,9 @@ export default {
     },
 
     created() {
+        this.typeSupplier = 0;
         this.isShowModal = false;
+        this.isShowPopup = false;
         this.dataReady = false;
         this.currentRecord = 20;
         this.currentPage = 1;

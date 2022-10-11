@@ -1,13 +1,17 @@
 <template>
     <BaseModalHeader>
-        <div class="option-item px-3">
+        <div
+            class="option-item px-3"
+            :class="{ 'pointer-event-none': isViewDetail }"
+        >
             <label for="isGroup">
                 <input
                     v-model="typeVendor"
                     type="radio"
                     name="typeSuppier"
                     id="isGroup"
-                    value="0"
+                    :readonly="isViewDetail"
+                    :value="0"
                 />
                 <div class="modal__radio cursor-pointer"></div>
             </label>
@@ -15,14 +19,18 @@
                 {{ RESOURCE.SUPPLIER_GROUP_RADIO }}
             </label>
         </div>
-        <div class="option-item px-3">
+        <div
+            class="option-item px-3"
+            :class="{ 'pointer-event-none': isViewDetail }"
+        >
             <label for="isIndividual">
                 <input
                     v-model="typeVendor"
                     type="radio"
                     name="typeSuppier"
                     id="isIndividual"
-                    value="1"
+                    :readonly="isViewDetail"
+                    :value="1"
                 />
                 <div class="modal__radio cursor-pointer"></div>
             </label>
@@ -48,6 +56,11 @@ export default {
     name: "SupplierFormHeader",
     components: { BaseModalHeader },
 
+    props: {
+        typeSupplier: Number,
+        isViewDetail: Boolean,
+    },
+
     emits: ["setValue"],
 
     data() {
@@ -57,18 +70,10 @@ export default {
         };
     },
 
-    methods: {
-        onHandleChangeTypeVendor() {
-            try {
-                this.$emit("setValue", this.typeVendor);
-            } catch (error) {
-                console.log(error);
-            }
-        },
-    },
+    methods: {},
 
     mounted() {
-        this.typeVendor = 0;
+        this.typeVendor = this.typeSupplier;
     },
 
     watch: {
