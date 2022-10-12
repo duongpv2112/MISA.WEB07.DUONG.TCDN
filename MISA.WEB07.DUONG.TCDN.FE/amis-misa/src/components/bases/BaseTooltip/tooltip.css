@@ -34,6 +34,7 @@
     color: #fff;
     font-size: 13px;
     box-shadow: 2px 2px 2px 0 #d4d7dc;
+    z-index: 10;
 }
 
 .tooltip-text.tooltip-input__validate::after {

@@ -3,7 +3,7 @@
         v-if="!isIcon && !isIconText"
         class="button"
         :class="className"
-        @click="isButtonCancel ? this.functionz(1) : this.functionz()"
+        @click="isButtonCancel ? this.functionz(1) : this.functionz(paramFunction)"
     >
         {{ title }}
         <BaseTooltip :content="contentTooltip" :className="classNameTooltip" />
@@ -47,6 +47,7 @@ export default {
         classNameTooltip: Array,
         contentTooltip: String,
         isButtonCancel: Boolean,
+        paramFunction: null,
     },
 
     data() {

@@ -19,7 +19,13 @@
                             :maxlength="20"
                             :isReadonly="isViewDetail"
                             :firstFocus="true"
+                            :isInputNumberString="true"
+                            :patternValidate="'REGEX_ONLY_NUMBER'"
+                            :isFieldErrorFocus="
+                                fieldFocus == listField.tax_code
+                            "
                             @setValue="setValue"
+                            @setValidateData="setValidateData"
                         />
 
                         <BaseInput
@@ -32,7 +38,11 @@
                             :maxlength="20"
                             :isRequired="true"
                             :isReadonly="isViewDetail"
+                            :isFieldErrorFocus="
+                                fieldFocus == listField.account_object_code
+                            "
                             @setValue="setValue"
+                            @setValidateData="setValidateData"
                         />
                     </div>
                     <div class="d-flex flex-wrap px-1">
@@ -50,7 +60,11 @@
                             :fieldName="RESOURCE.SUPPLIER_NAME_FIELD_LBL"
                             :isRequired="true"
                             :isReadonly="isViewDetail"
+                            :isFieldErrorFocus="
+                                fieldFocus == listField.account_object_name
+                            "
                             @setValue="setValue"
+                            @setValidateData="setValidateData"
                         />
 
                         <div
@@ -61,13 +75,12 @@
                             <div class="modal__col col-12">
                                 <label class="modal__label mb-6">
                                     {{ RESOURCE.SUPPLIER_NAME_FIELD_LBL }}
+                                    <span class="text-danger"> * </span>
                                 </label>
                                 <div class="modal__row">
                                     <div class="modal__group modal__col col-4">
                                         <BaseComboboxDefault
-                                            :className="[
-                                                'col-12',
-                                            ]"
+                                            :className="['col-12']"
                                             :dataField="
                                                 listField.vocative_supplier
                                             "
@@ -102,11 +115,20 @@
                                             account_object.account_object_name
                                         "
                                         :fieldName="
-                                            RESOURCE.SUPPLIER_REPRESENTATIVE_NAME_FIELD_LBL
+                                            RESOURCE.SUPPLIER_CONTACT_NAME_PLACEHOLDER
                                         "
                                         :isHideLable="true"
+                                        :isFieldErrorFocus="
+                                            fieldFocus ==
+                                            listField.account_object_name
+                                        "
+                                        :lable="
+                                            RESOURCE.SUPPLIER_NAME_FIELD_LBL
+                                        "
+                                        :isRequired="true"
                                         :isReadonly="isViewDetail"
                                         @setValue="setValue"
+                                        @setValidateData="setValidateData"
                                     />
                                 </div>
                             </div>
@@ -141,7 +163,13 @@
                             :valueField="account_object.telephone_number"
                             :fieldName="RESOURCE.SUPPLIER_PHONE_FIELD_LBL"
                             :isReadonly="isViewDetail"
+                            :isInputNumberString="true"
+                            :patternValidate="'REGEX_PHONE'"
+                            :isFieldErrorFocus="
+                                fieldFocus == listField.telephone_number
+                            "
                             @setValue="setValue"
+                            @setValidateData="setValidateData"
                         />
 
                         <BaseInput
@@ -165,9 +193,7 @@
                             <BaseComboboxTags
                                 :url="API.PAGING_DATA_SUPPLIER_GROUP"
                                 :propValue="'supplier_group_id'"
-                                :className="[
-                                    'col-12',
-                                ]"
+                                :className="['col-12']"
                                 :dataField="'supplier_group_id'"
                                 :propText="'supplier_group_code'"
                                 :value="valueSupplierConstraints"
@@ -188,7 +214,11 @@
                                         stypeColumn: {},
                                     },
                                 ]"
+                                :isFieldErrorFocus="
+                                    fieldFocus == 'supplier_group_id'
+                                "
                                 @setValueList="setValueList"
+                                @setValidateData="setValidateData"
                             />
                         </div>
 
@@ -202,10 +232,7 @@
                                 :propText="'employee_name'"
                                 :dataField="'account_object_id'"
                                 :dataText="'account_object_name'"
-                                :className="[
-                                    'modal__group',
-                                    'col-12',
-                                ]"
+                                :className="['modal__group', 'col-12']"
                                 :value="account_object.employee_name"
                                 :isReadOnly="isViewDetail"
                                 :isBottom="true"
@@ -222,7 +249,11 @@
                                         dataField: 'account_object_name',
                                     },
                                 ]"
+                                :isFieldErrorFocus="
+                                    fieldFocus == listField.employee_id
+                                "
                                 @setValue="setValue"
+                                @setValidateData="setValidateData"
                             />
                         </div>
                     </div>
@@ -246,9 +277,7 @@
                                             class="modal__group modal__col mb-control-group col-4"
                                         >
                                             <BaseComboboxDefault
-                                                :className="[
-                                                    'col-12',
-                                                ]"
+                                                :className="['col-12']"
                                                 :dataField="
                                                     listField.vocative_contact
                                                 "
@@ -304,7 +333,12 @@
                                         "
                                         :isHideLable="true"
                                         :isReadonly="isViewDetail"
+                                        :patternValidate="'REGEX_EMAIL'"
+                                        :isFieldErrorFocus="
+                                            fieldFocus == listField.email
+                                        "
                                         @setValue="setValue"
+                                        @setValidateData="setValidateData"
                                     />
                                     <BaseInput
                                         :className="[
@@ -323,7 +357,12 @@
                                         "
                                         :isHideLable="true"
                                         :isReadonly="isViewDetail"
+                                        :patternValidate="'REGEX_PHONE'"
+                                        :isFieldErrorFocus="
+                                            fieldFocus == listField.phone_number
+                                        "
                                         @setValue="setValue"
+                                        @setValidateData="setValidateData"
                                     />
                                 </div>
                             </div>
@@ -375,6 +414,10 @@
                                         "
                                         :isReadonly="isViewDetail"
                                         :isHideLable="true"
+                                        :patternValidate="'REGEX_EMAIL'"
+                                        :isFieldErrorFocus="
+                                            fieldFocus == listField.email
+                                        "
                                         @setValue="setValue"
                                     />
 
@@ -396,6 +439,12 @@
                                             "
                                             :isReadonly="isViewDetail"
                                             :isHideLable="true"
+                                            :isInputNumberString="true"
+                                            :patternValidate="'REGEX_PHONE'"
+                                            :isFieldErrorFocus="
+                                                fieldFocus ==
+                                                listField.phone_number
+                                            "
                                             @setValue="setValue"
                                         />
                                     </div>
@@ -419,6 +468,12 @@
                                             "
                                             :isReadonly="isViewDetail"
                                             :isHideLable="true"
+                                            :isInputNumberString="true"
+                                            :patternValidate="'REGEX_PHONE'"
+                                            :isFieldErrorFocus="
+                                                fieldFocus ==
+                                                listField.telephone_number
+                                            "
                                             @setValue="setValue"
                                         />
                                     </div>
@@ -481,6 +536,12 @@
                                             "
                                             :isHideLable="true"
                                             :isReadonly="isViewDetail"
+                                            :isInputNumberString="true"
+                                            :patternValidate="'REGEX_ONLY_NUMBER'"
+                                            :isFieldErrorFocus="
+                                                fieldFocus ==
+                                                listField.identity_number
+                                            "
                                             @setValue="setValue"
                                         />
                                     </div>
@@ -492,7 +553,9 @@
                                             :popover="{
                                                 visibility: 'focus',
                                             }"
+                                            mode="date"
                                             :attributes="datepicker"
+                                            @dayclick="checkValidateDate"
                                         >
                                             <template
                                                 v-slot="{
@@ -510,6 +573,10 @@
                                                         'modal__col',
                                                         'mb-control-group',
                                                         'col-6',
+                                                        'tooltip',
+                                                        isViewDetail
+                                                            ? 'pointer-event-none'
+                                                            : '',
                                                     ]"
                                                 >
                                                     <div
@@ -521,14 +588,32 @@
                                                     </div>
                                                     <input
                                                         class="modal__control modal__datepicker"
+                                                        :class="{
+                                                            'border-red':
+                                                                validateDate?.isInValid,
+                                                        }"
                                                         v-on="inputEvents"
+                                                        ref="identity_date"
                                                         :value="inputValue"
                                                         :id="
                                                             listField.identity_date
                                                         "
+                                                        :readonly="isViewDetail"
                                                         :placeholder="
                                                             RESOURCE.SUPPLIER_IDENTITY_DATE_FIELD_LBL
                                                         "
+                                                    />
+                                                    <BaseTooltip
+                                                        v-if="
+                                                            validateDate?.isInValid
+                                                        "
+                                                        :content="
+                                                            validateDate?.errorMessage
+                                                        "
+                                                        :className="[
+                                                            'tooltip-default',
+                                                            'tooltip-input__validate',
+                                                        ]"
                                                     />
                                                 </label>
                                             </template>
@@ -569,9 +654,7 @@
                                         }}
                                     </label>
                                     <BaseComboboxDefault
-                                        :className="[
-                                            'col-12',
-                                        ]"
+                                        :className="['col-12']"
                                         :dataField="listField.payment_term"
                                         :value="
                                             PAYMENT_TERM[
@@ -647,7 +730,13 @@
                                     RESOURCE.SUPPLIER_ACCOUNT_PAYABLE_FIELD_LBL
                                 "
                                 :isReadonly="isViewDetail"
+                                :isInputNumberString="true"
+                                :patternValidate="'REGEX_ONLY_NUMBER'"
+                                :isFieldErrorFocus="
+                                    fieldFocus == listField.account_payable
+                                "
                                 @setValue="setValue"
+                                @setValidateData="setValidateData"
                             />
                         </div>
                     </div>
@@ -679,6 +768,7 @@
         </div>
         <div class="modal__footer--right">
             <BaseButton
+                v-if="!isViewDetail"
                 :title="RESOURCE.SUPPLIER_SAVE_BTN"
                 :className="[
                     'button-text-13',
@@ -689,8 +779,10 @@
                 ]"
                 :contentTooltip="'Cất (Ctrl + S)'"
                 :classNameTooltip="['tooltip-default']"
+                :functionz="this.onSave"
             />
             <BaseButton
+                v-if="!isViewDetail"
                 :title="RESOURCE.SUPPLIER_SAVE_AND_ADD_BTN"
                 :className="[
                     'button-text-13',
@@ -700,7 +792,21 @@
                 ]"
                 :contentTooltip="'Cất và thêm (Ctrl + Shift + S)'"
                 :classNameTooltip="['tooltip-default']"
-                :functionz="onHandleSave"
+                :functionz="this.onSave"
+            />
+            <BaseButton
+                v-if="isViewDetail"
+                :title="'Sửa'"
+                :className="[
+                    'button-text-13',
+                    'button-primary',
+                    'button-text-bold',
+                    'tooltip',
+                ]"
+                :contentTooltip="'Cất và thêm (Ctrl + Shift + S)'"
+                :classNameTooltip="['tooltip-default']"
+                :paramFunction="this.account_object"
+                :functionz="this.onEdit"
             />
         </div>
     </div>
@@ -739,6 +845,7 @@ import BaseComboboxDefault from "@/components/bases/BaseCombobox/BaseComboboxDef
 import BaseButton from "@/components/bases/BaseButton/BaseButton.vue";
 import BaseComboboxTags from "../../../components/bases/BaseCombobox/BaseComboboxTags.vue";
 import BaseTooltip from "../../../components/bases/BaseTooltip/BaseTooltip";
+import { common } from "@/libs/common/common";
 
 export default {
     name: "SupplierForm",
@@ -761,7 +868,15 @@ export default {
         onClose: Function,
         onSave: Function,
         isViewDetail: Boolean,
+        validateData: Array,
+        setValidateData: Function,
+        setValue: Function,
+        setValueList: Function,
+        fieldFocus: null,
+        onEdit: Function,
     },
+
+    emits: ["setPopupData"],
 
     data() {
         return {
@@ -778,7 +893,7 @@ export default {
             datepicker: [
                 {
                     key: "today",
-                    highlight: "red",
+                    highlight: "green",
                     dates: new Date(),
                 },
             ],
@@ -885,56 +1000,40 @@ export default {
             ],
 
             valueSupplierConstraints: [],
+
+            validateDate: null,
         };
     },
     methods: {
-        setValue(valueField, dataField) {
+        checkValidateDate() {
             try {
-                this.account_object[dataField] = valueField;
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        setValueList(value) {
-            try {
-                this.supplier_constraints = [];
-                for (let i = 0; i < value.length; i++) {
-                    this.supplier_constraints.push({
-                        supplier_group_id: value[i].valueField,
-                        created_date: null,
-                        created_by: "Admin",
-                        modified_date: null,
-                        modified_by: "Admin",
-                    });
+                var valueDate = new Date(this.account_object.identity_date);
+                if (valueDate > new Date()) {
+                    this.validateDate = {
+                        isInValid: true,
+                        errorMessage:
+                            "Ngày cấp không được lớn hơn ngày hiện tại.",
+                    };
+                    this.setValidateData(
+                        true,
+                        this.validateDate.errorMessage,
+                        "identity_date"
+                    );
+                } else {
+                    this.validateDate = {
+                        isInValid: false,
+                        errorMessage: "",
+                    };
+                    this.setValidateData(
+                        false,
+                        this.validateDate.errorMessage,
+                        "identity_date"
+                    );
                 }
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        handleClick(event) {
-            try {
-                console.log(event);
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        onHandleSave() {
-            try {
-                Object.keys(this.account_object).forEach((key) => {
-                    if (
-                        !this.account_object[key] ||
-                        key == "created_date" ||
-                        key == "created_by" ||
-                        key == "modified_date" ||
-                        key == "modified_by"
-                    ) {
-                        delete this.account_object[key];
-                    }
-                });
-                this.onSave(this.account_object, this.supplier_constraints);
+                this.setValue(
+                    common.formatDate(this.account_object.identity_date),
+                    "identity_date"
+                );
             } catch (error) {
                 console.log(error);
             }
@@ -955,6 +1054,15 @@ export default {
                     });
             }
         }
+    },
+
+    watch: {
+        fieldFocus(newValue) {
+            console.log(newValue);
+            if (newValue && newValue == "identity_date") {
+                this.$refs[newValue].focus();
+            }
+        },
     },
 };
 </script>

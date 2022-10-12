@@ -101,6 +101,29 @@ namespace MISA.WEB07.DUONGPV.TCDN.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Xóa thông tin một bản ghi
+        /// </summary>
+        /// <param name="id">ID của bản ghi cần lấy</param>
+        /// <returns>Bản ghi xóa thành công hay thất bại (True, False)</returns>
+        /// Author: DUONGPV (04/10/2022)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteOneRecord([FromRoute] Guid id)
+        {
+            try
+            {
+                bool status = await _accountObjectBL.DeleteOneRecord(id);
+
+                // Trả về dữ liệu cho client
+                return StatusCode(StatusCodes.Status200OK, status);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+                return StatusCode(StatusCodes.Status400BadRequest, exception.Message);
+            }
+        }
+
         #endregion
 
     }

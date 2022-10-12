@@ -41,6 +41,7 @@
                         <button
                             v-for="(button, index) in footerPopup.footerLeft"
                             class="popup__button"
+                            :class="button.classButton"
                             :key="'button_left_' + index"
                             @click="button.buttonAction"
                         >

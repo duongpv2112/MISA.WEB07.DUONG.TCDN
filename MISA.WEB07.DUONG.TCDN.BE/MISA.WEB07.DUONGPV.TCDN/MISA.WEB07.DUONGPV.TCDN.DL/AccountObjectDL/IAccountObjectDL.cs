@@ -29,5 +29,13 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
         /// <returns>Thông tin chi tiết một bản ghi</returns>
         /// Author: DUONGPV (04/10/2022)
         public Task<bool> UpdateOneRecord(Guid id, SupplierDTO record);
+
+        /// <summary>
+        /// Xóa thông tin một bản ghi
+        /// </summary>
+        /// <param name="id">ID của bản ghi cần xóa</param>
+        /// <returns>Bản ghi xóa thành công hay thất bại (True, False)</returns>
+        /// Author: DUONGPV (04/10/2022)
+        public Task<bool> DeleteOneRecord(Guid id);
     }
 }

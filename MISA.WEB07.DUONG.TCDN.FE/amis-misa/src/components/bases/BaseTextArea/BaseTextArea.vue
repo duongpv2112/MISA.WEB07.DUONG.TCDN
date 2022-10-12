@@ -15,7 +15,7 @@
             :maxlength="maxlength"
             :rows="numberRow"
             :class="{
-                'bg-readonly': fieldReadonly,
+                'bg-readonly': fieldReadonly && isReadonly,
                 textarea__control: true,
             }"
             @change="handleChange(dataField, $event)"

@@ -28,9 +28,9 @@
             :maxlength="maxlength"
             :autocomplete="autocomplete"
             :readonly="isReadonly"
-            step="1"
             @input="onHandleInput(dataField, $event)"
             @blur="handleBlur($event)"
+            @keypress="isInputNumberString ? onKeyPressInputData() : null"
         />
         <BaseTooltip
             v-if="checkData.isInValid"
@@ -41,6 +41,7 @@
 </template>
 <script>
 import { common } from "@/libs/common/common";
+import { REGEX_TYPE } from "@/libs/resources/regex";
 import BaseTooltip from "../BaseTooltip/BaseTooltip";
 export default {
     name: "BaseInput",
@@ -59,11 +60,14 @@ export default {
         isRequired: Boolean,
         errorMessage: String,
         isInputNumber: Boolean,
+        isInputNumberString: Boolean,
         isReadonly: Boolean,
         firstFocus: Boolean,
+        isFieldErrorFocus: Boolean,
+        patternValidate: String,
     },
 
-    emits: ["setValue"],
+    emits: ["setValue", "setValidateData"],
 
     data() {
         return {
@@ -90,12 +94,19 @@ export default {
         }
     },
 
+    watch: {
+        isFieldErrorFocus(newValue) {
+            if (newValue) {
+                this.$refs[this.dataField].focus();
+            }
+        },
+    },
+
     methods: {
         onHandleInput(dataField, event) {
             try {
-                this.valueInput = event.target.value;
+                this.valueInput = event.target.value.trim();
                 if (this.isInputNumber) {
-                    console.log("a");
                     this.valueInput = this.valueInput.replace(/\D+/g, "");
                 }
                 this.$emit("setValue", this.valueInput, dataField);
@@ -103,18 +114,59 @@ export default {
                 console.log(error);
             }
         },
+
         handleBlur(event) {
             try {
-                if (!event.target.value && this.isRequired) {
+                if (!event.target.value.trim() && this.isRequired) {
                     this.checkData.isInValid = true;
                     this.checkData.errorMessage = `${this.fieldName} không được để trống.`;
+                    this.$emit(
+                        "setValidateData",
+                        true,
+                        this.checkData.errorMessage,
+                        this.dataField
+                    );
                 } else {
-                    this.checkData.isInValid = false;
-                    this.checkData.errorMessage = "";
+                    if (
+                        this.patternValidate &&
+                        event.target.value.trim() &&
+                        !this.checkValidatePattern(event.target.value)
+                    ) {
+                        this.checkData.isInValid = true;
+                        this.checkData.errorMessage = `${this.fieldName} không đúng định dạng.`;
+                        this.$emit(
+                            "setValidateData",
+                            true,
+                            this.checkData.errorMessage,
+                            this.dataField
+                        );
+                    } else {
+                        this.checkData.isInValid = false;
+                        this.checkData.errorMessage = "";
+                        this.$emit(
+                            "setValidateData",
+                            false,
+                            this.checkData.errorMessage,
+                            this.dataField
+                        );
+                    }
                 }
             } catch (error) {
                 console.log(error);
             }
+        },
+
+        onKeyPressInputData() {
+            try {
+                common.keypresOnlyNumber(event);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        checkValidatePattern(value) {
+            var regex = REGEX_TYPE[this.patternValidate];
+            return regex.test(value);
         },
     },
 

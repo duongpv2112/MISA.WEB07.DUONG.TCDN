@@ -1,8 +1,13 @@
 <template>
     <div class="combobox border-radius-2 combobox-tag">
         <div
-            class="combobox-selected"
-            :class="[className, isReadOnly ? 'bg-readonly' : '']"
+            class="combobox-selected tooltip"
+            :class="[
+                className,
+                isReadOnly ? 'bg-readonly' : '',
+                checkData.isInValid ? 'border-red' : '',
+                borderFocus ? 'border-focus' : '',
+            ]"
         >
             <div class="combobox-selected--input">
                 <div
@@ -16,7 +21,7 @@
                         </div>
                         <div
                             class="icon square-16 icon-close--small selected-item__icon"
-                            @click="onHandleRemoveItemSelected(item)"
+                            @click="!isReadOnly ? onHandleRemoveItemSelected(item) : null"
                         ></div>
                     </div>
                 </div>
@@ -29,6 +34,8 @@
                     @keyup="onHandleSearch($event.target.value)"
                     @keydown="selecItemUpDown"
                     @input="onHandleChangeInputData"
+                    @blur="this.borderFocus = false"
+                    @focus="this.borderFocus = true"
                 />
             </div>
             <div class="d-flex">
@@ -48,6 +55,11 @@
                     ></i>
                 </div>
             </div>
+            <BaseTooltip
+                v-if="checkData.isInValid"
+                :content="checkData.errorMessage"
+                :className="['tooltip-default', 'tooltip-input__validate']"
+            />
         </div>
         <div
             v-if="isShowListData"
@@ -105,6 +117,7 @@
 <script>
 import api from "@/services/api";
 import { common } from "@/libs/common/common";
+import BaseTooltip from "../BaseTooltip/BaseTooltip.vue";
 
 const keyCode = {
     Enter: 13,
@@ -112,11 +125,11 @@ const keyCode = {
     ArrowDown: 40,
     ESC: 27,
     Tab: 9,
+    Backspace: 8,
 };
 
 export default {
     name: "BaseComboboxTable",
-
     props: {
         url: String,
         value: Array,
@@ -130,10 +143,9 @@ export default {
         isBottom: Boolean,
         className: Array,
         nameRow: Array,
+        isFieldErrorFocus: Boolean,
     },
-
-    emits: ["setValueList"],
-
+    emits: ["setValueList", "setValidateData"],
     created() {
         this.pageNumber = 1;
         this.pageSize = 20;
@@ -145,7 +157,9 @@ export default {
             });
         }
     },
-
+    mounted() {
+        this.borderFocus = false;
+    },
     data() {
         return {
             dataCombobox: [],
@@ -155,12 +169,23 @@ export default {
             pageSize: Number,
             keyWord: String,
             isDataNull: Boolean,
+            borderFocus: Boolean,
             listSelected: [],
             indexItemFocus: null,
             indexItemSelected: null,
+            checkData: {
+                isInValid: false,
+                errorMessage: "",
+            },
         };
     },
-
+    watch: {
+        isFieldErrorFocus(newValue) {
+            if (newValue) {
+                this.$refs[this.propValue].focus();
+            }
+        },
+    },
     methods: {
         async getData(pageNumber, keyword, isScroll) {
             try {
@@ -185,7 +210,6 @@ export default {
                 console.log(error);
             }
         },
-
         onHandleScroll() {
             if (
                 this.$refs.scrollComponent.scrollTop +
@@ -197,7 +221,6 @@ export default {
                 this.getData(this.pageNumber, this.keyWord, true);
             }
         },
-
         async onHandleSearch(keyWord) {
             if (
                 event.keyCode != keyCode.ArrowDown &&
@@ -217,7 +240,6 @@ export default {
                 }, 400);
             }
         },
-
         /**
          * Nhấn vào button thì hiển thị hoặc ẩn List Item
          * @author: DUONGPV (08/09/2022)
@@ -226,15 +248,33 @@ export default {
             this.isShowListData = !this.isShowListData;
             this.$refs[this.propValue].focus();
         },
-
         /**
          * Nhấn vào button thì hiển thị hoặc ẩn List Item
          * @author: DUONGPV (08/09/2022)
          */
         onHandleChangeInputData() {
+            this.$emit("setValueList", []);
+            if (event.target.value) {
+                this.checkData.isInValid = true;
+                this.checkData.errorMessage = `Dữ liệu <${this.placeholder}> không có trong danh mục.`;
+                this.$emit(
+                    "setValidateData",
+                    true,
+                    this.checkData.errorMessage,
+                    this.propValue
+                );
+            } else {
+                this.checkData.isInValid = false;
+                this.checkData.errorMessage = "";
+                this.$emit(
+                    "setValidateData",
+                    false,
+                    this.checkData.errorMessage,
+                    this.propValue
+                );
+            }
             this.isShowListData = true;
         },
-
         /**
          * Nhấn vào button thì hiển thị hoặc ẩn List Item
          * @author: DUONGPV (08/09/2022)
@@ -242,7 +282,6 @@ export default {
         hideListData() {
             this.isShowListData = false;
         },
-
         /**
          * Nhấn vào button thì hiển thị hoặc ẩn List Item
          * @author: DUONGPV (08/09/2022)
@@ -270,11 +309,18 @@ export default {
                     this.listSelected.splice(indexSelectedValue, 1);
                 }
                 this.$emit("setValueList", this.dataInput);
+                this.checkData.isInValid = false;
+                this.checkData.errorMessage = "";
+                this.$emit(
+                    "setValidateData",
+                    false,
+                    this.checkData.errorMessage,
+                    this.propValue
+                );
             } catch (error) {
                 console.log(error);
             }
         },
-
         /**
          * Nhấn vào button thì hiển thị hoặc ẩn List Item
          * @author: DUONGPV (08/09/2022)
@@ -292,12 +338,12 @@ export default {
                     );
                     this.dataInput.splice(indexValue, 1);
                     this.listSelected.splice(indexSelectedValue, 1);
+                    this.$emit("setValueList", this.dataInput);
                 }
             } catch (error) {
                 console.log(error);
             }
         },
-
         /**
          * Check giá trị nhập input có tồn tại giá trị trong data không
          * @param {*} value Dữ liệu cần check tồn tại khi người dùng nhập
@@ -326,7 +372,6 @@ export default {
                 console.log(error);
             }
         },
-
         /**
          * Lựa chọn item bằng cách nhấn các phím lên, xuống trên bàn phím
          * @author: DUONGPV (08/09/2022)
@@ -338,6 +383,13 @@ export default {
                 switch (keyCodePress) {
                     case keyCode.ESC:
                         this.isShowListData = false;
+                        break;
+                    case keyCode.Backspace:
+                        this.dataInput.splice(this.dataInput.length - 1, 1);
+                        this.listSelected.splice(
+                            this.listSelected.length - 1,
+                            1
+                        );
                         break;
                     case keyCode.ArrowDown:
                         this.isShowListData = true;
@@ -353,7 +405,6 @@ export default {
                             this.indexItemFocus += 1;
                             this.fixScrolling();
                         }
-
                         break;
                     case keyCode.ArrowUp:
                         this.isShowListData = true;
@@ -384,13 +435,13 @@ export default {
                 console.log(error);
             }
         },
-
         fixScrolling() {
             var height =
                 this.$refs[`toFocus_${this.indexItemFocus}`][0].clientHeight;
             this.$refs.scrollComponent.scrollTop = height * this.indexItemFocus;
         },
     },
+    components: { BaseTooltip },
 };
 </script>
 <style scoped></style>

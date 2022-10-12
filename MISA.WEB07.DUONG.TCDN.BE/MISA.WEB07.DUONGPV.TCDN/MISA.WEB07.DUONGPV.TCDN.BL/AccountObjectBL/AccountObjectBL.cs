@@ -63,6 +63,17 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL
             return await _accountObjectDL.UpdateOneRecord(id, record);
         }
 
+        /// <summary>
+        /// Xóa thông tin một bản ghi
+        /// </summary>
+        /// <param name="id">ID của bản ghi cần xóa</param>
+        /// <returns>Bản ghi xóa thành công hay thất bại (True, False)</returns>
+        /// Author: DUONGPV (04/10/2022)
+        public async Task<bool> DeleteOneRecord(Guid id)
+        {
+            return await _accountObjectDL.DeleteOneRecord(id);
+        }
+
         #endregion
     }
 }

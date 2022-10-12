@@ -17,6 +17,18 @@ export const common = {
         }
     },
 
+    formatDate(date) {
+        let d = new Date(date);
+        var month = "" + (d.getMonth() + 1);
+        var day = "" + d.getDate();
+        var year = d.getFullYear();
+
+        if (month.length < 2) month = "0" + month;
+        if (day.length < 2) day = "0" + day;
+
+        return [year, month, day].join("-");
+    },
+
     /**
      * Validate kiểm tra dữ liệu nhập là số
      * @param {string} $event Dữ liệu cần validate
@@ -53,4 +65,32 @@ export const common = {
         );
         return str;
     },
+
+    keypresOnlyNumber(e) {
+        var key = e.keyCode || e.charCode;
+        if (
+            (key < 48 || key > 57) &&
+            key != 32 &&
+            key != 43 &&
+            key != 40 &&
+            key != 41
+        ) {
+            e.preventDefault();
+        }
+    },
+
+    // document.addEventListener("keydown", function (event) {
+    //     if (event.ctrlKey) {
+    //         event.preventDefault();
+    //     }
+    // });
+
+    // document.onkeydown = function(e) {
+    //     if (e.ctrlKey && e.keyCode === 83) {
+    //         alert('hello there');
+
+    //         // your code here
+    //         return false;
+    //     }
+    // };
 };

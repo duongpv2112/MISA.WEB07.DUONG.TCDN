@@ -123,8 +123,9 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
         public async Task<bool> UpdateOneRecord(Guid id, SupplierDTO record)
         {
             // Khai báo tên stored procedure INSERT
-            string insertStoredProcedureName = $"Func_AccountObject_Update";
-            string insertConstraintStoredProcedureName = $"Func_SupplierConstraint_Update";
+            string updateStoredProcedureName = $"Func_AccountObject_Update";
+            string deleteConstraintStoredProcedureName = $"Func_SupplierConstraint_Delete";
+            string insertConstraintStoredProcedureName = $"Func_SupplierConstraint_Insert";
 
             // Chuẩn bị tham số đầu vào của stored procedure
             var propertiesAccountObject = typeof(AccountObject).GetProperties();
@@ -140,46 +141,81 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
             parametersAccountObject.Add($"@v_{keyAccountObjectProperty?.Name}", id);
 
             bool isUpdateAccountObject = false;
-            bool isInsertSupplierConstraint = false;
+            bool isUpdateSupplierConstraint = false;
 
             // Thực hiện gọi vào DB để chạy câu lệnh stored procedure với tham số đầu vào ở trên
 
             using (var npgSqlConnection = new NpgsqlConnection(DatabaseContext.ConnectionString))
             {
                 npgSqlConnection.Open();
-                isUpdateAccountObject = await npgSqlConnection.QueryFirstAsync<bool>(insertStoredProcedureName, parametersAccountObject, commandType: System.Data.CommandType.StoredProcedure);
-                //if (record.supplierConstraints?.Count > 0)
-                //{
-                //    using (NpgsqlTransaction transaction = npgSqlConnection.BeginTransaction())
-                //    {
-                //        try
-                //        {
-                //            foreach (var dataItem in record.supplierConstraints)
-                //            {
-                //                var propertiesSupplierConstraint = typeof(SupplierConstraint).GetProperties();
-                //                var parametersSupplierConstraint = new DynamicParameters();
-                //                foreach (var property in propertiesSupplierConstraint)
-                //                {
-                //                    string propertyName = $"@v_{property.Name}";
-                //                    var propertyValue = property.GetValue(dataItem);
-                //                    parametersSupplierConstraint.Add(propertyName, propertyValue);
-                //                }
+                isUpdateAccountObject = await npgSqlConnection.QueryFirstAsync<bool>(updateStoredProcedureName, parametersAccountObject, commandType: System.Data.CommandType.StoredProcedure);
 
-                //                var keySupplierConstraintProperty = typeof(SupplierConstraint).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(KeyAttribute), true).Count() > 0);
-                //                parametersSupplierConstraint.Add($"@v_{keySupplierConstraintProperty?.Name}", newGuid);
+                bool isDeleteSupplierConstraint = false;
+                var keySupplierConstraintProperty = typeof(SupplierConstraint).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(KeyAttribute), true).Count() > 0);
+                var parametersSupplierConstraintDelete = new DynamicParameters();
+                parametersSupplierConstraintDelete.Add($"@v_{keySupplierConstraintProperty?.Name}", id);
 
-                //                isInsertSupplierConstraint = await npgSqlConnection.QueryFirstAsync<bool>(insertConstraintStoredProcedureName, parametersSupplierConstraint, commandType: System.Data.CommandType.StoredProcedure);
-                //            }
-                //            transaction.Commit();
-                //        }
-                //        catch
-                //        {
-                //            transaction.Rollback();
-                //        }
-                //    }
-                //}
+                isDeleteSupplierConstraint = await npgSqlConnection.QueryFirstAsync<bool>(deleteConstraintStoredProcedureName, parametersSupplierConstraintDelete, commandType: System.Data.CommandType.StoredProcedure);
+
+                if (isDeleteSupplierConstraint)
+                {
+                    if (record.supplierConstraints?.Count > 0)
+                    {
+                        using (NpgsqlTransaction transaction = npgSqlConnection.BeginTransaction())
+                        {
+                            try
+                            {
+                                foreach (var dataItem in record.supplierConstraints)
+                                {
+                                    var propertiesSupplierConstraint = typeof(SupplierConstraint).GetProperties();
+                                    var parametersSupplierConstraint = new DynamicParameters();
+                                    foreach (var property in propertiesSupplierConstraint)
+                                    {
+                                        string propertyName = $"@v_{property.Name}";
+                                        var propertyValue = property.GetValue(dataItem);
+                                        parametersSupplierConstraint.Add(propertyName, propertyValue);
+                                    }
+                                    parametersSupplierConstraint.Add($"@v_{keySupplierConstraintProperty?.Name}", id);
+
+                                    isUpdateSupplierConstraint = await npgSqlConnection.QueryFirstAsync<bool>(insertConstraintStoredProcedureName, parametersSupplierConstraint, commandType: System.Data.CommandType.StoredProcedure);
+                                }
+                                transaction.Commit();
+                            }
+                            catch
+                            {
+                                transaction.Rollback();
+                            }
+                        }
+                    }
+                    else isUpdateSupplierConstraint = true;
+                }
             }
-            return isUpdateAccountObject;
+            return isUpdateAccountObject ? isUpdateSupplierConstraint ? true : false : false;
+        }
+
+        /// <summary>
+        /// Xóa thông tin một bản ghi
+        /// </summary>
+        /// <param name="id">ID của bản ghi cần xóa</param>
+        /// <returns>Bản ghi xóa thành công hay thất bại (True, False)</returns>
+        /// Author: DUONGPV (04/10/2022)
+        public async Task<bool> DeleteOneRecord(Guid id)
+        {
+            // Khai báo tên stored procedure INSERT
+            string deleteAccountObjectStoredProcedureName = $"Func_AccountObject_Delete";
+
+            // Chuẩn bị tham số đầu vào của stored procedure
+            var parameterAccountObjects = new DynamicParameters();
+            var keyAccountObjectProperty = typeof(AccountObject).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(KeyAttribute), true).Count() > 0);
+            parameterAccountObjects.Add($"@v_{keyAccountObjectProperty?.Name}", id);
+
+            // Thực hiện gọi vào DB để chạy câu lệnh stored procedure với tham số đầu vào ở trên
+
+            using (var npgSqlConnection = new NpgsqlConnection(DatabaseContext.ConnectionString))
+            {
+                bool status = await npgSqlConnection.QueryFirstOrDefaultAsync<bool>(deleteAccountObjectStoredProcedureName, parameterAccountObjects, commandType: System.Data.CommandType.StoredProcedure);
+                return status;
+            }
         }
     }
 }

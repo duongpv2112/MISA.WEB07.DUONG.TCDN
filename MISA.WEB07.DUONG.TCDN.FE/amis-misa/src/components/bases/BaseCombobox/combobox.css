@@ -87,7 +87,7 @@
     left: -1px;
     right: -1px;
     animation: growUp linear 0.2s;
-    z-index: 10;
+    z-index: 9;
 }
 
 .combobox .combobox-data.absolute-bottom {
@@ -95,7 +95,7 @@
     left: -1px;
     right: -1px;
     animation: growUp linear 0.2s;
-    z-index: 10;
+    z-index: 9;
 }
 
 .combobox .combobox-table {
@@ -189,7 +189,6 @@
     min-height: 30px;
     border-radius: 2px;
     background-color: #fff;
-    overflow: hidden;
 }
 
 .combobox.combobox-tag .combobox-selected .combobox-selected--icon {

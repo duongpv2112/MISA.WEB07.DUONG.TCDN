@@ -249,6 +249,12 @@
                 :supplierValue="supplierData"
                 :onClose="onHandleHideModal"
                 :onSave="onSaveSupplier"
+                :onEdit="onEdit"
+                :validateData="validateData"
+                :fieldFocus="fieldErrorFocus"
+                :setValidateData="setValidateData"
+                :setValue="setValue"
+                :setValueList="setValueList"
             />
         </template>
     </BaseModal>
@@ -274,6 +280,7 @@ import BaseTooltip from "@/components/bases/BaseTooltip/BaseTooltip.vue";
 
 export default {
     name: "SupplierContainer",
+
     components: {
         SupplierGrid,
         SupplierForm,
@@ -283,25 +290,109 @@ export default {
         BasePopup,
         BaseTooltip,
     },
+
     data() {
         return {
             dataReady: Boolean,
+
             totalCount: Number,
+
             totalPage: Number,
+
             currentPage: Number,
+
             currentRecord: Number,
+
             keyWord: String,
+
             data: [],
+
             keyGrid: 0,
+
             RESOURCE: SUPPLIER_TEXT_CONFIG,
+
             isShowModal: Boolean,
+
             isShowPopup: Boolean,
+
             typeSupplier: Number,
+
             supplierData: null,
+
             popupData: null,
+
             isViewDetail: false,
+
+            account_object: {
+                account_object_code: "",
+                account_object_name: "",
+                address: "",
+                website: "",
+                tax_code: "",
+                phone_number: "",
+                telephone_number: "",
+                identity_number: "",
+                identity_date: "",
+                identity_place: "",
+                employee_id: "",
+                employee_name: "",
+                supplier_type: "",
+                contact_name: "",
+                vocative_contact: null,
+                vocative_supplier: null,
+                email: "",
+                representative_name: "",
+                payment_term: null,
+                number_day_owed: null,
+                maximum_debt_amount: null,
+                account_payable: "",
+                department_name: "",
+            },
+
+            supplier_constraints: [],
+
+            validateData: [
+                {
+                    isInValid: false,
+                    fieldName: "account_object_code",
+                    errorMessage: "",
+                },
+                {
+                    isInValid: false,
+                    fieldName: "account_object_name",
+                    errorMessage: "",
+                },
+                {
+                    isInValid: false,
+                    fieldName: "tax_code",
+                    errorMessage: "",
+                },
+                {
+                    isInValid: false,
+                    fieldName: "telephone_number",
+                    errorMessage: "",
+                },
+                {
+                    isInValid: false,
+                    fieldName: "email",
+                    errorMessage: "",
+                },
+                {
+                    isInValid: false,
+                    fieldName: "phone_number",
+                    errorMessage: "",
+                },
+                {
+                    isInValid: false,
+                    fieldName: "account_payable",
+                    errorMessage: "",
+                },
+            ],
+
+            fieldErrorFocus: null,
         };
     },
+
     methods: {
         async getSuppliers(pageSize, pageNumber, keyword, orderBy) {
             try {
@@ -397,7 +488,6 @@ export default {
         onHandleHideModal(typeClose) {
             try {
                 if (typeClose == TYPE_CLOSE.TYPE_CLOSE_CHECK_CHANGE) {
-                    this.isShowPopup = true;
                     this.popupData = {
                         typePopup: 0,
                         footerPopup: {
@@ -418,7 +508,7 @@ export default {
                                 },
                                 {
                                     buttonName: "Có",
-                                    buttonAction: "",
+                                    buttonAction: this.onSaveSupplier,
                                     classButton: ["btn-confirm"],
                                     valueFunction: "",
                                 },
@@ -428,6 +518,8 @@ export default {
                         noticeMessage:
                             "Dữ liệu đã bị thay đổi. Bạn có muốn cất không?",
                     };
+                    this.isShowPopup = true;
+                    this.setFieldErrorFocus(null);
                 } else if (typeClose == TYPE_CLOSE.TYPE_CLOSE_DEFAULT) {
                     this.isShowModal = false;
                     this.isShowPopup = false;
@@ -440,6 +532,10 @@ export default {
         onHandleHidePopup() {
             try {
                 this.isShowPopup = false;
+                var listValidate = this.validateData.filter((e) => {
+                    return e.isInValid == true;
+                });
+                this.setFieldErrorFocus(listValidate[0].fieldName);
             } catch (error) {
                 console.log(error);
             }
@@ -458,6 +554,8 @@ export default {
                 let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}/${value.account_object_id}`;
                 await api.get(urlFilter).then((data) => {
                     this.supplierData = data;
+                    this.account_object = data.accountObject;
+                    this.supplier_constraints = data.supplierConstraints;
                     this.onChangTypeSupplier(data.accountObject.supplier_type);
                 });
                 this.isViewDetail = false;
@@ -498,9 +596,16 @@ export default {
             }
         },
 
-        onHandleDelete(id) {
+        async onHandleDelete(id) {
             try {
-                console.log(id);
+                this.isShowPopup = false;
+                this.dataReady = false;
+                let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}/${id}`;
+                await api.delete(urlFilter).then((data) => {
+                    if (data) {
+                        this.onHandleReload();
+                    }
+                });
             } catch (error) {
                 console.log(error);
             }
@@ -528,54 +633,166 @@ export default {
             }
         },
 
-        async onSaveSupplier(supplier, supplierConstraints) {
+        async onSaveSupplier() {
             try {
-                // Object.keys(supplier).forEach((key) => {
-                //     if (
-                //         !supplier[key] ||
-                //         (typeof supplier[key] === "string" &&
-                //             supplier[key] === "")
-                //     ) {
-                //         supplier[key] = null;
-                //     }
-                // });
-                if (supplier.vocative_contact) {
-                    supplier.vocative_contact = Number(
-                        supplier.vocative_contact
-                    );
-                }
-                if (supplier.vocative_supplier) {
-                    supplier.vocative_supplier = Number(
-                        supplier.vocative_supplier
-                    );
-                }
-                supplier.supplier_type = Number(this.typeSupplier);
-                supplier.maximum_debt_amount = Number(
-                    supplier.maximum_debt_amount
-                );
-                supplier.number_day_owed = Number(supplier.number_day_owed);
-                supplier.is_supplier = true;
-                supplier.is_employee = false;
-                var bodyData = {
-                    accountObject: supplier,
-                    supplierConstraints: supplierConstraints,
-                };
-                if (supplier.account_object_id) {
-                    let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}/${supplier.account_object_id}`;
-                    await api.put(urlFilter, bodyData).then((response) => {
-                        if (response) {
-                            this.isShowModal = false;
-                        }
-                    });
+                this.setFieldErrorFocus(null);
+                if (this.checkValidateData()) {
+                    this.isShowPopup = true;
                 } else {
-                    let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}`;
-                    await api.post(urlFilter, bodyData).then((response) => {
-                        if (response) {
-                            this.isShowModal = false;
+                    Object.keys(this.account_object).forEach((key) => {
+                        if (this.account_object[key] != "0") {
+                            if (
+                                !this.account_object[key] ||
+                                (typeof this.account_object[key] === "string" &&
+                                    this.account_object[key] === "") ||
+                                key == "created_date" ||
+                                key == "created_by" ||
+                                key == "modified_date" ||
+                                key == "modified_by"
+                            ) {
+                                this.account_object[key] = null;
+                            }
                         }
                     });
+                    if (this.account_object.vocative_contact) {
+                        this.account_object.vocative_contact = Number(
+                            this.account_object.vocative_contact
+                        );
+                    }
+                    if (this.account_object.vocative_supplier) {
+                        this.account_object.vocative_supplier = Number(
+                            this.account_object.vocative_supplier
+                        );
+                    }
+                    this.account_object.supplier_type = Number(
+                        this.typeSupplier
+                    );
+                    this.account_object.maximum_debt_amount = Number(
+                        this.account_object.maximum_debt_amount
+                    );
+                    this.account_object.number_day_owed = Number(
+                        this.account_object.number_day_owed
+                    );
+                    this.account_object.is_supplier = true;
+                    this.account_object.is_employee = false;
+                    var bodyData = {
+                        accountObject: this.account_object,
+                        supplierConstraints: this.supplier_constraints,
+                    };
+                    if (this.account_object.account_object_id) {
+                        let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}/${this.account_object.account_object_id}`;
+                        await api.put(urlFilter, bodyData).then((response) => {
+                            if (response) {
+                                this.isShowModal = false;
+                            }
+                        });
+                    } else {
+                        let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}`;
+                        await api.post(urlFilter, bodyData).then((response) => {
+                            if (response) {
+                                this.isShowModal = false;
+                            }
+                        });
+                    }
                 }
                 this.onHandleReload();
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        setValidateData(isError, errorMessage, dataField) {
+            try {
+                var field = this.validateData.findIndex((e) => {
+                    return e.fieldName == dataField;
+                });
+                if (field != -1) {
+                    this.validateData[field].isInValid = isError;
+                    this.validateData[field].errorMessage = errorMessage;
+                } else {
+                    this.validateData.push({
+                        isInValid: isError,
+                        fieldName: dataField,
+                        errorMessage: errorMessage,
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        setValue(valueField, dataField) {
+            try {
+                this.account_object[dataField] = valueField;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        setValueList(value) {
+            try {
+                this.supplier_constraints = [];
+                for (let i = 0; i < value.length; i++) {
+                    this.supplier_constraints.push({
+                        supplier_group_id: value[i].valueField,
+                        created_date: null,
+                        created_by: "Admin",
+                        modified_date: null,
+                        modified_by: "Admin",
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        checkValidateData() {
+            try {
+                if (!this.account_object.account_object_code) {
+                    this.setValidateData(
+                        true,
+                        "Mã nhà cung cấp không được để trống.",
+                        "account_object_code"
+                    );
+                }
+                if (!this.account_object.account_object_name) {
+                    this.setValidateData(
+                        true,
+                        "Tên nhà cung cấp không được để trống.",
+                        "account_object_name"
+                    );
+                }
+                var listValidate = this.validateData.filter((e) => {
+                    return e.isInValid == true;
+                });
+                if (listValidate.length > 0) {
+                    var noticeMessage = listValidate[0].errorMessage;
+                    this.popupData = {
+                        typePopup: 1,
+                        footerPopup: {
+                            footerLeft: [
+                                {
+                                    buttonName: "Đồng ý",
+                                    buttonAction: this.onHandleHidePopup,
+                                    classButton: ["btn-confirm"],
+                                    valueFunction: "",
+                                },
+                            ],
+                            footerRight: [],
+                        },
+                        noticeMessage: noticeMessage,
+                    };
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        setFieldErrorFocus(fieldError) {
+            try {
+                this.fieldErrorFocus = fieldError;
             } catch (error) {
                 console.log(error);
             }

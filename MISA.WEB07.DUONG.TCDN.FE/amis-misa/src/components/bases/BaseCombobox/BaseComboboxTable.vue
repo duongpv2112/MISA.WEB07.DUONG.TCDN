@@ -1,8 +1,13 @@
 <template>
     <div class="combobox border-radius-2">
         <div
-            class="combobox-selected"
-            :class="[className, isReadOnly ? 'bg-readonly' : '']"
+            class="combobox-selected tooltip"
+            :class="[
+                className,
+                isReadOnly ? 'bg-readonly' : '',
+                checkData.isInValid ? 'border-red' : '',
+                borderFocus ? 'border-focus' : '',
+            ]"
         >
             <div class="combobox-selected--input">
                 <input
@@ -13,9 +18,11 @@
                     :tabindex="tabindex"
                     :readonly="isReadOnly"
                     :ref="propValue"
+                    @input="onHandleChangeInputData"
                     @keyup="onHandleSearch($event.target.value)"
                     @keydown="selecItemUpDown"
-                    @input="onHandleChangeInputData"
+                    @blur="this.borderFocus = false"
+                    @focus="this.borderFocus = true"
                 />
             </div>
             <div class="d-flex">
@@ -35,6 +42,11 @@
                     ></i>
                 </div>
             </div>
+            <BaseTooltip
+                v-if="checkData.isInValid"
+                :content="checkData.errorMessage"
+                :className="['tooltip-default', 'tooltip-input__validate']"
+            />
         </div>
         <div
             v-if="isShowListData"
@@ -83,6 +95,7 @@
 </template>
 <script>
 import api from "@/services/api";
+import BaseTooltip from "../BaseTooltip/BaseTooltip.vue";
 
 const keyCode = {
     Enter: 13,
@@ -94,7 +107,6 @@ const keyCode = {
 
 export default {
     name: "BaseComboboxTable",
-
     props: {
         url: String,
         value: String,
@@ -110,14 +122,18 @@ export default {
         listData: Array,
         className: Array,
         nameRow: Array,
+        isFieldErrorFocus: Boolean,
     },
-
-    emits: ["setValue"],
+    emits: ["setValue", "setValidateData"],
 
     created() {
         this.pageNumber = 1;
         this.pageSize = 20;
         this.getData(this.pageNumber);
+    },
+
+    mounted() {
+        this.borderFocus = false;
     },
 
     data() {
@@ -132,7 +148,20 @@ export default {
             borderFocus: Boolean,
             indexItemFocus: null,
             indexItemSelected: null,
+            checkData: {
+                isInValid: false,
+                errorMessage: "",
+            },
         };
+    },
+
+    watch: {
+        isFieldErrorFocus(newValue) {
+            if (newValue) {
+                console.log(newValue);
+                this.$refs[this.propValue].focus();
+            }
+        },
     },
 
     methods: {
@@ -157,7 +186,6 @@ export default {
                 } else {
                     this.dataCombobox = this.listData;
                 }
-
                 if (this.value) {
                     this.textInput = this.value;
                 }
@@ -179,7 +207,6 @@ export default {
         },
 
         async onHandleSearch(keyWord) {
-            console.log(event.keyCode);
             if (
                 event.keyCode != keyCode.ArrowDown &&
                 event.keyCode != keyCode.ArrowUp &&
@@ -213,6 +240,27 @@ export default {
          * @author: DUONGPV (08/09/2022)
          */
         onHandleChangeInputData() {
+            this.$emit("setValue", "", this.propValue);
+            if (this.textInput) {
+                this.checkData.isInValid = true;
+                this.checkData.errorMessage = `Dữ liệu <${this.placeholder}> không có trong danh mục.`;
+                this.$emit(
+                    "setValidateData",
+                    true,
+                    this.checkData.errorMessage,
+                    this.propValue
+                );
+            } else {
+                this.checkData.isInValid = false;
+                this.checkData.errorMessage = "";
+                this.$emit(
+                    "setValidateData",
+                    false,
+                    this.checkData.errorMessage,
+                    this.propValue
+                );
+            }
+
             this.isShowListData = true;
         },
 
@@ -238,6 +286,14 @@ export default {
                 if (this.propText) {
                     this.$emit("setValue", text, this.propText);
                 }
+                this.checkData.isInValid = false;
+                this.checkData.errorMessage = "";
+                this.$emit(
+                    "setValidateData",
+                    false,
+                    this.checkData.errorMessage,
+                    this.propValue
+                );
             } catch (error) {
                 console.log(error);
             }
@@ -269,7 +325,6 @@ export default {
                             this.indexItemFocus += 1;
                             this.fixScrolling();
                         }
-
                         break;
                     case keyCode.ArrowUp:
                         this.isShowListData = true;
@@ -308,6 +363,7 @@ export default {
             this.$refs.scrollComponent.scrollTop = height * this.indexItemFocus;
         },
     },
+    components: { BaseTooltip },
 };
 </script>
 <style scoped></style>
