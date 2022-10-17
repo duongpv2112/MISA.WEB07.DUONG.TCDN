@@ -75,6 +75,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                         }
                     }
                 }
+                else isInsertSupplierConstraint = true;
             }
             return isInsertAccountObject ? isInsertSupplierConstraint ? true : false : false;
         }
@@ -215,6 +216,28 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
             {
                 bool status = await npgSqlConnection.QueryFirstOrDefaultAsync<bool>(deleteAccountObjectStoredProcedureName, parameterAccountObjects, commandType: System.Data.CommandType.StoredProcedure);
                 return status;
+            }
+        }
+
+        /// <summary>
+        /// Lấy mã mới
+        /// </summary>
+        /// <returns>Mã code mới</returns>
+        /// Author: DUONGPV (04/10/2022)
+        public async Task<string> GetNewCode()
+        {
+            // Khai báo tên stored procedure INSERT
+            string getNewCodeStoredProcedureName = $"Func_AccountObject_GetNewCode";
+
+            // Thực hiện gọi vào DB để chạy câu lệnh stored procedure với tham số đầu vào ở trên
+
+            using (var npgSqlConnection = new NpgsqlConnection(DatabaseContext.ConnectionString))
+            {
+                long maxCode = await npgSqlConnection.QueryFirstOrDefaultAsync<long>(getNewCodeStoredProcedureName, commandType: System.Data.CommandType.StoredProcedure);
+
+                string newCode = "NCC-" + (maxCode + 1).ToString();
+
+                return newCode;
             }
         }
     }

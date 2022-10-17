@@ -16,6 +16,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
         /// Lấy danh sách bản ghi cho phép tìm kiếm và phân trang
         /// </summary>
         /// <param name="keyword">Từ khóa muốn tìm kiếm</param> 
+        /// <param name="filter">Giá trị muốn lọc</param>
         /// <param name="pageSize">Số trang muốn lấy</param>
         /// <param name="pageNumber">Thứ tự trang muốn lấy</param>
         /// <param name="orderBy">Sắp xếp</param>
@@ -27,7 +28,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
         /// + Số bản ghi trang hiện tại
         /// + Keyword tìm kiếm hiện tại</returns>
         /// Created by: DUONGPV (04/10/2022)
-        public async Task<PagingData<T>> GetDataFilter(string? keyword = "", int pageSize = 10, int pageNumber = 1, string? orderBy = "")
+        public virtual async Task<PagingData<T>> GetDataFilter(string? keyword = "", int? filter = null, int pageSize = 10, int pageNumber = 1, string? orderBy = "")
         {
             // Khai báo tên stored procedure GET ALL
             string tableName = EntityUtilities.GetTableName<T>();
@@ -47,7 +48,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
             // Thực hiện gọi vào DB để chạy câu lệnh stored procedure
             using (var npgSqlConnection = new NpgsqlConnection(DatabaseContext.ConnectionString))
             {
-                var multipleResults = await npgSqlConnection.QueryAsync<T>(getDataFilterStoredProcedureName, parametersGetPaging, commandType: CommandType.StoredProcedure);
+                var multipleResults = await npgSqlConnection.QueryAsync<dynamic>(getDataFilterStoredProcedureName, parametersGetPaging, commandType: CommandType.StoredProcedure);
                 var totalRecord = await npgSqlConnection.QueryFirstAsync<long>(getTotalRecordStoredProcedureName, parametersTotalRecord, commandType: CommandType.StoredProcedure);
                 if (multipleResults != null)
                 {
@@ -65,17 +66,19 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                         TotalPage = totalPage,
                         CurrentPage = pageNumber,
                         CurrentRecord = pageSize,
-                        KeyWord = keyword
+                        KeyWord = keyword,
+                        Filter = filter
                     };
                 }
                 return new PagingData<T>()
                 {
-                    Data = new List<T>(),
+                    Data = new List<dynamic>(),
                     TotalCount = 0,
                     TotalPage = 0,
                     CurrentPage = 0,
                     CurrentRecord = 0,
-                    KeyWord = ""
+                    KeyWord = "",
+                    Filter = null
                 };
             }
         }

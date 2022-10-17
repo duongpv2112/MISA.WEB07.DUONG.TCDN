@@ -12,12 +12,11 @@
                 v-for="column in columns"
                 :key="column.fieldName"
                 :style="column.styleObject"
-                @click="sortField(column.dataField)"
             >
                 <div class="d-flex">
                     {{ column.fieldName }}
                     <span
-                        v-if="true"
+                        v-if="false"
                         class="square-16-inline icon icon-dropdown-grey-triangle"
                         :class="{
                             'rotate-180': false,

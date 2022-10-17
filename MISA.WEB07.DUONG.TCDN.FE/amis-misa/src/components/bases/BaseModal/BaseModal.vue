@@ -1,8 +1,12 @@
 <template>
     <div class="modal fade">
         <div class="modal drag">
-            <div class="modal__dialog modal__lg">
+            <div
+                class="modal__dialog modal__lg"
+                :class="className"
+            >
                 <div class="modal__header cursor-grab">
+                    <div class="icon square-24 icon-recent-log"></div>
                     <div class="modal__tittle">{{ titleHeader }}</div>
                     <slot name="header"></slot>
                 </div>
@@ -16,6 +20,7 @@ export default {
     name: "BaseModal",
     props: {
         titleHeader: String,
+        className: Array,
     },
 };
 </script>

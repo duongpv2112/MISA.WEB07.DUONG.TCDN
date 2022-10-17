@@ -39,6 +39,18 @@
     flex-direction: column;
 }
 
+.container-page .container-page__container .container-page__response {
+    border: 2px solid #e2e9f2;
+    background: #f2f5f8;
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+    z-index: 9;
+    top: -14px;
+    right: -10px;
+}
+
 /* CSS Toolbar */
 
 .container-page__container .container-page__toolbar {

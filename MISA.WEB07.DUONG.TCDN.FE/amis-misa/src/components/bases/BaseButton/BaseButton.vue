@@ -3,7 +3,7 @@
         v-if="!isIcon && !isIconText"
         class="button"
         :class="className"
-        @click="isButtonCancel ? this.functionz(1) : this.functionz(paramFunction)"
+        @click="isButtonCancel ? this.functionz(1) : this.functionz ? this.functionz(paramFunction) : null"
     >
         {{ title }}
         <BaseTooltip :content="contentTooltip" :className="classNameTooltip" />
@@ -12,7 +12,7 @@
         v-if="isIcon"
         class="button"
         :class="className"
-        @click="this.functionz()"
+        @click="this.functionz ? this.functionz(paramFunction) : null"
     >
         <div class="d-flex flex-center button-icon">
             <span class="icon" :class="classNameIcon"></span>

@@ -4,10 +4,15 @@
             class="table-row"
             v-for="(item, index) in data"
             :key="'Row_' + (index + 1)"
+            @dblclick="this.columnActions.actionPrimary.functionAction(item)"
         >
             <td>
                 <input type="checkbox" :id="'Row_' + (index + 1)" />
-                <label class="table-checkbox" :for="'Row_' + (index + 1)">
+                <label
+                    class="table-checkbox"
+                    :for="'Row_' + (index + 1)"
+                    @dblclick.stop="null"
+                >
                     <div class="table-checkbox__icon"></div>
                 </label>
             </td>
@@ -26,7 +31,9 @@
                     <button
                         class="table-content__menu--action"
                         @click="
-                            this.columnActions.actionPrimary.functionAction(item)
+                            this.columnActions.actionPrimary.functionAction(
+                                item
+                            )
                         "
                     >
                         <span>{{

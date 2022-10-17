@@ -4,7 +4,7 @@ import TheContainer from "../components/layouts/TheContainer/TheContainer.vue";
 import DashBoard from "../views/Dashboard/DashBoard.vue";
 import CashPage from "../views/CashPage/CashPage.vue";
 import ProcessPage from "../views/CashPage/Process/Process.vue";
-import ReceiptPayment from "../views/CashPage/ReceiptPayment/ReceiptPayment.vue";
+import ReceiptPayment from "../views/CashPage/ReceiptPayment/ReceiptPaymentContainer.vue";
 import SupplierPage from "../views/Supplier/SupplierContainer.vue";
 
 /* Khai báo các router */

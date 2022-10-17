@@ -1,0 +1,5 @@
+export const RECEIPT_PAYMENT_ENUM = {
+    TYPE_RECEIPT_PAYMENT: null,
+    TYPE_RECEIPT: 0,
+    TYPE_PAYMENT: 1,
+};

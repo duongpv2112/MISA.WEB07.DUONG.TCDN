@@ -42,9 +42,9 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL
         /// + Số bản ghi trang hiện tại
         /// + Keyword tìm kiếm hiện tại</returns>
         /// Created by: DUONGPV (04/10/2022)
-        public async Task<PagingData<T>> GetDataFilter(string? keyword, int pageSize = 10, int pageNumber = 1, string? orderBy = "")
+        public async Task<PagingData<T>> GetDataFilter(string? keyword, int? filter = null, int pageSize = 10, int pageNumber = 1, string? orderBy = "")
         {
-            return await _baseDL.GetDataFilter(keyword, pageSize, pageNumber, orderBy);
+            return await _baseDL.GetDataFilter(keyword, filter, pageSize, pageNumber, orderBy);
         }
 
         #endregion

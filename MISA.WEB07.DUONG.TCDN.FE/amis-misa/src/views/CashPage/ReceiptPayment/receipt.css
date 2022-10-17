@@ -1,0 +1,276 @@
+.container-page.receipt {
+    padding: 20px 0 12px 0;
+    height: calc(100vh - 48px - 72px);
+}
+
+.receipt .container-page__overview {
+    margin-bottom: 20px;
+}
+
+.receipt .container-page__overview .overview-item {
+    width: 33.33333%;
+    color: #fff;
+    min-height: 64px;
+    position: relative;
+}
+
+.receipt .container-page__overview .overview-item.overview-item__with-draw {
+    margin-top: 8px;
+}
+
+.receipt .container-page__overview .overview-item.bg-with-draw {
+    background: #ff7f2c;
+    height: 100%;
+}
+
+.receipt .container-page__overview .overview-item.overview-item__deposit {
+    margin: 8px 8px 0 8px;
+}
+
+.receipt .container-page__overview .overview-item.bg-deposit {
+    background: #00a9f2;
+    height: 100%;
+}
+
+.receipt .container-page__overview .overview-item.overview-item__remain {
+    margin-top: 8px;
+}
+
+.receipt .container-page__overview .overview-item.bg-remain {
+    background: #74cb2f;
+    height: 100%;
+}
+
+.receipt .container-page__overview .overview-item__content {
+    padding: 4px 10px;
+}
+
+.receipt .container-page__overview .overview-item .total-money {
+    font-size: 24px;
+}
+
+.receipt .container-page__overview .overview-item .lable-overview {
+    font-size: 14px;
+}
+
+.receipt .container-page__overview .overview-item .funnel-icon {
+    height: 22px;
+    position: absolute;
+    width: 18px;
+    right: 8px;
+    top: 4px;
+    background-position: -1814px -202px;
+}
+
+.container-page__tabs-filter {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.container-page__tabs-filter .tabs-filter__list {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    padding-left: 0;
+    position: relative;
+    display: flex;
+    list-style-type: none;
+}
+
+.container-page__tabs-filter .tabs-filter__list .tabs-filter__item {
+    height: 32px;
+    display: flex;
+}
+
+.container-page__tabs-filter
+    .tabs-filter__list
+    .tabs-filter__item.active-filter {
+    background: #d4d7dc;
+    border-radius: 30px;
+    color: #2ca01c;
+    font-weight: 700;
+}
+
+.container-page__tabs-filter
+    .tabs-filter__list
+    .tabs-filter__item.active-filter
+    .tabs-filter__item-content {
+    color: #2ca01c;
+    font-weight: 700;
+}
+
+.container-page__tabs-filter .tabs-filter__item .tabs-filter__item-content {
+    position: relative;
+    width: 100%;
+    background: 0 0;
+    border: 0;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 0;
+    font-size: 13px;
+    color: #111;
+    margin: 0;
+    padding: 7.5px 16px;
+    line-height: 16px;
+}
+
+.receipt.container-page .container-page__container {
+    height: calc(100% - 200px);
+}
+
+.receipt.container-page .container-page__container.hide-collapse {
+    height: calc(100% - 108px);
+}
+
+.summary-info {
+    text-align: right;
+}
+
+.summary-info .summary-info-title {
+    font-size: 13px;
+}
+
+.summary-info .summary-info-number {
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.reference {
+    display: flex;
+}
+
+.reference .reference-title-main {
+    margin-right: 16px;
+    min-width: 75px;
+}
+
+.reference .reference-icon {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.tab-detail {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 16px;
+}
+
+.tab-detail .tab-detail-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #111;
+}
+
+.tab-detail .tab-header-extend {
+}
+
+.tab-header-extend .tab-header-option {
+    display: flex;
+    align-items: center;
+}
+
+.tab-header-extend .tab-header-option .option-lable {
+    padding-right: 10px;
+    white-space: nowrap;
+    padding-left: 20px;
+}
+
+.tab-header-extend .tab-header-option .tab-combobox {
+    max-width: 100px;
+}
+
+.grid-btn-control {
+    display: flex;
+    padding-bottom: 16px;
+}
+
+.grid-btn-control .grid-btn {
+    padding: 2px 16px;
+    border-color: #8d9096;
+    border-radius: 2.5px;
+    border: 1px solid #8d9096;
+    background-color: transparent;
+    height: 24px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.grid-btn-control .grid-btn:hover {
+    padding: 2px 16px;
+    margin-right: 8px;
+    border-color: #8d9096;
+    border-radius: 2.5px;
+    background-color: #d2d3d6;
+}
+
+.grid-btn-control .grid-btn-title {
+    color: #111;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.grid-input-control {
+}
+
+.grid-input-control .grid-input-title {
+    display: flex;
+    margin-bottom: 6px;
+}
+
+.grid-input-control .grid-input-title .attach-text {
+    display: flex;
+    white-space: nowrap;
+    font-weight: 700;
+}
+
+.grid-input-control .grid-input-title .grid-input-icon {
+    height: 18px;
+    width: 18px;
+    margin-right: 8px;
+}
+
+.grid-input-control .grid-input-title .max-size-upload {
+    margin-left: 15px;
+    color: #757575;
+    white-space: nowrap;
+}
+
+.grid-input-control .grid-input-upload {
+    background: #fff;
+    padding: 16px 20px;
+    box-sizing: border-box;
+    border-radius: 2px;
+    position: relative;
+    border: 1px solid #babec5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    float: left;
+    width: 100%;
+    min-height: 50px;
+    max-width: 340px;
+}
+
+.grid-input-control .grid-input-upload input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    left: 0;
+    top: 0;
+    cursor: pointer;
+}
+
+.grid-input-control .grid-input-upload span {
+    min-width: 264px;
+    display: block;
+    text-align: center;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100%;
+    color: #9e9e9e;
+    font-style: italic;
+}

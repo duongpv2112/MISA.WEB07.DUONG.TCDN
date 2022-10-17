@@ -74,6 +74,16 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL
             return await _accountObjectDL.DeleteOneRecord(id);
         }
 
+        /// <summary>
+        /// Lấy mã mới
+        /// </summary>
+        /// <returns>Mã code mới</returns>
+        /// Author: DUONGPV (04/10/2022)
+        public async Task<string> GetNewCode()
+        {
+            return await _accountObjectDL.GetNewCode();
+        }
+
         #endregion
     }
 }

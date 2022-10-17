@@ -295,6 +295,10 @@
     background-position: -88px -256px;
 }
 
+.icon-setting__detail {
+    background-position: -32px -144px;
+}
+
 .icon-arrow-up--white {
     background-position: -848px -359px;
 }
@@ -321,4 +325,20 @@
 
 .icon-selected--tags {
     background-position: -896px -312px;
+}
+
+.icon-chevron-up--primary {
+    background-position: -128px -360px;
+}
+
+.icon-chevron-down--primary {
+    background-position: -176px -360px;
+}
+
+.icon-recent-log {
+    background-position: -648px -144px;
+}
+
+.icon-attach {
+    background-position: -539px -203px;
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="modal__body">
+    <div class="modal__body" v-keyboardoutside="eventHandleKey">
         <div class="line-bottom">
             <div class="modal__row">
                 <div class="col-6 pr-26">
@@ -18,7 +18,7 @@
                             :fieldName="RESOURCE.SUPPLIER_TAXCODE_FIELD_LBL"
                             :maxlength="20"
                             :isReadonly="isViewDetail"
-                            :firstFocus="true"
+                            :firstFocus="typeSupplier == 0 ? true : false"
                             :isInputNumberString="true"
                             :patternValidate="'REGEX_ONLY_NUMBER'"
                             :isFieldErrorFocus="
@@ -36,6 +36,7 @@
                             :valueField="account_object.account_object_code"
                             :fieldName="RESOURCE.SUPPLIER_CODE_FIELD_LBL"
                             :maxlength="20"
+                            :firstFocus="typeSupplier == 1 ? true : false"
                             :isRequired="true"
                             :isReadonly="isViewDetail"
                             :isFieldErrorFocus="
@@ -793,6 +794,7 @@
                 :contentTooltip="'Cất và thêm (Ctrl + Shift + S)'"
                 :classNameTooltip="['tooltip-default']"
                 :functionz="this.onSave"
+                :paramFunction="1"
             />
             <BaseButton
                 v-if="isViewDetail"
@@ -863,6 +865,8 @@ export default {
     },
 
     props: {
+        accountObject: null,
+        supplierConstraints: null,
         typeSupplier: null,
         supplierValue: null,
         onClose: Function,
@@ -1038,10 +1042,39 @@ export default {
                 console.log(error);
             }
         },
+
+        /**
+         * Function kiểm tra người dùng nhấn các key để thao tác với modal
+         * @param {*} $event: Giá trị thẻ đang được chọn
+         * @author: DUONGPV (08/09/2022)
+         */
+        eventHandleKey() {
+            var keyCodePress = event;
+            if (event.ctrlKey) {
+                event.preventDefault();
+                if (keyCodePress.ctrlKey && keyCodePress.keyCode == 83) {
+                    this.onSave();
+                }
+                if (
+                    keyCodePress.ctrlKey &&
+                    keyCodePress.shiftKey &&
+                    keyCodePress.keyCode == 83
+                ) {
+                    this.onSave(1);
+                }
+            }
+            if (keyCodePress.keyCode == 27) {
+                this.onClose(0);
+            }
+        },
     },
 
     created() {
-        if (this.supplierValue) {
+        if (
+            this.supplierValue &&
+            this.supplierValue.accountObject &&
+            this.supplierValue.supplierConstraints
+        ) {
             this.account_object = this.supplierValue.accountObject;
             this.supplier_constraints = this.supplierValue.supplierConstraints;
             if (this.supplierValue) {
@@ -1053,12 +1086,14 @@ export default {
                         };
                     });
             }
+        } else {
+            this.account_object = this.accountObject;
+            this.supplier_constraints = this.supplierConstraints;
         }
     },
 
     watch: {
         fieldFocus(newValue) {
-            console.log(newValue);
             if (newValue && newValue == "identity_date") {
                 this.$refs[newValue].focus();
             }

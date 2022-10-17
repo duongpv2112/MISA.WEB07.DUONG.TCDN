@@ -13,6 +13,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL
         /// Lấy danh sách bản ghi cho phép tìm kiếm và phân trang
         /// </summary>
         /// <param name="keyword">Từ khóa muốn tìm kiếm</param> 
+        /// <param name="filter">Giá trị cần lọc</param> 
         /// <param name="pageSize">Số trang muốn lấy</param>
         /// <param name="pageNumber">Thứ tự trang muốn lấy</param>
         /// <param name="orderBy">Sắp xếp</param>
@@ -24,6 +25,6 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL
         /// + Số bản ghi trang hiện tại
         /// + Keyword tìm kiếm hiện tại</returns>
         /// Created by: DUONGPV (04/10/2022)
-        public Task<PagingData<T>> GetDataFilter(string? keyword, int pageSize = 10, int pageNumber = 1, string? orderBy = "");
+        public Task<PagingData<T>> GetDataFilter(string? keyword, int? filter = null, int pageSize = 10, int pageNumber = 1, string? orderBy = "");
     }
 }

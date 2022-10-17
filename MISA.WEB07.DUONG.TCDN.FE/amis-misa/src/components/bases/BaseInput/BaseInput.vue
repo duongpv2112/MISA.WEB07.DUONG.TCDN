@@ -100,6 +100,11 @@ export default {
                 this.$refs[this.dataField].focus();
             }
         },
+        firstFocus(newValue) {
+            if (newValue) {
+                this.$refs[this.dataField].focus();
+            }
+        },
     },
 
     methods: {

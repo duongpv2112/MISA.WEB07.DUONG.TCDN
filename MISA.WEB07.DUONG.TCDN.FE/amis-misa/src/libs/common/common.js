@@ -17,6 +17,23 @@ export const common = {
         }
     },
 
+    formatDecimalCurrency(value) {
+        try {
+            if (value) {
+                let newVal = value
+                    .toFixed()
+                    .toString()
+                    .replace(/^0+/, "")
+                    .replace(/\D/g, "")
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                return newVal;
+            }
+            return 0;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
     formatDate(date) {
         let d = new Date(date);
         var month = "" + (d.getMonth() + 1);
@@ -27,6 +44,22 @@ export const common = {
         if (day.length < 2) day = "0" + day;
 
         return [year, month, day].join("-");
+    },
+
+    formatDateWithType(date, type) {
+        let d = new Date(date);
+        var month = "" + (d.getMonth() + 1);
+        var day = "" + d.getDate();
+        var year = d.getFullYear();
+
+        if (month.length < 2) month = "0" + month;
+        if (day.length < 2) day = "0" + day;
+        switch (type) {
+            case "DD/MM/YYYY":
+                return [day, month, year].join("/");
+            case "YYYY-MM-DD":
+                return [year, month, day].join("-");
+        }
     },
 
     /**
@@ -77,6 +110,52 @@ export const common = {
         ) {
             e.preventDefault();
         }
+    },
+
+    /**
+     * Refesh object
+     * AUTHOR: DUONGPV (05/08/2022)
+     */
+    refreshObject(object) {
+        try {
+            Object.keys(object).forEach((key) => {
+                object[key] = "";
+            });
+            return object;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    newObject(object) {
+        try {
+            var newObject = object;
+            Object.keys(newObject).forEach((key) => {
+                newObject[key] = "";
+            });
+            return newObject;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    /**
+     * Kiểm tra hai object có như nhau không
+     * @param {*} obj1: Giá trị đối tượng thứ nhất
+     * @param {*} obj2: Giá trị đối tượng thứ hai
+     * Author: DUONGPV (29/07/2022)
+     */
+    objCompare(obj1, obj2) {
+        const Obj1_keys = Object.keys(obj1);
+
+        for (let k of Obj1_keys) {
+            if (obj1[k] && obj2[k] != undefined) {
+                if (obj1[k] !== obj2[k]) {
+                    return false;
+                }
+            }
+        }
+        return true;
     },
 
     // document.addEventListener("keydown", function (event) {

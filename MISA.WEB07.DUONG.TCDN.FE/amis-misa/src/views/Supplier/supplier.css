@@ -31,57 +31,57 @@
     margin-bottom: 20px;
 }
 
-.container-page__overview .overview-item {
+.supplier .container-page__overview .overview-item {
     width: 33.33333%;
     color: #fff;
     min-height: 64px;
     position: relative;
 }
 
-.container-page__overview .overview-item:not(:last-child){
+.supplier .container-page__overview .overview-item:not(:last-child){
     cursor: pointer;
 }
 
-.container-page__overview .overview-item.overview-item__dued-debt {
+.supplier .container-page__overview .overview-item.overview-item__dued-debt {
     margin-top: 8px;
 }
 
-.container-page__overview .overview-item.bg-dued-debt {
+.supplier .container-page__overview .overview-item.bg-dued-debt {
     background: #ff7f2c;
     height: 100%;
 }
 
-.container-page__overview .overview-item.overview-item__total-debt {
+.supplier .container-page__overview .overview-item.overview-item__total-debt {
     margin: 8px 8px 0 8px;
 }
 
-.container-page__overview .overview-item.bg-total-debt {
+.supplier .container-page__overview .overview-item.bg-total-debt {
     background: #b8bcc3;
     height: 100%;
 }
 
-.container-page__overview .overview-item.overview-item__payment {
+.supplier .container-page__overview .overview-item.overview-item__payment {
     margin-top: 8px;
 }
 
-.container-page__overview .overview-item.bg-payment {
+.supplier .container-page__overview .overview-item.bg-payment {
     background: #74cb2f;
     height: 100%;
 }
 
-.container-page__overview .overview-item__content {
+.supplier .container-page__overview .overview-item__content {
     padding: 4px 10px;
 }
 
-.container-page__overview .overview-item .total-money {
+.supplier .container-page__overview .overview-item .total-money {
     font-size: 24px;
 }
 
-.container-page__overview .overview-item .lable-overview {
+.supplier .container-page__overview .overview-item .lable-overview {
     font-size: 14px;
 }
 
-.container-page__overview .overview-item .funnel-icon {
+.supplier .container-page__overview .overview-item .funnel-icon {
     height: 22px;
     position: absolute;
     width: 18px;
@@ -90,18 +90,18 @@
     background-position: -1814px -202px;
 }
 
-.container-page__overview .overview-item .overview-line {
+.supplier .container-page__overview .overview-item .overview-line {
     display: none;
     padding-top: 6px;
     background: #707070;
     opacity: 0.5;
 }
 
-.container-page__overview .overview-item:not(:last-child):hover {
+.supplier .container-page__overview .overview-item:not(:last-child):hover {
     margin-top: 0;
     padding-top: 6px;
 }
 
-.container-page__overview .overview-item:not(:last-child):hover .overview-line {
+.supplier .container-page__overview .overview-item:not(:last-child):hover .overview-line {
     display: block;
 }

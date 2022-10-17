@@ -136,9 +136,18 @@
     padding-right: 1.5rem !important;
 }
 
+.px-2 {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+}
+
 .px-3 {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
+}
+
+.pl-10 {
+    padding-left: 10px;
 }
 
 .pr-4 {
@@ -153,12 +162,20 @@
     padding: 5px 0 6px 10px;
 }
 
+.pr-12 {
+    padding-right: 12px !important;
+}
+
 .pr-26 {
     padding-right: 26px !important;
 }
 
 .pr-20 {
     padding-right: 20px !important;
+}
+
+.pl-24 {
+    padding-left: 24px !important;
 }
 
 /* CSS Square Block */
@@ -343,4 +360,8 @@
     line-height: 32px;
     width: 175px;
     padding: 0 10px;
+}
+
+.m-w-350 {
+    min-width: 350px;
 }

@@ -32,8 +32,18 @@
         public string? KeyWord { get; set; }
 
         /// <summary>
+        /// Giá trị lọc
+        /// </summary>
+        public int? Filter { get; set; }
+
+        /// <summary>
         /// Mảng đối tượng thỏa mãn điều kiện tìm kiếm và phân trang 
         /// </summary>
-        public List<T> Data { get; set; } = new List<T>();
+        public List<dynamic> Data { get; set; } = new List<dynamic>();
+
+        /// <summary>
+        /// Đối tượng thông tin cần cung cấp cho client 
+        /// </summary>
+        public Object SummaryData { get; set; } = new Object();
     }
 }

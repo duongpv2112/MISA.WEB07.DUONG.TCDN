@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MISA.WEB07.DUONGPV.TCDN.BL.SupplierGroupBL
+namespace MISA.WEB07.DUONGPV.TCDN.BL
 {
     public class SupplierGroupBL : BaseBL<SupplierGroup>, ISupplierGroupBL
     {

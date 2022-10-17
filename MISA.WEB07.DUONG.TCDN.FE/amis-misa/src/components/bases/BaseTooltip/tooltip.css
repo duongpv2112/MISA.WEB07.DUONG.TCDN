@@ -20,6 +20,14 @@
     top: calc(100% + 10%);
     left: 50%;
     transform: translateX(-50%);
+    z-index: 10;
+}
+
+.tooltip-text.tooltip-absolute-left {
+    top: calc(100% + 10%);
+    right: 50%;
+    transform: translateX(35%);
+    z-index: 10;
 }
 
 .tooltip-text.tooltip-default--header {

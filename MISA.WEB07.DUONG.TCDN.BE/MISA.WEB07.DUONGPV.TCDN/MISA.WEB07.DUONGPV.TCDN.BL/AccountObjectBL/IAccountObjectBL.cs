@@ -37,5 +37,12 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL
         /// <returns>Bản ghi xóa thành công hay thất bại (True, False)</returns>
         /// Author: DUONGPV (04/10/2022)
         public Task<bool> DeleteOneRecord(Guid id);
+
+        /// <summary>
+        /// Lấy mã mới
+        /// </summary>
+        /// <returns>Mã code mới</returns>
+        /// Author: DUONGPV (04/10/2022)
+        public Task<string> GetNewCode();
     }
 }

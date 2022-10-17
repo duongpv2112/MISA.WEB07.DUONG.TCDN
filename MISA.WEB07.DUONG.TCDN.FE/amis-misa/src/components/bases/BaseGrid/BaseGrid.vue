@@ -8,6 +8,14 @@
                 :columnActions="columnActions"
                 :dataReady="dataReady"
             />
+            <BaseGridFooter
+                v-if="dataFooter?.isShow"
+                :columns="columns"
+                :firstColumn="dataFooter.firstColumn"
+                :columnShow="dataFooter.columnShow"
+                :data="dataFooter.data"
+                :dataReady="dataReady"
+            />
         </table>
         <div v-if="dataReady && data.length == 0" class="table-nodata">
             <div class="d-flex flex-center table-nodata__content">
@@ -21,7 +29,7 @@
     </div>
     <div class="table-navigation">
         <span class="navigation-total">
-            Tổng số: <strong>{{ total }}</strong> bản ghi
+            Tổng số: <strong>{{ formatNumber(total) }}</strong> bản ghi
         </span>
         <div class="navigation-action">
             <BaseComboboxDefault
@@ -54,6 +62,8 @@ import BaseGridHeader from "./BaseGridHeader.vue";
 import BaseGridRow from "./BaseGridRow.vue";
 import BasePagination from "./BasePagination.vue";
 import BaseComboboxDefault from "../BaseCombobox/BaseComboboxDefault.vue";
+import { common } from "@/libs/common/common";
+import BaseGridFooter from "./BaseGridFooter.vue";
 
 export default {
     name: "BaseGrid",
@@ -62,6 +72,7 @@ export default {
         BaseGridRow,
         BasePagination,
         BaseComboboxDefault,
+        BaseGridFooter,
     },
     props: {
         columns: Array,
@@ -73,6 +84,7 @@ export default {
         pageSize: Number,
         onHandlePageChange: Function,
         onHandlePageSizeChange: Function,
+        dataFooter: Object,
     },
     data() {
         return {
@@ -98,6 +110,8 @@ export default {
                     value_show: "100 bản ghi trên một trang",
                 },
             ],
+
+            formatNumber: common.formatCurrency,
         };
     },
 };

@@ -1,5 +1,5 @@
 <template>
-    <main class="container-page">
+    <main class="container-page supplier">
         <div class="container-page__top">
             <div class="d-flex justify-space-between">
                 <h2 class="container-page__title">
@@ -244,6 +244,8 @@
         </template>
         <template v-slot:body>
             <SupplierForm
+                :accountObject="account_object"
+                :supplierConstraints="supplier_constraints"
                 :isViewDetail="isViewDetail"
                 :typeSupplier="typeSupplier"
                 :supplierValue="supplierData"
@@ -277,6 +279,7 @@ import { SUPPLIER_TEXT_CONFIG } from "@/views/Supplier/constants/resource";
 import { TYPE_CLOSE } from "@/views/Supplier/constants/type-close";
 import BasePopup from "@/components/bases/BasePopup/BasePopup.vue";
 import BaseTooltip from "@/components/bases/BaseTooltip/BaseTooltip.vue";
+import { common } from "@/libs/common/common";
 
 export default {
     name: "SupplierContainer",
@@ -317,7 +320,10 @@ export default {
 
             typeSupplier: Number,
 
-            supplierData: null,
+            supplierData: {
+                accountObject: null,
+                supplierConstraints: null,
+            },
 
             popupData: null,
 
@@ -474,12 +480,20 @@ export default {
             }
         },
 
-        onHandleShowModal() {
+        async onHandleShowModal() {
             try {
-                this.isShowModal = true;
+                common.refreshObject(this.account_object);
+                this.account_object.account_object_id = "";
                 this.supplierData = null;
                 this.typeSupplier = 0;
                 this.isViewDetail = false;
+                let urlGetNewCode = `${API_RESOURCE.SUPPLIER_GET_NEW_CODE}`;
+                await api.get(urlGetNewCode).then((data) => {
+                    this.account_object.account_object_code = data;
+                });
+                this.account_object.isEdit = false;
+                this.account_object.isAdd = true;
+                this.isShowModal = true;
             } catch (error) {
                 console.log(error);
             }
@@ -487,39 +501,83 @@ export default {
 
         onHandleHideModal(typeClose) {
             try {
-                if (typeClose == TYPE_CLOSE.TYPE_CLOSE_CHECK_CHANGE) {
-                    this.popupData = {
-                        typePopup: 0,
-                        footerPopup: {
-                            footerLeft: [
-                                {
-                                    buttonName: "Hủy",
-                                    buttonAction: this.onHandleHidePopup,
-                                    classButton: "",
-                                    valueFunction: "",
-                                },
-                            ],
-                            footerRight: [
-                                {
-                                    buttonName: "Không",
-                                    buttonAction: this.onHandleHideModal,
-                                    classButton: "",
-                                    valueFunction: 1,
-                                },
-                                {
-                                    buttonName: "Có",
-                                    buttonAction: this.onSaveSupplier,
-                                    classButton: ["btn-confirm"],
-                                    valueFunction: "",
-                                },
-                            ],
-                        },
-
-                        noticeMessage:
-                            "Dữ liệu đã bị thay đổi. Bạn có muốn cất không?",
+                let isChange = false;
+                if (!this.account_object.account_object_id) {
+                    let newObject = {
+                        account_object_code:
+                            this.account_object.account_object_code,
+                        account_object_name: "",
+                        address: "",
+                        website: "",
+                        tax_code: "",
+                        phone_number: "",
+                        telephone_number: "",
+                        identity_number: "",
+                        identity_date: "",
+                        identity_place: "",
+                        employee_id: "",
+                        employee_name: "",
+                        supplier_type: "",
+                        contact_name: "",
+                        vocative_contact: null,
+                        vocative_supplier: null,
+                        email: "",
+                        representative_name: "",
+                        payment_term: null,
+                        number_day_owed: null,
+                        maximum_debt_amount: null,
+                        account_payable: "",
+                        department_name: "",
                     };
-                    this.isShowPopup = true;
-                    this.setFieldErrorFocus(null);
+                    isChange = common.objCompare(
+                        this.account_object,
+                        newObject
+                    );
+                } else {
+                    isChange = common.objCompare(
+                        this.account_object,
+                        this.supplierData.accountObject
+                    );
+                }
+
+                if (typeClose == TYPE_CLOSE.TYPE_CLOSE_CHECK_CHANGE) {
+                    if (!isChange) {
+                        this.popupData = {
+                            typePopup: 0,
+                            footerPopup: {
+                                footerLeft: [
+                                    {
+                                        buttonName: "Hủy",
+                                        buttonAction: this.onHandleHidePopup,
+                                        classButton: "",
+                                        valueFunction: "",
+                                    },
+                                ],
+                                footerRight: [
+                                    {
+                                        buttonName: "Không",
+                                        buttonAction: this.onHandleHideModal,
+                                        classButton: "",
+                                        valueFunction: 1,
+                                    },
+                                    {
+                                        buttonName: "Có",
+                                        buttonAction: this.onSaveSupplier,
+                                        classButton: ["btn-confirm"],
+                                        valueFunction: "",
+                                    },
+                                ],
+                            },
+
+                            noticeMessage:
+                                "Dữ liệu đã bị thay đổi. Bạn có muốn cất không?",
+                        };
+                        this.isShowPopup = true;
+                        this.setFieldErrorFocus(null);
+                    } else {
+                        this.isShowModal = false;
+                        this.isShowPopup = false;
+                    }
                 } else if (typeClose == TYPE_CLOSE.TYPE_CLOSE_DEFAULT) {
                     this.isShowModal = false;
                     this.isShowPopup = false;
@@ -535,7 +593,9 @@ export default {
                 var listValidate = this.validateData.filter((e) => {
                     return e.isInValid == true;
                 });
-                this.setFieldErrorFocus(listValidate[0].fieldName);
+                if (listValidate.length > 0) {
+                    this.setFieldErrorFocus(listValidate[0].fieldName);
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -551,13 +611,16 @@ export default {
 
         async onEdit(value) {
             try {
-                let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}/${value.account_object_id}`;
-                await api.get(urlFilter).then((data) => {
+                let urlGetOne = `${API_RESOURCE.PAGING_DATA_SUPPLIER}/${value.account_object_id}`;
+
+                await api.get(urlGetOne).then((data) => {
                     this.supplierData = data;
                     this.account_object = data.accountObject;
                     this.supplier_constraints = data.supplierConstraints;
                     this.onChangTypeSupplier(data.accountObject.supplier_type);
                 });
+                this.account_object.isEdit = true;
+                this.account_object.isAdd = false;
                 this.isViewDetail = false;
                 this.isShowModal = true;
             } catch (error) {
@@ -633,7 +696,7 @@ export default {
             }
         },
 
-        async onSaveSupplier() {
+        async onSaveSupplier(type) {
             try {
                 this.setFieldErrorFocus(null);
                 if (this.checkValidateData()) {
@@ -673,26 +736,36 @@ export default {
                     this.account_object.number_day_owed = Number(
                         this.account_object.number_day_owed
                     );
+                    this.account_object.identity_date = this.account_object
+                        .identity_date
+                        ? common.formatDate(this.account_object.identity_date)
+                        : null;
                     this.account_object.is_supplier = true;
                     this.account_object.is_employee = false;
                     var bodyData = {
                         accountObject: this.account_object,
                         supplierConstraints: this.supplier_constraints,
                     };
-                    if (this.account_object.account_object_id) {
+                    if (this.account_object.isEdit) {
                         let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}/${this.account_object.account_object_id}`;
                         await api.put(urlFilter, bodyData).then((response) => {
                             if (response) {
                                 this.isShowModal = false;
+                                this.isShowPopup = false;
                             }
                         });
-                    } else {
+                    } else if (this.account_object.isAdd) {
+                        delete bodyData.accountObject["account_object_id"];
                         let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}`;
                         await api.post(urlFilter, bodyData).then((response) => {
                             if (response) {
                                 this.isShowModal = false;
+                                this.isShowPopup = false;
                             }
                         });
+                    }
+                    if (type && type == 1) {
+                        this.onHandleShowModal();
                     }
                 }
                 this.onHandleReload();
