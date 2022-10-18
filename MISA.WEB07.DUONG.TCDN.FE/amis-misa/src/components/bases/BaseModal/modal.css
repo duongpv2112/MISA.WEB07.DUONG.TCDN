@@ -160,6 +160,7 @@
     padding: 0 12px 0 10px;
     border: 1px solid #bbb;
     box-sizing: border-box;
+    text-overflow: ellipsis;
 }
 
 .modal__group .modal__control:hover {
@@ -343,4 +344,5 @@
 
 .root-invoice {
     padding-top: 28px;
+    white-space: nowrap;
 }

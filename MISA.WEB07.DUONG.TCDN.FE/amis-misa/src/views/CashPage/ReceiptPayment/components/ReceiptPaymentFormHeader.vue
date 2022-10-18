@@ -4,10 +4,10 @@
             <BaseComboboxDefault
                 :className="['m-w-350']"
                 :dataField="'type_voucher'"
-                :value="'7. Chi khác'"
+                :value="stringTypeVoucher"
                 :listData="listDataCombobox"
                 :isHideLable="true"
-                :isBottom="true"
+                :isBottom="true"    
             />
         </div>
     </BaseModalHeader>
@@ -22,6 +22,7 @@ export default {
     props: {
         isViewDetail: Boolean,
         listDataCombobox: Array,
+        stringTypeVoucher: String,
     },
 
     emits: ["setValue"],

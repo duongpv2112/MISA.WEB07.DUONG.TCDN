@@ -64,6 +64,7 @@
 
 .button.button-text {
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .button.button-icon-text:hover {

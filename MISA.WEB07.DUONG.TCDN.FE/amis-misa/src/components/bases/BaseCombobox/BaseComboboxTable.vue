@@ -1,5 +1,10 @@
 <template>
-    <div class="combobox border-radius-2">
+    <div
+        class="combobox border-radius-2"
+        :class="{
+            'p-relative': isAbsoluteLayer,
+        }"
+    >
         <div
             class="combobox-selected tooltip"
             :class="[
@@ -26,7 +31,10 @@
                 />
             </div>
             <div class="d-flex">
-                <div class="combobox-selected--icon combobox-selected--icon-br">
+                <div
+                    class="combobox-selected--icon combobox-selected--icon-br"
+                    v-if="!isHideIconPlus"
+                >
                     <i class="icon icon-plus--success square-16"></i>
                 </div>
                 <div
@@ -52,7 +60,8 @@
             v-if="isShowListData"
             class="combobox-data"
             v-clickoutside="hideListData"
-            :class="{ 'absolute-bottom': isBottom }"
+            :class="[classListData, isBottom ? 'absolute-bottom' : '']"
+            :style="!isAbsoluteLayer ? styleListData : null"
             ref="scrollComponent"
             @scroll="onHandleScroll"
         >
@@ -62,6 +71,7 @@
                         <th
                             scope="col"
                             v-for="(item, index) in nameRow"
+                            :style="item.styleObject ? item.styleObject : null"
                             :key="index"
                         >
                             {{ item.fieldName }}
@@ -123,6 +133,10 @@ export default {
         className: Array,
         nameRow: Array,
         isFieldErrorFocus: Boolean,
+        isHideIconPlus: Boolean,
+        isAbsoluteLayer: Boolean,
+        isAbsoluteFull: Boolean,
+        classListData: Array,
     },
     emits: ["setValue", "setValidateData"],
 
@@ -152,6 +166,7 @@ export default {
                 isInValid: false,
                 errorMessage: "",
             },
+            styleListData: Object,
         };
     },
 
@@ -231,6 +246,34 @@ export default {
          * @author: DUONGPV (08/09/2022)
          */
         btnSelectDataOnClick() {
+            if (!this.isAbsoluteLayer) {
+                this.styleListData = {
+                    top: `${
+                        event.target.parentElement.offsetParent.offsetTop +
+                        event.target.parentElement.offsetParent.offsetHeight +
+                        5
+                    }px`,
+                    left: `${event.target.parentElement.offsetParent.offsetLeft}px`,
+                    "max-width": "382px",
+                    "z-index": "999999",
+                };
+
+                if (this.isAbsoluteFull) {
+                    this.styleListData = {
+                        top: `${
+                            event.target.parentElement.offsetParent.offsetTop +
+                            event.target.parentElement.offsetParent
+                                .offsetHeight +
+                            6
+                        }px`,
+                        "z-index": "99",
+                        right: "0",
+                        "min-width": "1000px",
+                        "max-width": "1000px",
+                    };
+                }
+            }
+
             this.isShowListData = !this.isShowListData;
             this.$refs[this.propValue].focus();
         },

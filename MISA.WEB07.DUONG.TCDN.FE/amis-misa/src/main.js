@@ -33,17 +33,17 @@ app.directive("clickoutside", {
 
 app.directive("keyboardoutside", {
     mounted: (el, binding) => {
-        el.clickOutsideEvent = function (event) {
+        el.keyDownOutsideEvent = function (event) {
             if (!(el === event.target)) {
                 binding.value(event, el);
             }
         };
-        document.body.addEventListener("keydown", el.clickOutsideEvent);
-        document.body.addEventListener("touchstart", el.clickOutsideEvent);
+        document.body.addEventListener("keydown", el.keyDownOutsideEvent);
+        document.body.addEventListener("touchstart", el.keyDownOutsideEvent);
     },
     beforeUnmount: function (el) {
-        document.body.removeEventListener("keydown", el.clickOutsideEvent);
-        document.body.removeEventListener("touchstart", el.clickOutsideEvent);
+        document.body.removeEventListener("keydown", el.keyDownOutsideEvent);
+        document.body.removeEventListener("touchstart", el.keyDownOutsideEvent);
     },
     stopProp(event) {
         event.stopPropagation();

@@ -365,3 +365,11 @@
 .m-w-350 {
     min-width: 350px;
 }
+
+.min-w-1000 {
+    min-width: 1000px !important;
+}
+
+.h-200 {
+    min-height: 200px !important;
+}

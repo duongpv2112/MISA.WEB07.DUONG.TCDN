@@ -1,20 +1,65 @@
 <template>
-    <div class="modal__body">
+    <div class="modal__body p-relative">
         <div class="modal__body-top">
             <div class="main-infomation">
                 <div class="modal__row">
                     <div class="col-7 pr-12">
                         <div class="d-flex flex-wrap">
-                            <div class="modal__col col-5">
+                            <div
+                                class="modal__col"
+                                :class="{
+                                    'col-5': typeVoucher == ENUM.TYPE_PAYMENT,
+                                    'col-4': typeVoucher == ENUM.TYPE_RECEIPT,
+                                }"
+                            >
                                 <label class="modal__label mb-6">
                                     Mã đối tượng
                                 </label>
                                 <BaseComboboxTable
-                                    :propValue="'employee_id'"
-                                    :propText="'employee_name'"
+                                    :url="URL.PAGING_DATA_ACCOUNT_OBJECT"
+                                    :propValue="'account_object_id'"
+                                    :propText="'account_object_code'"
                                     :dataField="'account_object_id'"
-                                    :dataText="'account_object_name'"
+                                    :dataText="'account_object_code'"
                                     :className="['modal__group', 'col-12']"
+                                    :classListData="['min-w-1000', 'h-200']"
+                                    :nameRow="[
+                                        {
+                                            fieldName: 'Đối tượng',
+                                            dataField: 'account_object_code',
+                                            styleObject: {
+                                                'min-width': '120px',
+                                            },
+                                        },
+                                        {
+                                            fieldName: 'Tên đối tượng',
+                                            dataField: 'account_object_name',
+                                            styleObject: {
+                                                'min-width': '280px',
+                                            },
+                                        },
+                                        {
+                                            fieldName: 'Mã số thuế',
+                                            dataField: 'tax_code',
+                                            styleObject: {
+                                                'min-width': '140px',
+                                            },
+                                        },
+                                        {
+                                            fieldName: 'Địa chỉ',
+                                            dataField: 'address',
+                                            styleObject: {
+                                                'min-width': '250px',
+                                            },
+                                        },
+                                        {
+                                            fieldName: 'Điện thoại',
+                                            dataField: 'phone_number',
+                                            styleObject: {
+                                                'min-width': '100px',
+                                            },
+                                        },
+                                    ]"
                                     :isBottom="true"
                                 />
                             </div>
@@ -22,56 +67,141 @@
                                 :className="[
                                     'modal__group',
                                     'modal__col',
-                                    'col-7',
+                                    typeVoucher == ENUM.TYPE_PAYMENT
+                                        ? 'col-7'
+                                        : '',
+                                    typeVoucher == ENUM.TYPE_RECEIPT
+                                        ? 'col-8'
+                                        : '',
                                 ]"
                                 :lable="'Tên đối tượng'"
+                                :valueField="receiptPayment.account_object_name"
                                 :maxlength="20"
-                                :isNotTooltip="false"
                             />
                             <BaseInput
                                 :className="[
                                     'modal__group',
                                     'modal__col',
-                                    'col-5',
+                                    typeVoucher == ENUM.TYPE_PAYMENT
+                                        ? 'col-5'
+                                        : '',
+                                    typeVoucher == ENUM.TYPE_RECEIPT
+                                        ? 'col-4'
+                                        : '',
                                 ]"
-                                :lable="'Người nhận'"
+                                :lable="
+                                    typeVoucher == ENUM.TYPE_PAYMENT
+                                        ? 'Người nhận'
+                                        : 'Người nộp'
+                                "
+                                :valueField="
+                                    receiptPayment.account_object_contact_name
+                                "
                                 :maxlength="20"
-                                :isNotTooltip="false"
                             />
                             <BaseInput
                                 :className="[
                                     'modal__group',
                                     'modal__col',
-                                    'col-7',
+                                    typeVoucher == ENUM.TYPE_PAYMENT
+                                        ? 'col-7'
+                                        : '',
+                                    typeVoucher == ENUM.TYPE_RECEIPT
+                                        ? 'col-8'
+                                        : '',
                                 ]"
                                 :lable="'Địa chỉ'"
+                                :valueField="receiptPayment.address"
                                 :maxlength="20"
-                                :isNotTooltip="false"
                             />
                             <BaseInput
+                                v-if="typeVoucher == ENUM.TYPE_PAYMENT"
                                 :className="[
                                     'modal__group',
                                     'modal__col',
                                     'col-12',
                                 ]"
                                 :lable="'Lý do chi'"
+                                :valueField="receiptPayment.reason"
                                 :maxlength="20"
-                                :isNotTooltip="false"
                             />
                             <div class="d-flex col-12">
-                                <div class="modal__col col-5">
+                                <div
+                                    class="modal__col"
+                                    :class="{
+                                        'col-5':
+                                            typeVoucher == ENUM.TYPE_PAYMENT,
+                                        'col-4':
+                                            typeVoucher == ENUM.TYPE_RECEIPT,
+                                    }"
+                                >
                                     <label class="modal__label mb-6">
                                         Nhân viên
                                     </label>
                                     <BaseComboboxTable
-                                        :propValue="'employee_id'"
-                                        :propText="'employee_name'"
+                                        :url="URL.PAGING_DATA_EMPLOYEE"
+                                        :propValue="'account_object_id'"
+                                        :propText="'account_object_code'"
                                         :dataField="'account_object_id'"
                                         :dataText="'account_object_name'"
                                         :className="['modal__group', 'col-12']"
+                                        :classListData="['min-w-1000', 'h-200']"
+                                        :nameRow="[
+                                            {
+                                                fieldName: 'Mã nhân viên',
+                                                dataField:
+                                                    'account_object_code',
+                                                styleObject: {
+                                                    'min-width': '120px',
+                                                },
+                                            },
+                                            {
+                                                fieldName: 'Tên nhân viên',
+                                                dataField:
+                                                    'account_object_name',
+                                                styleObject: {
+                                                    'min-width': '280px',
+                                                },
+                                            },
+                                            {
+                                                fieldName: 'Đơn vị',
+                                                dataField: 'department_name',
+                                                styleObject: {
+                                                    'min-width': '140px',
+                                                },
+                                            },
+                                            {
+                                                fieldName: 'Điện thoại di động',
+                                                dataField: 'phone_number',
+                                                styleObject: {
+                                                    'min-width': '250px',
+                                                },
+                                            },
+                                            {
+                                                fieldName: 'Điện thoại',
+                                                dataField: 'phone_number',
+                                                styleObject: {
+                                                    'min-width': '100px',
+                                                },
+                                            },
+                                        ]"
+                                        :value="receiptPayment.employee_name"
                                         :isBottom="true"
+                                        :isAbsoluteLayer="false"
                                     />
                                 </div>
+
+                                <BaseInput
+                                    v-if="typeVoucher == ENUM.TYPE_RECEIPT"
+                                    :className="[
+                                        'modal__group',
+                                        'modal__col',
+                                        'col-4',
+                                    ]"
+                                    :lable="'Lý do nộp'"
+                                    :valueField="receiptPayment.reason"
+                                    :maxlength="20"
+                                />
 
                                 <BaseInput
                                     :className="[
@@ -80,6 +210,8 @@
                                         'col-2',
                                     ]"
                                     :lable="'Kèm theo'"
+                                    :valueField="receiptPayment.adding_number"
+                                    :isInputNumber="true"
                                     :maxlength="20"
                                 />
                                 <span class="root-invoice px-2"
@@ -105,7 +237,7 @@
                                 Ngày hạch toán
                             </label>
                             <vc-date-picker
-                                v-model="a"
+                                v-model="receiptPaymentForm.accounting_date"
                                 :popover="{
                                     visibility: 'focus',
                                 }"
@@ -120,6 +252,7 @@
                                             'modal__col',
                                             'mb-control-group',
                                             'col-12',
+                                            'tooltip',
                                             'left-separate',
                                         ]"
                                     >
@@ -148,7 +281,9 @@
                                 Ngày phiếu chi
                             </label>
                             <vc-date-picker
-                                v-model="a"
+                                v-model="
+                                    receiptPaymentForm.receipt_payment_date
+                                "
                                 :popover="{
                                     visibility: 'focus',
                                 }"
@@ -163,6 +298,7 @@
                                             'modal__col',
                                             'mb-control-group',
                                             'col-12',
+                                            'tooltip',
                                             'left-separate',
                                         ]"
                                     >
@@ -191,7 +327,14 @@
                                     'col-12',
                                     'left-separate',
                                 ]"
-                                :lable="'Mã đối tượng'"
+                                :lable="
+                                    typeVoucher == ENUM.TYPE_PAYMENT
+                                        ? 'Số phiếu chi'
+                                        : 'Số phiếu thu'
+                                "
+                                :valueField="
+                                    receiptPayment.receipt_payment_number
+                                "
                                 :maxlength="20"
                             />
                         </div>
@@ -199,7 +342,9 @@
                     <div class="col-3 modal__col">
                         <div class="summary-info">
                             <div class="summary-info-title">Tổng tiền</div>
-                            <div class="summary-info-number">10.000.000</div>
+                            <div class="summary-info-number">
+                                {{ receiptPaymentForm.total_money }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -223,44 +368,107 @@
                     <table class="table">
                         <thead class="table-head">
                             <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Diễn giải</th>
-                                <th scope="col">TK Nợ</th>
-                                <th scope="col">TK Có</th>
-                                <th scope="col">Số tiền</th>
-                                <th scope="col">Đối tượng</th>
-                                <th scope="col">Tên đối tượng</th>
-                                <th scope="col">TK ngân hàng</th>
-                                <th scope="col">Khế ước vay</th>
+                                <th scope="col" class="table-head__index">#</th>
+                                <th
+                                    scope="col"
+                                    v-for="(column, index) in columns"
+                                    :key="'col_grid_' + index"
+                                    :style="column.styleObject"
+                                >
+                                    {{ column.fieldName }}
+                                </th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody class="table-body">
-                            <tr class="table-row">
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>Xóa</td>
+                            <tr
+                                class="table-row"
+                                v-for="(item, index) in receiptPaymentDetail"
+                                :key="item.id"
+                            >
+                                <td>
+                                    {{ index + 1 }}
+                                </td>
+                                <td
+                                    v-for="(column, index) in columns"
+                                    :key="'col_' + (index + 1)"
+                                >
+                                    <BaseInput
+                                        v-if="
+                                            column.dataInput.isInput &&
+                                            !column.dataCombobox.isCombobox
+                                        "
+                                        :className="[
+                                            'modal__group',
+                                            'modal__col',
+                                            'mb-0',
+                                            'col-12',
+                                        ]"
+                                        :valueField="item[column.dataField]"
+                                        :isInputNumber="
+                                            column.dataInput.isInputNumber
+                                        "
+                                        :isHideLable="true"
+                                    />
+
+                                    <BaseComboboxTable
+                                        v-if="
+                                            !column.dataInput.isInput &&
+                                            column.dataCombobox.isCombobox
+                                        "
+                                        :url="column.dataCombobox.url"
+                                        :propValue="'account_object_id'"
+                                        :propText="'account_object_code'"
+                                        :dataField="'account_object_id'"
+                                        :dataText="'account_object_code'"
+                                        :className="[
+                                            'modal__group',
+                                            'col-12',
+                                            'mb-0',
+                                        ]"
+                                        :value="item[column.dataField]"
+                                        :nameRow="column.dataCombobox.nameRows"
+                                        :isHideIconPlus="true"
+                                        :isAbsoluteLayer="false"
+                                        :isAbsoluteFull="
+                                            column.dataCombobox
+                                                .isComboboxFullWidth
+                                                ? true
+                                                : false
+                                        "
+                                    />
+                                    {{
+                                        !column.dataInput.isInput &&
+                                        !column.dataCombobox.isCombobox
+                                            ? item[column.dataField]
+                                            : ""
+                                    }}
+                                </td>
+                                <td>
+                                    <span
+                                        @click="removeRow(typeVoucher, item)"
+                                        class="square-16 icon icon-delete"
+                                    ></span>
+                                </td>
                             </tr>
                         </tbody>
-                        <tfoot class="table-head">
-                            <tr class="table-row">
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
+                        <tfoot class="table-foot">
+                            <tr>
+                                <th scope="col"></th>
+                                <th
+                                    scope="col"
+                                    v-for="column in columns"
+                                    :key="'col_' + column.dataField"
+                                    :style="column.styleObject"
+                                >
+                                    {{
+                                        column.dataField ==
+                                        dataFooter.columnShow
+                                            ? dataFooter.data
+                                            : ""
+                                    }}
+                                </th>
+                                <th scope="col"></th>
                             </tr>
                         </tfoot>
                     </table>
@@ -268,11 +476,11 @@
             </div>
             <div class="grid-control-accounting">
                 <div class="grid-btn-control">
-                    <button class="grid-btn mr-12">
+                    <button class="grid-btn mr-12" @click="addRow(typeVoucher)">
                         <span class="grid-btn-title">Thêm dòng</span>
                     </button>
 
-                    <button class="grid-btn">
+                    <button class="grid-btn" @click="removeAllRow(typeVoucher)">
                         <span class="grid-btn-title">Xóa hết dòng</span>
                     </button>
                 </div>
@@ -312,6 +520,7 @@
                     'button-text-13',
                     'button-text-bold',
                     'button-border-modal',
+                    'tooltip',
                     'mr-12',
                 ]"
                 :contentTooltip="'Cất (Ctrl + S)'"
@@ -410,11 +619,14 @@
 </template>
 <script>
 import { RECEIPT_PAYMENT_TEXT_CONFIG } from "@/views/CashPage/ReceiptPayment/constants/resources";
+import { RECEIPT_PAYMENT_ENUM } from "@/views/CashPage/ReceiptPayment/constants/enums";
+import { API_RESOURCE } from "@/views/CashPage/ReceiptPayment/constants/api";
 import BaseTooltip from "@/components/bases/BaseTooltip/BaseTooltip.vue";
 import BaseButton from "@/components/bases/BaseButton/BaseButton.vue";
 import BaseInput from "@/components/bases/BaseInput/BaseInput.vue";
 import BaseComboboxTable from "@/components/bases/BaseCombobox/BaseComboboxTable.vue";
 import BaseComboboxDefault from "@/components/bases/BaseCombobox/BaseComboboxDefault.vue";
+import { common } from "@/libs/common/common";
 
 export default {
     name: "ReceiptPaymentForm",
@@ -429,11 +641,22 @@ export default {
 
     props: {
         onClose: Function,
+        typeVoucher: null,
+        columns: Array,
+        receiptPayment: null,
+        receiptPaymentDetail: null,
+        addRow: Function,
+        removeRow: Function,
+        removeAllRow: Function,
     },
 
     data() {
         return {
+            URL: API_RESOURCE,
+
             RESOURCE: RECEIPT_PAYMENT_TEXT_CONFIG,
+
+            ENUM: RECEIPT_PAYMENT_ENUM,
 
             isShowButtonCombobox: Boolean,
 
@@ -444,12 +667,31 @@ export default {
                     dates: new Date(),
                 },
             ],
-            a: null,
+
+            dataFooter: {
+                data: 0,
+                columnShow: "amount_money",
+            },
+
+            receiptPaymentForm: {
+                accounting_date: null,
+                receipt_payment_date: null,
+                total_money: 0,
+            },
         };
     },
 
     created() {
         this.isShowButtonCombobox = false;
+        if (this.receiptPayment) {
+            this.receiptPaymentForm.accounting_date =
+                this.receiptPayment.accounting_date;
+            this.receiptPaymentForm.receipt_payment_date =
+                this.receiptPayment.receipt_payment_date;
+            this.receiptPaymentForm.total_money = common.formatDecimalCurrency(
+                this.receiptPayment.total_money
+            );
+        }
     },
 
     methods: {

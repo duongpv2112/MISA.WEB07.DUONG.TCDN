@@ -1,5 +1,5 @@
 <template>
-    <div class="combobox border-radius-2">
+    <div class="combobox border-radius-2 p-relative">
         <div
             class="combobox-selected"
             :class="[

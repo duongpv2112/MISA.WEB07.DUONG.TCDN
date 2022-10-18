@@ -250,6 +250,7 @@
                                         dataField: 'account_object_name',
                                     },
                                 ]"
+                                :isAbsoluteLayer="true"
                                 :isFieldErrorFocus="
                                     fieldFocus == listField.employee_id
                                 "
