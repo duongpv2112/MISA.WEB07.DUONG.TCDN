@@ -21,6 +21,7 @@
                                     :propText="'account_object_code'"
                                     :dataField="'account_object_id'"
                                     :dataText="'account_object_code'"
+                                    :value="receiptPayment.account_object_code"
                                     :className="['modal__group', 'col-12']"
                                     :classListData="['min-w-1000', 'h-200']"
                                     :nameRow="[
@@ -61,6 +62,7 @@
                                         },
                                     ]"
                                     :isBottom="true"
+                                    @setValue="setValue"
                                 />
                             </div>
                             <BaseInput
@@ -77,6 +79,7 @@
                                 :lable="'Tên đối tượng'"
                                 :valueField="receiptPayment.account_object_name"
                                 :maxlength="20"
+                                :key="keyComponent"
                             />
                             <BaseInput
                                 :className="[
@@ -98,6 +101,7 @@
                                     receiptPayment.account_object_contact_name
                                 "
                                 :maxlength="20"
+                                :key="keyComponent"
                             />
                             <BaseInput
                                 :className="[
@@ -113,6 +117,7 @@
                                 :lable="'Địa chỉ'"
                                 :valueField="receiptPayment.address"
                                 :maxlength="20"
+                                :key="keyComponent"
                             />
                             <BaseInput
                                 v-if="typeVoucher == ENUM.TYPE_PAYMENT"
@@ -124,6 +129,7 @@
                                 :lable="'Lý do chi'"
                                 :valueField="receiptPayment.reason"
                                 :maxlength="20"
+                                :key="keyComponent"
                             />
                             <div class="d-flex col-12">
                                 <div
@@ -201,6 +207,7 @@
                                     :lable="'Lý do nộp'"
                                     :valueField="receiptPayment.reason"
                                     :maxlength="20"
+                                    :key="keyComponent"
                                 />
 
                                 <BaseInput
@@ -243,6 +250,7 @@
                                 }"
                                 mode="date"
                                 :attributes="datepicker"
+                                :key="keyComponent"
                             >
                                 <template v-slot="{ inputValue, inputEvents }">
                                     <label
@@ -289,6 +297,7 @@
                                 }"
                                 mode="date"
                                 :attributes="datepicker"
+                                :key="keyComponent"
                             >
                                 <template v-slot="{ inputValue, inputEvents }">
                                     <label
@@ -336,6 +345,7 @@
                                     receiptPayment.receipt_payment_number
                                 "
                                 :maxlength="20"
+                                :key="keyComponent"
                             />
                         </div>
                     </div>
@@ -349,7 +359,7 @@
                     </div>
                 </div>
             </div>
-            <div class="grid-accounting">
+            <div class="grid-accounting" :key="keyComponent">
                 <div class="tab-detail">
                     <div class="tab-detail-title">Hạch toán</div>
                     <div class="tab-header-extend">
@@ -417,10 +427,10 @@
                                             column.dataCombobox.isCombobox
                                         "
                                         :url="column.dataCombobox.url"
-                                        :propValue="'account_object_id'"
-                                        :propText="'account_object_code'"
-                                        :dataField="'account_object_id'"
-                                        :dataText="'account_object_code'"
+                                        :propValue="column.dataCombobox.propValue"
+                                        :propText="column.dataCombobox.propText"
+                                        :dataField="column.dataCombobox.dataField"
+                                        :dataText="column.dataCombobox.dataText"
                                         :className="[
                                             'modal__group',
                                             'col-12',
@@ -436,6 +446,7 @@
                                                 ? true
                                                 : false
                                         "
+                                        :classListData="column.dataCombobox.classListData"
                                     />
                                     {{
                                         !column.dataInput.isInput &&
@@ -648,6 +659,7 @@ export default {
         addRow: Function,
         removeRow: Function,
         removeAllRow: Function,
+        setValue: Function,
     },
 
     data() {
@@ -674,24 +686,27 @@ export default {
             },
 
             receiptPaymentForm: {
-                accounting_date: null,
-                receipt_payment_date: null,
+                accounting_date: new Date(),
+                receipt_payment_date: new Date(),
                 total_money: 0,
             },
+
+            keyComponent: 0,
         };
     },
 
     created() {
         this.isShowButtonCombobox = false;
         if (this.receiptPayment) {
-            this.receiptPaymentForm.accounting_date =
-                this.receiptPayment.accounting_date;
-            this.receiptPaymentForm.receipt_payment_date =
-                this.receiptPayment.receipt_payment_date;
+            this.receiptPaymentForm = this.receiptPayment;
             this.receiptPaymentForm.total_money = common.formatDecimalCurrency(
                 this.receiptPayment.total_money
             );
         }
+    },
+
+    beforeUpdate() {
+        this.keyComponent += 1;
     },
 
     methods: {

@@ -78,7 +78,8 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+                <BaseLoading v-if="isLoading" />
+                <tbody v-if="!isLoading">
                     <tr
                         v-for="(data, index) in dataCombobox"
                         :key="'row_' + index"
@@ -106,6 +107,7 @@
 <script>
 import api from "@/services/api";
 import BaseTooltip from "../BaseTooltip/BaseTooltip.vue";
+import BaseLoading from "../BaseLoading/BaseLoading.vue";
 
 const keyCode = {
     Enter: 13,
@@ -143,11 +145,13 @@ export default {
     created() {
         this.pageNumber = 1;
         this.pageSize = 20;
-        this.getData(this.pageNumber);
     },
 
     mounted() {
         this.borderFocus = false;
+        if (this.value) {
+            this.textInput = this.value;
+        }
     },
 
     data() {
@@ -167,6 +171,7 @@ export default {
                 errorMessage: "",
             },
             styleListData: Object,
+            isLoading: true,
         };
     },
 
@@ -198,11 +203,9 @@ export default {
                         this.keyWord = response.keyWord;
                         this.isDataNull = response.data.length == 0;
                     });
+                    this.isLoading = false;
                 } else {
                     this.dataCombobox = this.listData;
-                }
-                if (this.value) {
-                    this.textInput = this.value;
                 }
             } catch (error) {
                 console.log(error);
@@ -276,6 +279,9 @@ export default {
 
             this.isShowListData = !this.isShowListData;
             this.$refs[this.propValue].focus();
+            if (this.dataCombobox.length == 0) {
+                this.getData(this.pageNumber);
+            }
         },
 
         /**
@@ -322,10 +328,10 @@ export default {
         onHandleSelected(item) {
             try {
                 const text = item[this.dataText];
-                const value = item[this.dataField];
+                // const value = item[this.dataField];
                 this.textInput = text;
                 this.isShowListData = false;
-                this.$emit("setValue", value, this.propValue);
+                this.$emit("setValue", item, this.propValue);
                 if (this.propText) {
                     this.$emit("setValue", text, this.propText);
                 }
@@ -406,7 +412,7 @@ export default {
             this.$refs.scrollComponent.scrollTop = height * this.indexItemFocus;
         },
     },
-    components: { BaseTooltip },
+    components: { BaseTooltip, BaseLoading },
 };
 </script>
 <style scoped></style>

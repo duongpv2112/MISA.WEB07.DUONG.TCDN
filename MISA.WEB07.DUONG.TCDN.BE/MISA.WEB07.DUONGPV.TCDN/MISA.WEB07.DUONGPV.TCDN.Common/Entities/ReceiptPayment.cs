@@ -26,13 +26,13 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// Ngày hạch toán
         /// </summary>
         [Required]
-        public DateTime accounting_date { get; set; }
+        public string accounting_date { get; set; }
 
         /// <summary>
         /// Ngày chứng từ
         /// </summary>
         [Required]
-        public DateTime? receipt_payment_date { get; set; }
+        public string receipt_payment_date { get; set; }
 
         /// <summary>
         /// Số chứng từ
@@ -72,12 +72,12 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// Số lượng file kèm 
         /// </summary>
-        public string? adding_number { get; set; }
+        public int adding_number { get; set; }
 
         /// <summary>
         /// Tổng tiền
         /// </summary>
-        public long? total_money { get; set; }
+        public decimal total_money { get; set; }
 
         /// <summary>
         /// Ngày tạo

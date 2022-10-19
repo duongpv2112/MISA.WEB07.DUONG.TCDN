@@ -373,3 +373,7 @@
 .h-200 {
     min-height: 200px !important;
 }
+
+.h-large-combobox-table {
+    min-height: 192px !important;
+}

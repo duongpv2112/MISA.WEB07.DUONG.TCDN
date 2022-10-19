@@ -307,6 +307,11 @@
     position: unset !important;
 }
 
+.grid-data .combobox .combobox-table td {
+    height: 32px;
+    max-height: 32px;
+}
+
 .grid-data .combobox .combobox-table tr:hover td:first-child,
 .grid-data .combobox .combobox-table tr:hover td:last-child {
     background-color: unset !important;

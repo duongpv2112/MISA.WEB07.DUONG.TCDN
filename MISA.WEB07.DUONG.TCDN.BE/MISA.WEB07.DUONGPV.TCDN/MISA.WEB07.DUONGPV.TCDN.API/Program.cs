@@ -1,6 +1,4 @@
 using MISA.WEB07.DUONGPV.TCDN.BL;
-using MISA.WEB07.DUONGPV.TCDN.BL;
-using MISA.WEB07.DUONGPV.TCDN.BL;
 using MISA.WEB07.DUONGPV.TCDN.DL;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +26,8 @@ builder.Services.AddScoped<ISupplierGroupBL, SupplierGroupBL>();
 builder.Services.AddScoped<ISupplierGroupDL, SupplierGroupDL>();
 builder.Services.AddScoped<IReceiptPaymentDL, ReceiptPaymentDL>();
 builder.Services.AddScoped<IReceiptPaymentBL, ReceiptPaymentBL>();
+builder.Services.AddScoped<IAccountDL, AccountDL>();
+builder.Services.AddScoped<IAccountBL, AccountBL>();
 
 builder.Services.AddCors(options =>
 {
