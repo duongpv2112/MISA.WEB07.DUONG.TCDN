@@ -53,7 +53,7 @@ export default {
         type: String,
         dataField: String,
         valueField: null,
-        tabindex: String,
+        tabindex: Number,
         fieldName: String,
         maxlength: Number,
         autocomplete: String,

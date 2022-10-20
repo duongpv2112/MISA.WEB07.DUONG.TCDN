@@ -26,5 +26,15 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL
         /// + Keyword tìm kiếm hiện tại</returns>
         /// Created by: DUONGPV (04/10/2022)
         public Task<PagingData<T>> GetDataFilter(string? keyword, int? filter = null, int pageSize = 10, int pageNumber = 1, string? orderBy = "");
+
+        /// <summary>
+        /// Lấy danh sách bản ghi cần export
+        /// </summary>
+        /// <param name="keyword">Từ khóa muốn tìm kiếm</param> 
+        /// <param name="filter">Giá trị muốn lọc</param>
+        /// <param name="orderBy">Sắp xếp</param>
+        /// <returns>Danh sách bản ghi được export</returns>
+        /// Created by: DUONGPV (04/10/2022)
+        public Task<byte[]> ExportData(ExportDataDTO export);
     }
 }

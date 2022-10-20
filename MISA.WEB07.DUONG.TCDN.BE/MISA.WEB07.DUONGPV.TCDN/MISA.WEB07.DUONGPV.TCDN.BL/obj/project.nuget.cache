@@ -1,12 +1,21 @@
 {
   "version": 2,
-  "dgSpecHash": "vXf86eng0z3WI2O+SowjaEMK57wjZudkBNi03h0cpf4YVkA6rVnVNBqbIy450htYaf3JxzfFfNQeyGXUnF7n1A==",
+  "dgSpecHash": "F6rINAePr3QbhUc6QP7rwtUEc92uaKod41IFJ4dVMpT3+n/n9OTinv5dJZ4Ou8+szLbIctcBvgahYejgEaw6GQ==",
   "success": true,
   "projectFilePath": "F:\\MISA_GITHUB\\MISA.WEB07.DUONG.TCDN\\MISA.WEB07.DUONG.TCDN.BE\\MISA.WEB07.DUONGPV.TCDN\\MISA.WEB07.DUONGPV.TCDN.BL\\MISA.WEB07.DUONGPV.TCDN.BL.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\duong\\.nuget\\packages\\aspose.cells\\22.10.1\\aspose.cells.22.10.1.nupkg.sha512",
     "C:\\Users\\duong\\.nuget\\packages\\dapper\\2.0.123\\dapper.2.0.123.nupkg.sha512",
+    "C:\\Users\\duong\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\duong\\.nuget\\packages\\npgsql\\6.0.7\\npgsql.6.0.7.nupkg.sha512",
-    "C:\\Users\\duong\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
+    "C:\\Users\\duong\\.nuget\\packages\\skiasharp\\2.88.0\\skiasharp.2.88.0.nupkg.sha512",
+    "C:\\Users\\duong\\.nuget\\packages\\skiasharp.nativeassets.macos\\2.88.0\\skiasharp.nativeassets.macos.2.88.0.nupkg.sha512",
+    "C:\\Users\\duong\\.nuget\\packages\\skiasharp.nativeassets.win32\\2.88.0\\skiasharp.nativeassets.win32.2.88.0.nupkg.sha512",
+    "C:\\Users\\duong\\.nuget\\packages\\system.formats.asn1\\6.0.0\\system.formats.asn1.6.0.0.nupkg.sha512",
+    "C:\\Users\\duong\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
+    "C:\\Users\\duong\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
+    "C:\\Users\\duong\\.nuget\\packages\\system.security.cryptography.pkcs\\6.0.1\\system.security.cryptography.pkcs.6.0.1.nupkg.sha512",
+    "C:\\Users\\duong\\.nuget\\packages\\system.text.encoding.codepages\\4.7.0\\system.text.encoding.codepages.4.7.0.nupkg.sha512"
   ],
   "logs": []
 }

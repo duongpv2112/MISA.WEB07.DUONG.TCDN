@@ -167,19 +167,4 @@ export const common = {
         }
         return true;
     },
-
-    // document.addEventListener("keydown", function (event) {
-    //     if (event.ctrlKey) {
-    //         event.preventDefault();
-    //     }
-    // });
-
-    // document.onkeydown = function(e) {
-    //     if (e.ctrlKey && e.keyCode === 83) {
-    //         alert('hello there');
-
-    //         // your code here
-    //         return false;
-    //     }
-    // };
 };

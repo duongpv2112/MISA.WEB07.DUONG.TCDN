@@ -83,6 +83,33 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
             }
         }
 
+        /// <summary>
+        /// Lấy danh sách bản ghi cần export
+        /// </summary>
+        /// <param name="keyword">Từ khóa muốn tìm kiếm</param> 
+        /// <param name="filter">Giá trị muốn lọc</param>
+        /// <param name="orderBy">Sắp xếp</param>
+        /// <returns>Danh sách bản ghi được export</returns>
+        /// Created by: DUONGPV (04/10/2022)
+        public virtual async Task<List<T>> ExportData(string? keyword = "", int? filter = null, string? orderBy = "")
+        {
+            // Khai báo tên stored procedure GET ALL
+            string tableName = EntityUtilities.GetTableName<T>();
+            string getDataFilterStoredProcedureName = $"Func_{tableName}_Export";
+
+            // Chuẩn bị tham số đầu vào cho stored procedure
+            var parametersGetPaging = new DynamicParameters();
+            parametersGetPaging.Add("@v_keyword", keyword == null ? "" : keyword);
+            parametersGetPaging.Add("@v_sort", orderBy == null ? "" : orderBy);
+
+            // Thực hiện gọi vào DB để chạy câu lệnh stored procedure
+            using (var npgSqlConnection = new NpgsqlConnection(DatabaseContext.ConnectionString))
+            {
+                var multipleResults = await npgSqlConnection.QueryAsync<T>(getDataFilterStoredProcedureName, parametersGetPaging, commandType: CommandType.StoredProcedure);
+                return multipleResults.ToList();
+            }
+        }
+
         #endregion
     }
 }

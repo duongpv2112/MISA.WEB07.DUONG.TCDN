@@ -72,16 +72,19 @@ export default {
      * @returns Trả ra thông báo thành công hay thất bại
      * AUTHOR: DUONGPV (04/10/2022)
      */
-    export(url, nameDownload) {
+    export(url, bodyExport, nameDownload) {
         try {
             let lastUrl = CONFIG_API.BASE_DOMAIN + CONFIG_API.BASE_URL + url;
+
             var config = {
                 method: "POST",
                 url: lastUrl,
                 headers: {
+                    accept: "*/*",
                     "Content-Type": "application/json",
                 },
                 responseType: "blob",
+                data: JSON.stringify(bodyExport),
             };
 
             return axios(config).then((response) => {

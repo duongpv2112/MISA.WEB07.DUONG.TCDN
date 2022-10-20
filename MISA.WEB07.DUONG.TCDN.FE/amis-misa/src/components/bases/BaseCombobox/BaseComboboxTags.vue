@@ -21,7 +21,11 @@
                         </div>
                         <div
                             class="icon square-16 icon-close--small selected-item__icon"
-                            @click="!isReadOnly ? onHandleRemoveItemSelected(item) : null"
+                            @click="
+                                !isReadOnly
+                                    ? onHandleRemoveItemSelected(item)
+                                    : null
+                            "
                         ></div>
                     </div>
                 </div>
@@ -31,10 +35,11 @@
                     :readonly="isReadOnly"
                     :placeholder="dataInput.length > 0 ? '' : placeholder"
                     :ref="propValue"
-                    @keyup="onHandleSearch($event.target.value)"
                     @keydown="selecItemUpDown"
                     @input="onHandleChangeInputData"
-                    @blur="this.borderFocus = false"
+                    @blur="
+                        (this.borderFocus = false)
+                    "
                     @focus="this.borderFocus = true"
                 />
             </div>
@@ -91,7 +96,7 @@
                         :class="{
                             'combobox__item--focus': index == indexItemFocus,
                         }"
-                        @click="onHandleSelected(data)"
+                        @click.prevent="onHandleSelected(data)"
                     >
                         <td
                             v-for="(col, colIndex) in nameRow"
@@ -273,6 +278,7 @@ export default {
                     this.propValue
                 );
             }
+            this.onHandleSearch(event.target.value);
             this.isShowListData = true;
         },
         /**
@@ -288,6 +294,7 @@ export default {
          */
         onHandleSelected(item) {
             try {
+                this.$refs[this.propValue].focus();
                 if (
                     !this.checkValueInclude(item[this.propText], this.dataInput)
                 ) {
@@ -381,8 +388,12 @@ export default {
                 var keyCodePress = event.keyCode;
                 var elToFocus = null;
                 switch (keyCodePress) {
+                    case 9: 
+                        this.isShowListData = false;
+                        break;
                     case keyCode.ESC:
                         this.isShowListData = false;
+                        event.stopPropagation();
                         break;
                     case keyCode.Backspace:
                         this.dataInput.splice(this.dataInput.length - 1, 1);
@@ -390,6 +401,7 @@ export default {
                             this.listSelected.length - 1,
                             1
                         );
+                        event.stopPropagation();
                         break;
                     case keyCode.ArrowDown:
                         this.isShowListData = true;
@@ -405,6 +417,7 @@ export default {
                             this.indexItemFocus += 1;
                             this.fixScrolling();
                         }
+                        event.stopPropagation();
                         break;
                     case keyCode.ArrowUp:
                         this.isShowListData = true;
@@ -420,6 +433,7 @@ export default {
                             this.indexItemFocus -= 1;
                             this.fixScrolling();
                         }
+                        event.stopPropagation();
                         break;
                     case keyCode.Enter:
                         elToFocus =
@@ -427,6 +441,7 @@ export default {
                         if (elToFocus && elToFocus.length > 0) {
                             elToFocus[0].click();
                         }
+                        event.stopPropagation();
                         break;
                     default:
                         break;

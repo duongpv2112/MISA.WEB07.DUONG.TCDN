@@ -196,7 +196,7 @@
                             :className="['tooltip-default--header']"
                         />
                     </button>
-                    <button class="toolbar-button tooltip">
+                    <button class="toolbar-button tooltip" @click="exportData">
                         <span class="d-block square-24 icon icon-excel"></span>
                         <BaseTooltip
                             :content="'Xuất ra Excel'"
@@ -567,6 +567,7 @@ export default {
                                         valueFunction: "",
                                     },
                                 ],
+                                enterKeyFunc: this.onSaveSupplier,
                             },
 
                             noticeMessage:
@@ -649,6 +650,8 @@ export default {
                                 valueFunction: value.account_object_id,
                             },
                         ],
+                        enterKeyFunc: this.onHandleDelete,
+                        valueEnterKeyFunc: value.account_object_id,
                     },
 
                     noticeMessage: `Bạn có thực sự muốn xóa nhân viên <${value.account_object_code}> không?`,
@@ -797,6 +800,15 @@ export default {
         setValue(valueField, dataField) {
             try {
                 this.account_object[dataField] = valueField;
+                if (
+                    typeof valueField == "object" &&
+                    (dataField == "employee_id" || dataField == "employee_name")
+                ) {
+                    this.account_object["employee_id"] =
+                        valueField["account_object_id"];
+                    this.account_object["employee_name"] =
+                        valueField["account_object_name"];
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -821,12 +833,15 @@ export default {
 
         checkValidateData() {
             try {
+                console.log(this.account_object);
                 if (!this.account_object.account_object_code) {
                     this.setValidateData(
                         true,
                         "Mã nhà cung cấp không được để trống.",
                         "account_object_code"
                     );
+                } else {
+                    this.setValidateData(false, "", "account_object_code");
                 }
                 if (!this.account_object.account_object_name) {
                     this.setValidateData(
@@ -834,6 +849,8 @@ export default {
                         "Tên nhà cung cấp không được để trống.",
                         "account_object_name"
                     );
+                } else {
+                    this.setValidateData(false, "", "account_object_name");
                 }
                 var listValidate = this.validateData.filter((e) => {
                     return e.isInValid == true;
@@ -852,6 +869,7 @@ export default {
                                 },
                             ],
                             footerRight: [],
+                            enterKeyFunc: this.onHandleHidePopup,
                         },
                         noticeMessage: noticeMessage,
                     };
@@ -866,6 +884,63 @@ export default {
         setFieldErrorFocus(fieldError) {
             try {
                 this.fieldErrorFocus = fieldError;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async exportData() {
+            try {
+                var bodyExport = {
+                    columns: [
+                        {
+                            caption: "STT",
+                            key: "stt",
+                            width: 155,
+                        },
+                        {
+                            caption: "Mã nhà cung cấp",
+                            key: "account_object_code",
+                            width: 155,
+                        },
+                        {
+                            caption: "Tên nhà cung cấp",
+                            key: "account_object_name",
+                            width: 155,
+                        },
+                        {
+                            caption: "Địa chỉ",
+                            key: "address",
+                            width: 155,
+                        },
+                        {
+                            caption: "Ngày cấp",
+                            key: "identity_date",
+                            width: 155,
+                        },
+                        {
+                            caption: "Số nợ tối đa",
+                            key: "maximum_debt_amount",
+                            width: 155,
+                        },
+                    ],
+                    reportTitle: "DANH SÁCH NHÀ CUNG CẤP",
+                    fileNameDownload: "Danh_sach_nha_cung_cap",
+                    keyword: this.keyWord,
+                    filter: 0,
+                    orderBy: "",
+                };
+                await api
+                    .export(
+                        API_RESOURCE.SUPPLIER_EXPORT,
+                        bodyExport,
+                        "Danh_sach_nha_cung_cap.xlsx"
+                    )
+                    .then((data) => {
+                        if (data) {
+                            console.log("a");
+                        }
+                    });
             } catch (error) {
                 console.log(error);
             }

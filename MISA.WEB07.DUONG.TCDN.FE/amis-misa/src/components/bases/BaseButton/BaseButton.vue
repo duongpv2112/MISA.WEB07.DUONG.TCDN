@@ -3,6 +3,7 @@
         v-if="!isIcon && !isIconText"
         class="button"
         :class="className"
+        :tabindex="tabindex"
         @click="isButtonCancel ? this.functionz(1) : this.functionz ? this.functionz(paramFunction) : null"
     >
         {{ title }}
@@ -12,6 +13,7 @@
         v-if="isIcon"
         class="button"
         :class="className"
+        :tabindex="tabindex"
         @click="this.functionz ? this.functionz(paramFunction) : null"
     >
         <div class="d-flex flex-center button-icon">
@@ -24,6 +26,7 @@
         v-if="isIconText"
         class="button"
         :class="className"
+        :tabindex="tabindex"
         @click="this.functionz()"
     >
         <div class="d-flex flex-center">
@@ -48,6 +51,7 @@ export default {
         contentTooltip: String,
         isButtonCancel: Boolean,
         paramFunction: null,
+        tabindex: Number
     },
 
     data() {

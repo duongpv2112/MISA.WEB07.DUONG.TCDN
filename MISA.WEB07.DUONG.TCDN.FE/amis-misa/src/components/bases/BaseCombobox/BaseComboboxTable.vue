@@ -24,9 +24,10 @@
                     :readonly="isReadOnly"
                     :ref="propValue"
                     @input="onHandleChangeInputData"
-                    @keyup="onHandleSearch($event.target.value)"
                     @keydown="selecItemUpDown"
-                    @blur="this.borderFocus = false"
+                    @blur="
+                        (this.borderFocus = false)
+                    "
                     @focus="this.borderFocus = true"
                 />
             </div>
@@ -178,7 +179,6 @@ export default {
     watch: {
         isFieldErrorFocus(newValue) {
             if (newValue) {
-                console.log(newValue);
                 this.$refs[this.propValue].focus();
             }
         },
@@ -309,7 +309,10 @@ export default {
                     this.propValue
                 );
             }
-
+            this.onHandleSearch(this.textInput)
+            if (this.dataCombobox.length == 0) {
+                this.getData(this.pageNumber);
+            }
             this.isShowListData = true;
         },
 
@@ -333,7 +336,7 @@ export default {
                 this.isShowListData = false;
                 this.$emit("setValue", item, this.propValue);
                 if (this.propText) {
-                    this.$emit("setValue", text, this.propText);
+                    this.$emit("setValue", item, this.propText);
                 }
                 this.checkData.isInValid = false;
                 this.checkData.errorMessage = "";
@@ -357,11 +360,19 @@ export default {
                 var keyCodePress = event.keyCode;
                 var elToFocus = null;
                 switch (keyCodePress) {
+                    case 9: 
+                        this.isShowListData = false;
+                        break;
                     case keyCode.ESC:
                         this.isShowListData = false;
+                        event.stopPropagation();
                         break;
                     case keyCode.ArrowDown:
                         this.isShowListData = true;
+                        event.stopPropagation();
+                        if (this.dataCombobox.length == 0) {
+                            this.getData(this.pageNumber);
+                        }
                         elToFocus =
                             this.$refs[`toFocus_${this.indexItemFocus + 1}`];
                         if (
@@ -377,6 +388,10 @@ export default {
                         break;
                     case keyCode.ArrowUp:
                         this.isShowListData = true;
+                        event.stopPropagation();
+                        if (this.dataCombobox.length == 0) {
+                            this.getData(this.pageNumber);
+                        }
                         elToFocus =
                             this.$refs[`toFocus_${this.indexItemFocus - 1}`];
                         if (
@@ -391,6 +406,7 @@ export default {
                         }
                         break;
                     case keyCode.Enter:
+                        event.stopPropagation();
                         elToFocus =
                             this.$refs[`toFocus_${this.indexItemFocus}`];
                         if (elToFocus && elToFocus.length > 0) {

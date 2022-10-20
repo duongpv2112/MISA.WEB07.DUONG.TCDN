@@ -24,6 +24,7 @@
                             :isFieldErrorFocus="
                                 fieldFocus == listField.tax_code
                             "
+                            :tabindex="typeSupplier == 0 ? 1 : 2"
                             @setValue="setValue"
                             @setValidateData="setValidateData"
                         />
@@ -42,6 +43,7 @@
                             :isFieldErrorFocus="
                                 fieldFocus == listField.account_object_code
                             "
+                            :tabindex="typeSupplier == 0 ? 2 : 1"
                             @setValue="setValue"
                             @setValidateData="setValidateData"
                         />
@@ -64,6 +66,7 @@
                             :isFieldErrorFocus="
                                 fieldFocus == listField.account_object_name
                             "
+                            :tabindex="5"
                             @setValue="setValue"
                             @setValidateData="setValidateData"
                         />
@@ -98,6 +101,7 @@
                                             :isHideLable="true"
                                             :isBottom="true"
                                             :isReadOnly="isViewDetail"
+                                            :tabindex="4"
                                             @setValue="setValue"
                                         />
                                     </div>
@@ -128,6 +132,7 @@
                                         "
                                         :isRequired="true"
                                         :isReadonly="isViewDetail"
+                                        :tabindex="5"
                                         @setValue="setValue"
                                         @setValidateData="setValidateData"
                                     />
@@ -148,6 +153,7 @@
                             :fieldName="RESOURCE.SUPPLIER_ADDRESS_FIELD_LBL"
                             :numberRow="2"
                             :isReadonly="isViewDetail"
+                            :tabindex="7"
                             @setValue="setValue"
                         />
                     </div>
@@ -169,6 +175,7 @@
                             :isFieldErrorFocus="
                                 fieldFocus == listField.telephone_number
                             "
+                            :tabindex="3"
                             @setValue="setValue"
                             @setValidateData="setValidateData"
                         />
@@ -182,6 +189,7 @@
                             :valueField="account_object.website"
                             :fieldName="RESOURCE.SUPPLIER_WEBSITE_FIELD_LBL"
                             :isReadonly="isViewDetail"
+                            :tabindex="4"
                             @setValue="setValue"
                         />
                     </div>
@@ -218,6 +226,7 @@
                                 :isFieldErrorFocus="
                                     fieldFocus == 'supplier_group_id'
                                 "
+                                :tabindex="typeSupplier == 1 ? 3 : 6"
                                 @setValueList="setValueList"
                                 @setValidateData="setValidateData"
                             />
@@ -240,6 +249,7 @@
                                 :placeholder="
                                     RESOURCE.SUPPLIER_EMPLOYEE_FIELD_LBL
                                 "
+                                :classListData="['h-200']"
                                 :nameRow="[
                                     {
                                         fieldName: 'Mã nhân viên',
@@ -254,6 +264,7 @@
                                 :isFieldErrorFocus="
                                     fieldFocus == listField.employee_id
                                 "
+                                :tabindex="typeSupplier == 1 ? 6 : 8"
                                 @setValue="setValue"
                                 @setValidateData="setValidateData"
                             />
@@ -296,6 +307,7 @@
                                                 :isHideLable="true"
                                                 :isBottom="true"
                                                 :isReadOnly="isViewDetail"
+                                                :tabindex="9"
                                                 @setValue="setValue"
                                             />
                                         </div>
@@ -317,6 +329,7 @@
                                             "
                                             :isHideLable="true"
                                             :isReadonly="isViewDetail"
+                                            :tabindex="10"
                                             @setValue="setValue"
                                         />
                                     </div>
@@ -339,6 +352,7 @@
                                         :isFieldErrorFocus="
                                             fieldFocus == listField.email
                                         "
+                                        :tabindex="12"
                                         @setValue="setValue"
                                         @setValidateData="setValidateData"
                                     />
@@ -363,6 +377,7 @@
                                         :isFieldErrorFocus="
                                             fieldFocus == listField.phone_number
                                         "
+                                        :tabindex="13"
                                         @setValue="setValue"
                                         @setValidateData="setValidateData"
                                     />
@@ -386,6 +401,7 @@
                                 :fieldName="
                                     RESOURCE.SUPPLIER_REPRESENTATIVE_FIELD_LBL
                                 "
+                                :tabindex="11"
                                 :isReadonly="isViewDetail"
                                 @setValue="setValue"
                             />
@@ -420,6 +436,7 @@
                                         :isFieldErrorFocus="
                                             fieldFocus == listField.email
                                         "
+                                        :tabindex="8"
                                         @setValue="setValue"
                                     />
 
@@ -447,6 +464,7 @@
                                                 fieldFocus ==
                                                 listField.phone_number
                                             "
+                                            :tabindex="10"
                                             @setValue="setValue"
                                         />
                                     </div>
@@ -476,6 +494,7 @@
                                                 fieldFocus ==
                                                 listField.telephone_number
                                             "
+                                            :tabindex="12"
                                             @setValue="setValue"
                                         />
                                     </div>
@@ -505,6 +524,7 @@
                                             RESOURCE.SUPPLIER_REPRESENTATIVE_FIELD_LBL
                                         "
                                         :isReadonly="isViewDetail"
+                                        :tabindex="14"
                                         @setValue="setValue"
                                     />
                                 </div>
@@ -544,6 +564,7 @@
                                                 fieldFocus ==
                                                 listField.identity_number
                                             "
+                                            :tabindex="9"
                                             @setValue="setValue"
                                         />
                                     </div>
@@ -604,6 +625,7 @@
                                                         :placeholder="
                                                             RESOURCE.SUPPLIER_IDENTITY_DATE_FIELD_LBL
                                                         "
+                                                        :tabindex="11"
                                                     />
                                                     <BaseTooltip
                                                         v-if="
@@ -638,6 +660,7 @@
                                         "
                                         :isHideLable="true"
                                         :isReadonly="isViewDetail"
+                                        :tabindex="13"
                                         @setValue="setValue"
                                     />
                                 </div>
@@ -766,6 +789,7 @@
                 ]"
                 :isButtonCancel="true"
                 :functionz="onClose"
+                :tabindex="17"
             />
         </div>
         <div class="modal__footer--right">
@@ -782,6 +806,7 @@
                 :contentTooltip="'Cất (Ctrl + S)'"
                 :classNameTooltip="['tooltip-default']"
                 :functionz="this.onSave"
+                :tabindex="15"
             />
             <BaseButton
                 v-if="!isViewDetail"
@@ -796,6 +821,7 @@
                 :classNameTooltip="['tooltip-default']"
                 :functionz="this.onSave"
                 :paramFunction="1"
+                :tabindex="16"
             />
             <BaseButton
                 v-if="isViewDetail"
@@ -810,6 +836,7 @@
                 :classNameTooltip="['tooltip-default']"
                 :paramFunction="this.account_object"
                 :functionz="this.onEdit"
+                :tabindex="15"
             />
         </div>
     </div>
@@ -1065,6 +1092,7 @@ export default {
                 }
             }
             if (keyCodePress.keyCode == 27) {
+                event.stopPropagation();
                 this.onClose(0);
             }
         },

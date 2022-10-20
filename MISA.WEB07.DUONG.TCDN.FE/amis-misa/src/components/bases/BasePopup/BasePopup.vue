@@ -1,7 +1,7 @@
 <template>
     <div class="popup fade">
         <div class="popup__dialog">
-            <div class="popup__content">
+            <div class="popup__content" v-keyboardoutside="eventHandleKey">
                 <div class="popup__header"></div>
                 <div class="popup__body">
                     <div class="popup__notice">
@@ -78,7 +78,19 @@ export default {
         footerPopup: Object,
     },
 
-    methods: {},
+    methods: {
+        /**
+         * Function kiểm tra người dùng nhấn các key để thao tác với modal
+         * @param {*} $event: Giá trị thẻ đang được chọn
+         * @author: DUONGPV (08/09/2022)
+         */
+        eventHandleKey() {
+            var keyCodePress = event;
+            if(keyCodePress.keyCode == 13){
+                this.footerPopup.enterKeyFunc(this.footerPopup.valueEnterKeyFunc);
+            }
+        },
+    },
 
     data() {
         return {

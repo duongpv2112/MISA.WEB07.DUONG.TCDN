@@ -49,11 +49,6 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         public Guid? account_object_id { get; set; }
 
         /// <summary>
-        /// Mã đối tượng
-        /// </summary>
-        public string? account_object_code { get; set; }
-
-        /// <summary>
         /// Tên đối tượng
         /// </summary>
         public string? account_object_name { get; set; }

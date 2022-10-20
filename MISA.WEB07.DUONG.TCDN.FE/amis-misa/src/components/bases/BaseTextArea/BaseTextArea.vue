@@ -31,7 +31,7 @@ export default {
         dataField: String,
         valueField: String,
         isReadonly: Boolean,
-        tabindex: String,
+        tabindex: Number,
         fieldName: String,
         maxlength: Number,
         numberRow: Number,

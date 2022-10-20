@@ -62,7 +62,7 @@
                                         },
                                     ]"
                                     :isBottom="true"
-                                    @setValue="setValue"
+                                    @setValue="setDataAccountObject"
                                 />
                             </div>
                             <BaseInput
@@ -78,8 +78,9 @@
                                 ]"
                                 :lable="'Tên đối tượng'"
                                 :valueField="receiptPayment.account_object_name"
-                                :maxlength="20"
+                                :dataField="'account_object_name'"
                                 :key="keyComponent"
+                                @setValue="setValue"
                             />
                             <BaseInput
                                 :className="[
@@ -100,8 +101,9 @@
                                 :valueField="
                                     receiptPayment.account_object_contact_name
                                 "
-                                :maxlength="20"
+                                :dataField="'account_object_contact_name'"
                                 :key="keyComponent"
+                                @setValue="setValue"
                             />
                             <BaseInput
                                 :className="[
@@ -116,8 +118,9 @@
                                 ]"
                                 :lable="'Địa chỉ'"
                                 :valueField="receiptPayment.address"
-                                :maxlength="20"
+                                :dataField="'address'"
                                 :key="keyComponent"
+                                @setValue="setValue"
                             />
                             <BaseInput
                                 v-if="typeVoucher == ENUM.TYPE_PAYMENT"
@@ -128,8 +131,9 @@
                                 ]"
                                 :lable="'Lý do chi'"
                                 :valueField="receiptPayment.reason"
-                                :maxlength="20"
+                                :dataField="'reason'"
                                 :key="keyComponent"
+                                @setValue="setValue"
                             />
                             <div class="d-flex col-12">
                                 <div
@@ -146,8 +150,8 @@
                                     </label>
                                     <BaseComboboxTable
                                         :url="URL.PAGING_DATA_EMPLOYEE"
-                                        :propValue="'account_object_id'"
-                                        :propText="'account_object_code'"
+                                        :propValue="'employee_id'"
+                                        :propText="'employee_name'"
                                         :dataField="'account_object_id'"
                                         :dataText="'account_object_name'"
                                         :className="['modal__group', 'col-12']"
@@ -194,6 +198,7 @@
                                         :value="receiptPayment.employee_name"
                                         :isBottom="true"
                                         :isAbsoluteLayer="false"
+                                        @setValue="setValue"
                                     />
                                 </div>
 
@@ -206,8 +211,9 @@
                                     ]"
                                     :lable="'Lý do nộp'"
                                     :valueField="receiptPayment.reason"
-                                    :maxlength="20"
+                                    :dataField="'reason'"
                                     :key="keyComponent"
+                                    @setValue="setValue"
                                 />
 
                                 <BaseInput
@@ -219,7 +225,8 @@
                                     :lable="'Kèm theo'"
                                     :valueField="receiptPayment.adding_number"
                                     :isInputNumber="true"
-                                    :maxlength="20"
+                                    :dataField="'adding_number'"
+                                    @setValue="setValue"
                                 />
                                 <span class="root-invoice px-2"
                                     >chứng từ gốc</span
@@ -251,33 +258,44 @@
                                 mode="date"
                                 :attributes="datepicker"
                                 :key="keyComponent"
+                                @dayclick="checkValidateDate"
                             >
                                 <template v-slot="{ inputValue, inputEvents }">
-                                    <label
-                                        class="d-block p-relative"
-                                        :class="[
-                                            'modal__group',
-                                            'modal__col',
-                                            'mb-control-group',
-                                            'col-12',
-                                            'tooltip',
-                                            'left-separate',
-                                        ]"
-                                    >
-                                        <div
-                                            class="square-32 cursor-pointer modal-icon__calendar"
+                                    <div class="left-separate">
+                                        <label
+                                            class="d-block p-relative"
+                                            :class="[
+                                                'modal__group',
+                                                'col-12',
+                                                'tooltip',
+                                                'mb-0',
+                                            ]"
                                         >
-                                            <span
-                                                class="square-32 icon icon-calendar"
-                                            ></span>
-                                        </div>
-                                        <input
-                                            class="modal__control modal__datepicker"
-                                            v-on="inputEvents"
-                                            ref="identity_date"
-                                            :value="inputValue"
-                                        />
-                                    </label>
+                                            <div
+                                                class="square-32 cursor-pointer modal-icon__calendar"
+                                            >
+                                                <span
+                                                    class="square-32 icon icon-calendar"
+                                                ></span>
+                                            </div>
+                                            <input
+                                                class="modal__control modal__datepicker"
+                                                v-on="inputEvents"
+                                                ref="identity_date"
+                                                :value="inputValue"
+                                            />
+                                            <BaseTooltip
+                                                v-if="validateDateAD?.isInValid"
+                                                :content="
+                                                    validateDateAD?.errorMessage
+                                                "
+                                                :className="[
+                                                    'tooltip-default',
+                                                    'tooltip-input__validate',
+                                                ]"
+                                            />
+                                        </label>
+                                    </div>
                                 </template>
                             </vc-date-picker>
                         </div>
@@ -298,62 +316,75 @@
                                 mode="date"
                                 :attributes="datepicker"
                                 :key="keyComponent"
+                                @dayclick="checkValidateDate"
                             >
                                 <template v-slot="{ inputValue, inputEvents }">
-                                    <label
-                                        class="d-block p-relative"
-                                        :class="[
-                                            'modal__group',
-                                            'modal__col',
-                                            'mb-control-group',
-                                            'col-12',
-                                            'tooltip',
-                                            'left-separate',
-                                        ]"
-                                    >
-                                        <div
-                                            class="square-32 cursor-pointer modal-icon__calendar"
+                                    <div class="left-separate">
+                                        <label
+                                            class="d-block p-relative"
+                                            :class="[
+                                                'modal__group',
+                                                'col-12',
+                                                'tooltip',
+                                                'mb-0',
+                                            ]"
                                         >
-                                            <span
-                                                class="square-32 icon icon-calendar"
-                                            ></span>
-                                        </div>
-                                        <input
-                                            class="modal__control modal__datepicker"
-                                            v-on="inputEvents"
-                                            ref="identity_date"
-                                            :value="inputValue"
-                                        />
-                                    </label>
+                                            <div
+                                                class="square-32 cursor-pointer modal-icon__calendar"
+                                            >
+                                                <span
+                                                    class="square-32 icon icon-calendar"
+                                                ></span>
+                                            </div>
+                                            <input
+                                                class="modal__control modal__datepicker"
+                                                v-on="inputEvents"
+                                                ref="identity_date"
+                                                :value="inputValue"
+                                            />
+                                            <BaseTooltip
+                                                v-if="validateDateRP?.isInValid"
+                                                :content="
+                                                    validateDateRP?.errorMessage
+                                                "
+                                                :className="[
+                                                    'tooltip-default',
+                                                    'tooltip-input__validate',
+                                                ]"
+                                            />
+                                        </label>
+                                    </div>
                                 </template>
                             </vc-date-picker>
                         </div>
                         <div class="col-12">
-                            <BaseInput
-                                :className="[
-                                    'modal__group',
-                                    'modal__col',
-                                    'col-12',
-                                    'left-separate',
-                                ]"
-                                :lable="
-                                    typeVoucher == ENUM.TYPE_PAYMENT
-                                        ? 'Số phiếu chi'
-                                        : 'Số phiếu thu'
-                                "
-                                :valueField="
-                                    receiptPayment.receipt_payment_number
-                                "
-                                :maxlength="20"
-                                :key="keyComponent"
-                            />
+                            <div class="left-separate">
+                                <BaseInput
+                                    :className="['modal__group', 'col-12']"
+                                    :lable="
+                                        typeVoucher == ENUM.TYPE_PAYMENT
+                                            ? 'Số phiếu chi'
+                                            : 'Số phiếu thu'
+                                    "
+                                    :valueField="
+                                        receiptPayment.receipt_payment_number
+                                    "
+                                    :dataField="'receipt_payment_number'"
+                                    :key="keyComponent"
+                                    @setValue="setValue"
+                                />
+                            </div>
                         </div>
                     </div>
                     <div class="col-3 modal__col">
                         <div class="summary-info">
                             <div class="summary-info-title">Tổng tiền</div>
                             <div class="summary-info-number">
-                                {{ receiptPaymentForm.total_money }}
+                                {{
+                                    common.formatDecimalCurrency(
+                                        receiptPaymentForm.total_money
+                                    )
+                                }}
                             </div>
                         </div>
                     </div>
@@ -395,6 +426,7 @@
                                 class="table-row"
                                 v-for="(item, index) in receiptPaymentDetail"
                                 :key="item.id"
+                                @click="setRowSelected(index)"
                             >
                                 <td>
                                     {{ index + 1 }}
@@ -418,7 +450,10 @@
                                         :isInputNumber="
                                             column.dataInput.isInputNumber
                                         "
+                                        :type="'text'"
+                                        :dataField="column.dataInput.dataField"
                                         :isHideLable="true"
+                                        @setValue="updateRow"
                                     />
 
                                     <BaseComboboxTable
@@ -427,9 +462,13 @@
                                             column.dataCombobox.isCombobox
                                         "
                                         :url="column.dataCombobox.url"
-                                        :propValue="column.dataCombobox.propValue"
+                                        :propValue="
+                                            column.dataCombobox.propValue
+                                        "
                                         :propText="column.dataCombobox.propText"
-                                        :dataField="column.dataCombobox.dataField"
+                                        :dataField="
+                                            column.dataCombobox.dataField
+                                        "
                                         :dataText="column.dataCombobox.dataText"
                                         :className="[
                                             'modal__group',
@@ -446,7 +485,10 @@
                                                 ? true
                                                 : false
                                         "
-                                        :classListData="column.dataCombobox.classListData"
+                                        :classListData="
+                                            column.dataCombobox.classListData
+                                        "
+                                        @setValue="updateRow"
                                     />
                                     {{
                                         !column.dataInput.isInput &&
@@ -457,7 +499,7 @@
                                 </td>
                                 <td>
                                     <span
-                                        @click="removeRow(typeVoucher, item)"
+                                        @click="removeRow(item)"
                                         class="square-16 icon icon-delete"
                                     ></span>
                                 </td>
@@ -475,7 +517,7 @@
                                     {{
                                         column.dataField ==
                                         dataFooter.columnShow
-                                            ? dataFooter.data
+                                            ? common.formatDecimalCurrency(dataFooter.data)
                                             : ""
                                     }}
                                 </th>
@@ -487,11 +529,11 @@
             </div>
             <div class="grid-control-accounting">
                 <div class="grid-btn-control">
-                    <button class="grid-btn mr-12" @click="addRow(typeVoucher)">
+                    <button class="grid-btn mr-12" @click="addRow">
                         <span class="grid-btn-title">Thêm dòng</span>
                     </button>
 
-                    <button class="grid-btn" @click="removeAllRow(typeVoucher)">
+                    <button class="grid-btn" @click="removeAllRow">
                         <span class="grid-btn-title">Xóa hết dòng</span>
                     </button>
                 </div>
@@ -545,6 +587,8 @@
                         'button-primary',
                         'button-border-radius-right',
                     ]"
+                    :functionz="onSave"
+                    :paramFunction="typeVoucher"
                 />
                 <div class="d-flex button-combobox">
                     <button
@@ -655,11 +699,10 @@ export default {
         typeVoucher: null,
         columns: Array,
         receiptPayment: null,
-        receiptPaymentDetail: null,
-        addRow: Function,
-        removeRow: Function,
-        removeAllRow: Function,
+        accountings: null,
         setValue: Function,
+        setListValue: Function,
+        onSave: Function,
     },
 
     data() {
@@ -670,7 +713,11 @@ export default {
 
             ENUM: RECEIPT_PAYMENT_ENUM,
 
+            common: common,
+
             isShowButtonCombobox: Boolean,
+
+            receiptPaymentDetail: null,
 
             datepicker: [
                 {
@@ -686,12 +733,18 @@ export default {
             },
 
             receiptPaymentForm: {
+                account_object_id: null,
                 accounting_date: new Date(),
                 receipt_payment_date: new Date(),
                 total_money: 0,
             },
 
+            validateDateAD: null,
+            validateDateRP: null,
+
             keyComponent: 0,
+
+            rowSelected: 0,
         };
     },
 
@@ -699,14 +752,39 @@ export default {
         this.isShowButtonCombobox = false;
         if (this.receiptPayment) {
             this.receiptPaymentForm = this.receiptPayment;
-            this.receiptPaymentForm.total_money = common.formatDecimalCurrency(
-                this.receiptPayment.total_money
-            );
+            this.receiptPaymentForm.total_money =
+                this.receiptPayment.total_money;
         }
+        if (this.accountings) {
+            this.receiptPaymentDetail = this.accountings;
+        }
+        this.sumTotalMoney();
     },
 
     beforeUpdate() {
-        this.keyComponent += 1;
+        this.sumTotalMoney();
+        if (!this.receiptPaymentForm.accounting_date) {
+            this.validateDateAD = {
+                isInValid: true,
+                errorMessage: "Ngày hạch toán không được để trống",
+            };
+        } else {
+            this.validateDateAD = {
+                isInValid: false,
+                errorMessage: "",
+            };
+        }
+        if (!this.receiptPaymentForm.receipt_payment_date) {
+            this.validateDateRP = {
+                isInValid: true,
+                errorMessage: "Ngày chứng từ không được để trống",
+            };
+        } else {
+            this.validateDateRP = {
+                isInValid: false,
+                errorMessage: "",
+            };
+        }
     },
 
     methods: {
@@ -717,7 +795,179 @@ export default {
         onHideButtonCombobox() {
             this.isShowButtonCombobox = false;
         },
+
+        checkValidateDate() {
+            try {
+                this.setValue(
+                    common.formatDate(this.receiptPaymentForm.accounting_date),
+                    "accounting_date"
+                );
+                this.setValue(
+                    common.formatDate(
+                        this.receiptPaymentForm.receipt_payment_date
+                    ),
+                    "receipt_payment_date"
+                );
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        setRowSelected(index) {
+            try {
+                this.rowSelected = index;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        sumTotalMoney() {
+            try {
+                var sum = 0;
+                this.receiptPaymentDetail.map((item) => {
+                    return (sum += Number(item.amount_money));
+                });
+                this.receiptPaymentForm.total_money = sum;
+                this.dataFooter.data = sum;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        updateRow(value, dataField) {
+            try {
+                if (
+                    typeof value == "object" &&
+                    value &&
+                    (dataField == "debt_account" ||
+                        dataField == "credit_account")
+                ) {
+                    this.receiptPaymentDetail[this.rowSelected][dataField] =
+                        value.account_number;
+                } else if (
+                    typeof value == "object" &&
+                    value &&
+                    (dataField == "account_object_id" ||
+                        dataField == "account_object_code")
+                ) {
+                    this.receiptPaymentDetail[this.rowSelected][dataField] =
+                        value[dataField];
+                    this.receiptPaymentDetail[this.rowSelected][
+                        "account_object_name"
+                    ] = value["account_object_name"];
+                } else if (dataField == "amount_money") {
+                    this.receiptPaymentDetail[this.rowSelected][dataField] =
+                        Number(value);
+                } else {
+                    this.receiptPaymentDetail[this.rowSelected][dataField] =
+                        value;
+                }
+                this.$emit("setListValue", this.receiptPaymentDetail);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        addRow() {
+            try {
+                if (this.receiptPaymentDetail.length == 0) {
+                    this.receiptPaymentDetail.push({
+                        id: common.createUUID(),
+                        reason:
+                            this.typeVoucher == 0
+                                ? "Thu tiền của "
+                                : "Chi tiền cho",
+                        debt_account: "",
+                        credit_account: "",
+                        amount_money: 0,
+                        account_object_id: "",
+                        account_object_code: "",
+                        account_object_name: "",
+                    });
+                } else {
+                    this.receiptPaymentDetail.push({
+                        id: common.createUUID(),
+                        reason: this.receiptPaymentDetail[
+                            this.receiptPaymentDetail.length - 1
+                        ].reason,
+                        debt_account:
+                            this.receiptPaymentDetail[
+                                this.receiptPaymentDetail.length - 1
+                            ].debt_account,
+                        credit_account:
+                            this.receiptPaymentDetail[
+                                this.receiptPaymentDetail.length - 1
+                            ].credit_account,
+                        amount_money: 0,
+                        account_object_id:
+                            this.receiptPaymentDetail[
+                                this.receiptPaymentDetail.length - 1
+                            ].account_object_id,
+                        account_object_code:
+                            this.receiptPaymentDetail[
+                                this.receiptPaymentDetail.length - 1
+                            ].account_object_code,
+                        account_object_name:
+                            this.receiptPaymentDetail[
+                                this.receiptPaymentDetail.length - 1
+                            ].account_object_name,
+                    });
+                }
+                this.$emit("setListValue", this.receiptPaymentDetail);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        removeRow(valueRow) {
+            try {
+                this.receiptPaymentDetail = this.receiptPaymentDetail.filter(
+                    (item) => {
+                        return item != valueRow;
+                    }
+                );
+                this.$emit("setListValue", this.receiptPaymentDetail);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        removeAllRow() {
+            try {
+                console.log("a");
+                this.receiptPaymentDetail = [
+                    {
+                        id: common.createUUID(),
+                        reason:
+                            this.typeVoucher == 0
+                                ? "Thu tiền của"
+                                : "Chi tiền cho",
+                        debt_account: "",
+                        credit_account: "",
+                        amount_money: "",
+                        account_object_id: "",
+                        account_object_code: "",
+                        account_object_name: "",
+                    },
+                ];
+                console.log(this.receiptPaymentDetail);
+                this.$emit("setListValue", this.receiptPaymentDetail);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        setDataAccountObject(value, dataField) {
+            try {
+                this.keyComponent += 1;
+                this.setValue(value, dataField);
+            } catch (error) {
+                console.log(error);
+            }
+        },
     },
+
+    watch: {},
 };
 </script>
 <style scoped>
