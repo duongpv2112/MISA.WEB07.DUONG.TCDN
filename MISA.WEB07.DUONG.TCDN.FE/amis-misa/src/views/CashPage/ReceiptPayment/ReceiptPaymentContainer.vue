@@ -248,7 +248,7 @@
                             :className="['tooltip-default--header']"
                         />
                     </button>
-                    <button class="toolbar-button tooltip">
+                    <button class="toolbar-button tooltip" @click="exportData">
                         <span class="d-block square-24 icon icon-excel"></span>
                         <BaseTooltip
                             :content="'Xuất ra Excel'"
@@ -647,7 +647,7 @@ export default {
                     let url = `${API_RESOURCE.PAGING_DATA_RECEIPT_PAYMENT}/${value.receipt_payment_id}?typeRecord=0`;
 
                     await api.delete(url).then((data) => {
-                        if(data) {
+                        if (data) {
                             this.onHandleReload();
                         }
                     });
@@ -655,7 +655,7 @@ export default {
                     let url = `${API_RESOURCE.PAGING_DATA_RECEIPT_PAYMENT}/${value.receipt_payment_id}?typeRecord=1`;
 
                     await api.delete(url).then((data) => {
-                        if(data) {
+                        if (data) {
                             this.onHandleReload();
                         }
                     });
@@ -1312,6 +1312,82 @@ export default {
         setValueRecieptPaymentDetail(value) {
             try {
                 this.receiptPaymentDetail = value;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async exportData() {
+            try {
+                var fileNameDownload = "";
+                var reportTitle = "";
+                if (
+                    this.filterValue ==
+                    RECEIPT_PAYMENT_ENUM.TYPE_RECEIPT_PAYMENT
+                ) {
+                    fileNameDownload = "Danh_sach_thu_chi_tien";
+                    reportTitle = "DANH SÁCH THU CHI TIỀN";
+                } else if (
+                    this.filterValue == RECEIPT_PAYMENT_ENUM.TYPE_RECEIPT
+                ) {
+                    fileNameDownload = "Danh_sach_thu_tien";
+                    reportTitle = "DANH SÁCH THU TIỀN";
+                } else if (
+                    this.filterValue == RECEIPT_PAYMENT_ENUM.TYPE_PAYMENT
+                ) {
+                    fileNameDownload = "Danh_sach_chi_tien";
+                    reportTitle = "DANH SÁCH CHI TIỀN";
+                }
+                var bodyExport = {
+                    columns: [
+                        {
+                            caption: "STT",
+                            key: "stt",
+                            width: 155,
+                        },
+                        {
+                            caption: "Ngày hạch toán",
+                            key: "accounting_date",
+                            width: 155,
+                        },
+                        {
+                            caption: "Ngày chứng từ",
+                            key: "receipt_payment_date",
+                            width: 155,
+                        },
+                        {
+                            caption: "Số chứng từ",
+                            key: "receipt_payment_number",
+                            width: 155,
+                        },
+                        {
+                            caption: "Diễn giải",
+                            key: "reason",
+                            width: 155,
+                        },
+                        {
+                            caption: "Số tiền",
+                            key: "total_money",
+                            width: 155,
+                        },
+                    ],
+                    reportTitle: reportTitle,
+                    fileNameDownload: fileNameDownload,
+                    keyword: this.keyWord,
+                    filter: this.filterValue,
+                    orderBy: "",
+                };
+                await api
+                    .export(
+                        API_RESOURCE.RECEIPT_PAYMENT_EXPORT_DATA,
+                        bodyExport,
+                        `${fileNameDownload}.xlsx`
+                    )
+                    .then((data) => {
+                        if (data) {
+                            console.log("a");
+                        }
+                    });
             } catch (error) {
                 console.log(error);
             }

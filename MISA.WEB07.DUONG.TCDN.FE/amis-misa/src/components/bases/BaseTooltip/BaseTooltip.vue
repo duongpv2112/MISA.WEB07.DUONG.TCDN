@@ -1,5 +1,5 @@
 <template>
-    <span class="tooltip-text" :class="className">
+    <span class="tooltip-text" :class="className" :style="styleObject">
         {{ content }}
     </span>
 </template>
@@ -9,6 +9,7 @@ export default {
     props: {
         content: String,
         className: Array,
+        styleObject: null
     },
 };
 </script>

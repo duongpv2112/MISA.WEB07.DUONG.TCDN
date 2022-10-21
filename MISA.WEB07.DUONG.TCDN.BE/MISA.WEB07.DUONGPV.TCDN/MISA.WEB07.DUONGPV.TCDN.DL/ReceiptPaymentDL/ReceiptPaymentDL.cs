@@ -432,5 +432,49 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                 return newCode;
             }
         }
+
+        /// <summary>
+        /// Lấy danh sách bản ghi cần export
+        /// </summary>
+        /// <param name="keyword">Từ khóa muốn tìm kiếm</param> 
+        /// <param name="filter">Giá trị muốn lọc</param>
+        /// <param name="orderBy">Sắp xếp</param>
+        /// <returns>Danh sách bản ghi được export</returns>
+        /// Created by: DUONGPV (04/10/2022)
+        public override async Task<List<ReceiptPayment>> ExportData(string? keyword = "", int? filter = null, string? orderBy = "")
+        {
+            // Khai báo tên stored procedure GET ALL
+
+            var tableName = "";
+            switch (filter)
+            {
+                case null:
+                    tableName = "ReceiptPayment";
+                    break;
+                case 0:
+                    tableName = "Receipt";
+                    break;
+                case 1:
+                    tableName = "Payment";
+                    break;
+                default:
+                    tableName = "ReceiptPayment";
+                    break;
+            }
+
+            string exportDataStoredProcedureName = $"Func_{tableName}_Export";
+
+            // Chuẩn bị tham số đầu vào cho stored procedure
+            var parametersExportData = new DynamicParameters();
+            parametersExportData.Add("@v_keyword", keyword == null ? "" : keyword);
+            parametersExportData.Add("@v_sort", orderBy == null ? "" : orderBy);
+
+            // Thực hiện gọi vào DB để chạy câu lệnh stored procedure
+            using (var npgSqlConnection = new NpgsqlConnection(DatabaseContext.ConnectionString))
+            {
+                var multipleResults = await npgSqlConnection.QueryAsync<ReceiptPayment>(exportDataStoredProcedureName, parametersExportData, commandType: CommandType.StoredProcedure);
+                return multipleResults.ToList();
+            }
+        }
     }
 }
