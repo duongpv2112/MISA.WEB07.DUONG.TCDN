@@ -203,7 +203,10 @@
                             :className="['tooltip-default--header']"
                         />
                     </button>
-                    <button class="toolbar-button tooltip">
+                    <button
+                        class="toolbar-button tooltip"
+                        @click="onHandleShowSettingPage"
+                    >
                         <span
                             class="d-block square-24 icon icon-setting-list"
                         ></span>
@@ -266,20 +269,26 @@
         :footerPopup="popupData.footerPopup"
         :noticeMessage="popupData.noticeMessage"
     />
+
+    <BaseModalSetting
+        v-if="isShowModalSetting"
+        :onClose="onHandleHideSettingPage"
+    />
 </template>
 <script>
+import { API_RESOURCE } from "./constants/api";
+import { SUPPLIER_TEXT_CONFIG } from "@/views/Supplier/constants/resource";
+import { TYPE_CLOSE } from "@/views/Supplier/constants/type-close";
+import { common } from "@/libs/common/common";
+import api from "@/services/api";
 import SupplierGrid from "./components/SupplierGrid.vue";
 import SupplierForm from "./components/SupplierForm.vue";
 import BaseButton from "@/components/bases/BaseButton/BaseButton.vue";
 import BaseModal from "@/components/bases/BaseModal/BaseModal.vue";
 import SupplierFormHeader from "./components/SupplierFormHeader.vue";
-import api from "@/services/api";
-import { API_RESOURCE } from "./constants/api";
-import { SUPPLIER_TEXT_CONFIG } from "@/views/Supplier/constants/resource";
-import { TYPE_CLOSE } from "@/views/Supplier/constants/type-close";
 import BasePopup from "@/components/bases/BasePopup/BasePopup.vue";
 import BaseTooltip from "@/components/bases/BaseTooltip/BaseTooltip.vue";
-import { common } from "@/libs/common/common";
+import BaseModalSetting from "@/components/bases/BaseModalSetting/BaseModalSetting.vue";
 
 export default {
     name: "SupplierContainer",
@@ -292,6 +301,7 @@ export default {
         SupplierFormHeader,
         BasePopup,
         BaseTooltip,
+        BaseModalSetting,
     },
 
     data() {
@@ -396,6 +406,8 @@ export default {
             ],
 
             fieldErrorFocus: null,
+
+            isShowModalSetting: Boolean,
         };
     },
 
@@ -568,6 +580,7 @@ export default {
                                     },
                                 ],
                                 enterKeyFunc: this.onSaveSupplier,
+                                escKeyFunc: this.onHandleHidePopup
                             },
 
                             noticeMessage:
@@ -652,6 +665,7 @@ export default {
                         ],
                         enterKeyFunc: this.onHandleDelete,
                         valueEnterKeyFunc: value.account_object_id,
+                        escKeyFunc: this.onHandleHidePopup
                     },
 
                     noticeMessage: `Bạn có thực sự muốn xóa nhân viên <${value.account_object_code}> không?`,
@@ -833,7 +847,6 @@ export default {
 
         checkValidateData() {
             try {
-                console.log(this.account_object);
                 if (!this.account_object.account_object_code) {
                     this.setValidateData(
                         true,
@@ -870,6 +883,7 @@ export default {
                             ],
                             footerRight: [],
                             enterKeyFunc: this.onHandleHidePopup,
+                            escKeyFunc: this.onHandleHidePopup,
                         },
                         noticeMessage: noticeMessage,
                     };
@@ -945,6 +959,14 @@ export default {
                 console.log(error);
             }
         },
+
+        onHandleShowSettingPage() {
+            this.isShowModalSetting = true;
+        },
+
+        onHandleHideSettingPage() {
+            this.isShowModalSetting = false;
+        },
     },
 
     created() {
@@ -955,6 +977,7 @@ export default {
         this.currentRecord = 20;
         this.currentPage = 1;
         this.totalCount = 0;
+        this.isShowModalSetting = false;
         this.getSuppliers(this.currentRecord, this.currentPage);
     },
 };

@@ -1,4 +1,4 @@
-﻿using MISA.WEB07.DUONGPV.TCDN.Common.Attributes;
+﻿    using MISA.WEB07.DUONGPV.TCDN.Common.Attributes;
 using MISA.WEB07.DUONGPV.TCDN.Common.Enums;
 using System;
 using System.Collections.Generic;
@@ -19,29 +19,31 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// ID Chứng từ
         /// </summary>
-        [Key]
+        [PrimaryKey("receipt_payment_id")]
         public Guid receipt_payment_id { get; set; }
 
         /// <summary>
         /// Ngày hạch toán
         /// </summary>
-        [Required]
+        [IsNotNullOrEmpty("Ngày hạch toán không được để trống")]
         public string accounting_date { get; set; }
 
         /// <summary>
         /// Ngày chứng từ
         /// </summary>
-        [Required]
+        [IsNotNullOrEmpty("Ngày chứng từ không được để trống")]
         public string receipt_payment_date { get; set; }
 
         /// <summary>
         /// Số chứng từ
         /// </summary>
+        [IsNotNullOrEmpty("Số chứng từ không được để trống")]
         public string? receipt_payment_number { get; set; }
 
         /// <summary>
         /// ID Đối tượng
         /// </summary>
+        [ForeignKey("account_object_id")]
         public Guid? account_object_id { get; set; }
 
         /// <summary>

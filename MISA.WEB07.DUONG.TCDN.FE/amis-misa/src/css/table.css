@@ -29,7 +29,7 @@
 .table .table-head th {
     font-size: 12px;
     height: 35px !important;
-    text-align: left !important;
+    text-align: left;
     background-color: #e5e8ec;
     border-top: none;
     text-transform: uppercase;
@@ -62,7 +62,7 @@
 .table .table-body td {
     height: 44px;
     max-height: 44px;
-    text-align: left !important;
+    text-align: left;
     padding: 0 10px;
 }
 

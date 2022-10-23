@@ -4,10 +4,20 @@
         class="button"
         :class="className"
         :tabindex="tabindex"
-        @click="isButtonCancel ? this.functionz(1) : this.functionz ? this.functionz(paramFunction) : null"
+        @click="
+            isButtonCancel
+                ? this.functionz(1)
+                : this.functionz
+                ? this.functionz(paramFunction)
+                : null
+        "
     >
         {{ title }}
-        <BaseTooltip :content="contentTooltip" :className="classNameTooltip" />
+        <BaseTooltip
+            v-if="contentTooltip"
+            :content="contentTooltip"
+            :className="classNameTooltip"
+        />
     </button>
     <button
         v-if="isIcon"
@@ -20,7 +30,11 @@
             <span class="icon" :class="classNameIcon"></span>
             <div class="button-line"></div>
         </div>
-        <BaseTooltip :content="contentTooltip" :className="classNameTooltip" />
+        <BaseTooltip
+            v-if="contentTooltip"
+            :content="contentTooltip"
+            :className="classNameTooltip"
+        />
     </button>
     <button
         v-if="isIconText"
@@ -33,7 +47,11 @@
             <span class="pr-4">{{ title }}</span>
             <span class="icon" :class="classNameIcon"></span>
         </div>
-        <BaseTooltip :content="contentTooltip" :className="classNameTooltip" />
+        <BaseTooltip
+            v-if="contentTooltip"
+            :content="contentTooltip"
+            :className="classNameTooltip"
+        />
     </button>
 </template>
 <script>
@@ -51,7 +69,7 @@ export default {
         contentTooltip: String,
         isButtonCancel: Boolean,
         paramFunction: null,
-        tabindex: Number
+        tabindex: Number,
     },
 
     data() {

@@ -1,11 +1,15 @@
 <template>
-    <td>{{ value }}</td>
+    <td :class="{ 'text-center': isCenter, 'text-right': isRight }">
+        {{ value }}
+    </td>
 </template>
 <script>
 export default {
     name: "BaseGridCol",
     props: {
-        value: String,
+        value: null,
+        isCenter: Boolean,
+        isRight: Boolean,
     },
 };
 </script>

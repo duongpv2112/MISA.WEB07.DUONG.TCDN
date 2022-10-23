@@ -255,7 +255,10 @@
                             :className="['tooltip-default--header']"
                         />
                     </button>
-                    <button class="toolbar-button tooltip">
+                    <button
+                        class="toolbar-button tooltip"
+                        @click="onHandleShowSettingPage"
+                    >
                         <span
                             class="d-block square-24 icon icon-setting-list"
                         ></span>
@@ -268,6 +271,7 @@
             </div>
             <div class="container-page__table">
                 <ReceiptPaymentGrid
+                    :columns="columns"
                     :dataReady="dataReady"
                     :data="data"
                     :totalCount="totalCount"
@@ -315,9 +319,9 @@
                 :columns="columnsAccouting"
                 :receiptPayment="receiptPayment"
                 :accountings="receiptPaymentDetail"
+                :onSave="onSave"
                 :setValue="setValueRecieptPayment"
                 :setListValue="setValueRecieptPaymentDetail"
-                :onSave="onSave"
             />
         </template>
     </BaseModal>
@@ -328,6 +332,11 @@
         :footerPopup="popupData.footerPopup"
         :noticeMessage="popupData.noticeMessage"
     />
+
+    <BaseModalSetting
+        v-if="isShowModalSetting"
+        :onClose="onHandleHideSettingPage"
+    />
 </template>
 <script>
 import { RECEIPT_PAYMENT_TEXT_CONFIG } from "@/views/CashPage/ReceiptPayment/constants/resources";
@@ -335,6 +344,7 @@ import { RECEIPT_PAYMENT_ENUM } from "@/views/CashPage/ReceiptPayment/constants/
 import { API_RESOURCE } from "@/views/CashPage/ReceiptPayment/constants/api";
 import { common } from "@/libs/common/common";
 import api from "@/services/api";
+import { template } from "@/views/CashPage/ReceiptPayment/constants/template";
 import BaseButton from "@/components/bases/BaseButton/BaseButton.vue";
 import BaseTooltip from "@/components/bases/BaseTooltip/BaseTooltip.vue";
 import ReceiptPaymentGrid from "./components/ReceiptPaymentGrid.vue";
@@ -342,6 +352,7 @@ import BaseModal from "@/components/bases/BaseModal/BaseModal.vue";
 import ReceiptPaymentFormHeader from "./components/ReceiptPaymentFormHeader.vue";
 import ReceiptPaymentForm from "./components/ReceiptPaymentForm.vue";
 import BasePopup from "@/components/bases/BasePopup/BasePopup.vue";
+import BaseModalSetting from "@/components/bases/BaseModalSetting/BaseModalSetting.vue";
 
 export default {
     name: "ReceiptPaymentContainer",
@@ -354,10 +365,13 @@ export default {
         ReceiptPaymentFormHeader,
         ReceiptPaymentForm,
         BasePopup,
+        BaseModalSetting,
     },
 
     data() {
         return {
+            columns: Array,
+
             dataReady: Boolean,
 
             totalCount: Number,
@@ -368,7 +382,7 @@ export default {
 
             currentRecord: Number,
 
-            keyWord: String,
+            keyWord: null,
 
             data: [],
 
@@ -413,6 +427,10 @@ export default {
             popupData: null,
 
             isShowPopup: Boolean,
+
+            fieldErrorFocus: null,
+
+            isShowModalSetting: Boolean,
         };
     },
 
@@ -629,6 +647,9 @@ export default {
                                 valueFunction: value,
                             },
                         ],
+                        enterKeyFunc: this.onHandleDelete,
+                        valueEnterKeyFunc: value,
+                        escKeyFunc: this.onHandleHidePopup,
                     },
 
                     noticeMessage: `Bạn có thực sự muốn xóa chứng từ <${value.receipt_payment_number}> không?`,
@@ -691,33 +712,45 @@ export default {
 
         async onSave(type) {
             try {
+                this.receiptPaymentDetail.map((item) => {
+                    if (typeof item.amount_money == "string") {
+                        item.amount_money = Number(
+                            item.amount_money.replace(/\D+/g, "")
+                        );
+                    }
+                    return item;
+                });
                 var bodyData = {
                     receiptPayment: this.receiptPayment,
                     receiptPaymentDetails: this.receiptPaymentDetail,
                 };
                 if (this.receiptPayment.is_add) {
                     delete bodyData.receiptPayment.receipt_payment_id;
-                    api.post(
-                        `${API_RESOURCE.PAGING_DATA_RECEIPT_PAYMENT}?typeRecord=` +
-                            type,
-                        bodyData
-                    ).then((data) => {
-                        if (data) {
-                            this.isShowModal = false;
-                            this.onHandleReload();
-                        }
-                    });
+                    await api
+                        .post(
+                            `${API_RESOURCE.PAGING_DATA_RECEIPT_PAYMENT}?typeRecord=` +
+                                type,
+                            bodyData
+                        )
+                        .then((data) => {
+                            if (data) {
+                                this.isShowModal = false;
+                                this.onHandleReload();
+                            }
+                        });
                 } else if (this.receiptPayment.is_edit) {
-                    api.put(
-                        `${API_RESOURCE.PAGING_DATA_RECEIPT_PAYMENT}/${this.receiptPayment.receipt_payment_id}?typeRecord=` +
-                            type,
-                        bodyData
-                    ).then((data) => {
-                        if (data) {
-                            this.isShowModal = false;
-                            this.onHandleReload();
-                        }
-                    });
+                    await api
+                        .put(
+                            `${API_RESOURCE.PAGING_DATA_RECEIPT_PAYMENT}/${this.receiptPayment.receipt_payment_id}?typeRecord=` +
+                                type,
+                            bodyData
+                        )
+                        .then((data) => {
+                            if (data) {
+                                this.isShowModal = false;
+                                this.onHandleReload();
+                            }
+                        });
                 }
             } catch (error) {
                 console.log(error);
@@ -730,20 +763,17 @@ export default {
                     this.receiptPayment = {
                         account_object_code: "",
                         account_object_contact_name: "",
-                        account_object_id: "",
                         account_object_name: "",
                         accounting_date: common.formatDate(new Date()),
                         adding_number: 0,
                         address: "",
                         created_by: "",
                         created_date: "",
-                        employee_id: "",
                         employee_name: "",
                         modified_by: "",
                         modified_date: "",
                         reason: "Thu tiền của ",
                         receipt_payment_date: common.formatDate(new Date()),
-                        receipt_payment_id: "",
                         receipt_payment_number: "",
                         total_money: 0,
                         is_add: true,
@@ -757,8 +787,6 @@ export default {
                             debt_account: "",
                             credit_account: "",
                             amount_money: 0,
-                            account_object_id:
-                                this.receiptPayment.account_object_id,
                             account_object_code:
                                 this.receiptPayment.account_object_code,
                             account_object_name:
@@ -769,20 +797,17 @@ export default {
                     this.receiptPayment = {
                         account_object_code: "",
                         account_object_contact_name: "",
-                        account_object_id: "",
                         account_object_name: "",
                         accounting_date: common.formatDate(new Date()),
                         adding_number: 0,
                         address: "",
                         created_by: "",
                         created_date: "",
-                        employee_id: "",
                         employee_name: "",
                         modified_by: "",
                         modified_date: "",
                         reason: "Chi tiền cho ",
                         receipt_payment_date: common.formatDate(new Date()),
-                        receipt_payment_id: "",
                         receipt_payment_number: "",
                         total_money: 0,
                         is_add: true,
@@ -796,8 +821,6 @@ export default {
                             debt_account: "",
                             credit_account: "",
                             amount_money: 0,
-                            account_object_id:
-                                this.receiptPayment.account_object_id,
                             account_object_code:
                                 this.receiptPayment.account_object_code,
                             account_object_name:
@@ -1392,6 +1415,14 @@ export default {
                 console.log(error);
             }
         },
+
+        onHandleShowSettingPage() {
+            this.isShowModalSetting = true;
+        },
+
+        onHandleHideSettingPage() {
+            this.isShowModalSetting = false;
+        },
     },
 
     created() {
@@ -1401,6 +1432,8 @@ export default {
         this.currentPage = 1;
         this.totalCount = 0;
         this.isShowModal = false;
+        this.isShowModalSetting = false;
+        this.columns = template;
         this.getReceiptPayments(this.currentRecord, this.currentPage);
     },
 };

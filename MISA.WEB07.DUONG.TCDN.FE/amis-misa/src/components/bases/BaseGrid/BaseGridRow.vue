@@ -20,6 +20,8 @@
                 v-for="(column, index) in columns"
                 :key="'Col_' + (index + 1)"
                 :value="item[column.dataField]"
+                :isCenter="column.isCenter"
+                :isRight="column.isRight"
             />
             <td
                 :key="'col_action_' + (index + 1)"
@@ -42,7 +44,11 @@
                     </button>
                     <button
                         class="table-content__menu--choose"
-                        @click="showListAction(item)"
+                        @click="
+                            isShowListAction && isShowListAction == item
+                                ? showListAction(null)
+                                : showListAction(item)
+                        "
                     >
                         <span class="square-16 icon icon-downcaret-down"></span>
                     </button>

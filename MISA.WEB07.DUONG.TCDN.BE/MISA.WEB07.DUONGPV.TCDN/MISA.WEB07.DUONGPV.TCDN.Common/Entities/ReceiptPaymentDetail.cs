@@ -18,7 +18,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// ID Hạch toán
         /// </summary>
-        [Key]
+        [PrimaryKey("accounting_id")]
         public Guid accounting_id { get; set; }
 
         /// <summary>
@@ -29,13 +29,13 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// Tài khoản nợ
         /// </summary>
-        [Required]
+        [IsNotNullOrEmpty("Tài khoản nợ không được trống")]
         public string debt_account { get; set; }
 
         /// <summary>
         /// Tài khoản có
         /// </summary>
-        [Required]
+        [IsNotNullOrEmpty("Tài khoản có không được trống")]
         public string credit_account { get; set; }
 
         /// <summary>
@@ -56,8 +56,8 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// ID Chứng từ
         /// </summary>
-        [Required]
-        [MISAKey("receipt_payment_id")]
+        [IsNotNullOrEmpty("ID chứng từ không tồn tại")]
+        [ForeignKey("receipt_payment_id")]
         public Guid? receipt_payment_id { get; set; }
 
         /// <summary>

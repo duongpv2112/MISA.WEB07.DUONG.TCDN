@@ -517,7 +517,9 @@
                                     {{
                                         column.dataField ==
                                         dataFooter.columnShow
-                                            ? common.formatDecimalCurrency(dataFooter.data)
+                                            ? common.formatDecimalCurrency(
+                                                  dataFooter.data
+                                              )
                                             : ""
                                     }}
                                 </th>
@@ -756,9 +758,15 @@ export default {
                 this.receiptPayment.total_money;
         }
         if (this.accountings) {
-            this.receiptPaymentDetail = this.accountings;
+            this.renderAccountings();
         }
         this.sumTotalMoney();
+    },
+
+    watch: {
+        accountings(newValue) {
+            console.log(newValue);
+        },
     },
 
     beforeUpdate() {
@@ -825,7 +833,13 @@ export default {
             try {
                 var sum = 0;
                 this.receiptPaymentDetail.map((item) => {
-                    return (sum += Number(item.amount_money));
+                    var money = 0;
+                    if (typeof item.amount_money == "string") {
+                        money = item.amount_money.replace(/\D+/g, "");
+                    } else {
+                        money = Math.ceil(item.amount_money);
+                    }
+                    return (sum += Number(money));
                 });
                 this.receiptPaymentForm.total_money = sum;
                 this.dataFooter.data = sum;
@@ -862,7 +876,7 @@ export default {
                     this.receiptPaymentDetail[this.rowSelected][dataField] =
                         value;
                 }
-                this.$emit("setListValue", this.receiptPaymentDetail);
+                this.setListValue(this.receiptPaymentDetail);
             } catch (error) {
                 console.log(error);
             }
@@ -913,7 +927,7 @@ export default {
                             ].account_object_name,
                     });
                 }
-                this.$emit("setListValue", this.receiptPaymentDetail);
+                this.setListValue(this.receiptPaymentDetail);
             } catch (error) {
                 console.log(error);
             }
@@ -921,12 +935,13 @@ export default {
 
         removeRow(valueRow) {
             try {
-                this.receiptPaymentDetail = this.receiptPaymentDetail.filter(
-                    (item) => {
-                        return item != valueRow;
-                    }
-                );
-                this.$emit("setListValue", this.receiptPaymentDetail);
+                let listData = this.receiptPaymentDetail.map((item) => {
+                    return item;
+                });
+                this.receiptPaymentDetail = listData.filter((item) => {
+                    return item != valueRow;
+                });
+                this.setListValue(this.receiptPaymentDetail);
             } catch (error) {
                 console.log(error);
             }
@@ -934,7 +949,6 @@ export default {
 
         removeAllRow() {
             try {
-                console.log("a");
                 this.receiptPaymentDetail = [
                     {
                         id: common.createUUID(),
@@ -942,32 +956,50 @@ export default {
                             this.typeVoucher == 0
                                 ? "Thu tiền của"
                                 : "Chi tiền cho",
-                        debt_account: "",
-                        credit_account: "",
-                        amount_money: "",
-                        account_object_id: "",
-                        account_object_code: "",
-                        account_object_name: "",
+                        amount_money: 0,
                     },
                 ];
-                console.log(this.receiptPaymentDetail);
-                this.$emit("setListValue", this.receiptPaymentDetail);
+                this.setListValue(this.receiptPaymentDetail);
             } catch (error) {
                 console.log(error);
             }
         },
 
-        setDataAccountObject(value, dataField) {
+        async setDataAccountObject(value, dataField) {
             try {
+                await this.setValue(value, dataField);
+                await this.renderAccountings();
                 this.keyComponent += 1;
-                this.setValue(value, dataField);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        renderAccountings() {
+            try {
+                this.receiptPaymentDetail = this.accountings.map((item) => {
+                    return {
+                        reason: item.reason,
+                        debt_account: item.debt_account,
+                        credit_account: item.credit_account,
+                        amount_money: common.formatDecimalCurrency(
+                            item.amount_money
+                        ),
+                        account_object_id: item.account_object_id,
+                        account_object_code: item.account_object_code,
+                        account_object_name: item.account_object_name,
+                        receipt_payment_id: item.receipt_payment_id,
+                        created_date: item.created_date,
+                        created_by: item.created_by,
+                        modified_date: item.modified_date,
+                        modified_by: item.modified_by,
+                    };
+                });
             } catch (error) {
                 console.log(error);
             }
         },
     },
-
-    watch: {},
 };
 </script>
 <style scoped>

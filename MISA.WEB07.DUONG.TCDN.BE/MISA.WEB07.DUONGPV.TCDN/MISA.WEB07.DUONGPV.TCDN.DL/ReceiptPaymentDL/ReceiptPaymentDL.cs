@@ -153,7 +153,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                 parametersReceiptPayment.Add(propertyName, propertyValue);
             }
 
-            var keyReceiptPaymentProperty = typeof(ReceiptPayment).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(KeyAttribute), true).Count() > 0);
+            var keyReceiptPaymentProperty = typeof(ReceiptPayment).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(PrimaryKeyAttribute), true).Count() > 0);
             parametersReceiptPayment.Add($"@v_{keyReceiptPaymentProperty?.Name}", newGuid);
 
             bool isInsertReceiptPayment = false;
@@ -180,10 +180,10 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                                     parametersReceiptPaymentDetail.Add(propertyName, propertyValue);
                                 }
 
-                                var keyReceiptPaymentDetailProperty = typeof(ReceiptPaymentDetail).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(KeyAttribute), true).Count() > 0);
+                                var keyReceiptPaymentDetailProperty = typeof(ReceiptPaymentDetail).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(PrimaryKeyAttribute), true).Count() > 0);
                                 parametersReceiptPaymentDetail.Add($"@v_{keyReceiptPaymentDetailProperty?.Name}", Guid.NewGuid());
 
-                                var keyRefReceiptPaymentDetailProperty = typeof(ReceiptPaymentDetail).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(MISAKeyAttribute), true).Count() > 0);
+                                var keyRefReceiptPaymentDetailProperty = typeof(ReceiptPaymentDetail).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(ForeignKeyAttribute), true).Count() > 0);
                                 parametersReceiptPaymentDetail.Add($"@v_{keyRefReceiptPaymentDetailProperty?.Name}", newGuid);
 
                                 isInsertReceiptPaymentDetail = await npgSqlConnection.QueryFirstAsync<bool>(insertReferenceStoredProcedureName, parametersReceiptPaymentDetail, commandType: System.Data.CommandType.StoredProcedure);
@@ -231,11 +231,11 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
 
             // Chuẩn bị tham số đầu vào của stored procedure
             var parameterReceiptPayments = new DynamicParameters();
-            var keyReceiptPaymentProperty = typeof(ReceiptPayment).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(KeyAttribute), true).Count() > 0);
+            var keyReceiptPaymentProperty = typeof(ReceiptPayment).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(PrimaryKeyAttribute), true).Count() > 0);
             parameterReceiptPayments.Add($"@v_{keyReceiptPaymentProperty?.Name}", id);
 
             var parameterReceiptPaymentDetails = new DynamicParameters();
-            var keyReceiptPaymentDetailProperty = typeof(ReceiptPaymentDetail).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(MISAKeyAttribute), true).Count() > 0);
+            var keyReceiptPaymentDetailProperty = typeof(ReceiptPaymentDetail).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(ForeignKeyAttribute), true).Count() > 0);
             parameterReceiptPaymentDetails.Add($"@v_{keyReceiptPaymentDetailProperty?.Name}", id);
 
             // Thực hiện gọi vào DB để chạy câu lệnh stored procedure với tham số đầu vào ở trên
@@ -292,7 +292,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                 parametersReceiptPayment.Add(propertyName, propertyValue);
             }
 
-            var keyReceiptPaymentProperty = typeof(ReceiptPayment).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(KeyAttribute), true).Count() > 0);
+            var keyReceiptPaymentProperty = typeof(ReceiptPayment).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(PrimaryKeyAttribute), true).Count() > 0);
             parametersReceiptPayment.Add($"@v_{keyReceiptPaymentProperty?.Name}", id);
 
             bool isUpdateReceiptPayment = false;
@@ -306,7 +306,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                 isUpdateReceiptPayment = await npgSqlConnection.QueryFirstAsync<bool>(updateReceiptPaymentStoredProcedureName, parametersReceiptPayment, commandType: System.Data.CommandType.StoredProcedure);
 
                 bool isDeleteReceiptPaymentDetail = false;
-                var keyRefReceiptPaymentDetailProperty = typeof(ReceiptPaymentDetail).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(MISAKeyAttribute), true).Count() > 0);
+                var keyRefReceiptPaymentDetailProperty = typeof(ReceiptPaymentDetail).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(ForeignKeyAttribute), true).Count() > 0);
                 var parametersReceiptPaymentDetailDelete = new DynamicParameters();
                 parametersReceiptPaymentDetailDelete.Add($"@v_{keyRefReceiptPaymentDetailProperty?.Name}", id);
 
@@ -330,7 +330,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                                         var propertyValue = property.GetValue(dataItem);
                                         parametersReceiptPaymentDetail.Add(propertyName, propertyValue);
                                     }
-                                    var keyReceiptPaymentDetailProperty = typeof(ReceiptPaymentDetail).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(KeyAttribute), true).Count() > 0);
+                                    var keyReceiptPaymentDetailProperty = typeof(ReceiptPaymentDetail).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(PrimaryKeyAttribute), true).Count() > 0);
                                     parametersReceiptPaymentDetail.Add($"@v_{keyReceiptPaymentDetailProperty?.Name}", Guid.NewGuid());
                                     parametersReceiptPaymentDetail.Add($"@v_{keyRefReceiptPaymentDetailProperty?.Name}", id);
 
@@ -379,7 +379,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
 
             // Chuẩn bị tham số đầu vào của stored procedure
             var parameterReceiptPayments = new DynamicParameters();
-            var keyReceiptPaymentProperty = typeof(ReceiptPayment).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(KeyAttribute), true).Count() > 0);
+            var keyReceiptPaymentProperty = typeof(ReceiptPayment).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(PrimaryKeyAttribute), true).Count() > 0);
             parameterReceiptPayments.Add($"@v_{keyReceiptPaymentProperty?.Name}", id);
 
             // Thực hiện gọi vào DB để chạy câu lệnh stored procedure với tham số đầu vào ở trên

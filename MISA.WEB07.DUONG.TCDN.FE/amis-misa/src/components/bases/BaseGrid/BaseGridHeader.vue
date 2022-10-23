@@ -13,7 +13,13 @@
                 :key="column.fieldName"
                 :style="column.styleObject"
             >
-                <div class="d-flex">
+                <div
+                    class="d-flex"
+                    :class="{
+                        'flex-center': column.isCenter,
+                        'flex-end': column.isRight,
+                    }"
+                >
                     {{ column.fieldName }}
                     <span
                         v-if="false"
@@ -25,7 +31,7 @@
                     </span>
                 </div>
             </th>
-            <th scope="col">Chức năng</th>
+            <th scope="col" class="text-center">Chức năng</th>
         </tr>
     </thead>
 </template>

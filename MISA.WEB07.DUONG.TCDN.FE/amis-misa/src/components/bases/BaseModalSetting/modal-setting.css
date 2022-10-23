@@ -1,0 +1,198 @@
+.modal-setting {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.modal-setting .modal-setting__container {
+    width: 800px;
+    min-width: 800px;
+    max-width: 800px;
+    background-color: #fff;
+}
+
+.modal-setting__container .modal-setting__header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 5px 5px;
+    position: relative;
+}
+
+.modal-setting__header .modal-setting__header-title {
+    padding: 16px 16px 20px 16px;
+    color: #111;
+    font-weight: 700;
+    font-size: 24px;
+}
+
+.modal-setting__header .modal-setting__header-action {
+    display: flex;
+    padding: 12px;
+}
+
+.modal-setting__container .modal-setting__toolbar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 5px 5px;
+    position: relative;
+    padding: 0 16px;
+    margin-bottom: 12px;
+}
+
+.modal-setting__container .modal-setting__toolbar-search {
+    position: relative;
+}
+
+.modal-setting__container .modal-setting__input-search {
+    width: 100%;
+    height: 32px;
+    padding: 0 46px 0 14px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    outline: none;
+}
+
+.modal-setting__container .modal-setting__input-search:hover {
+    outline: 1px solid #e2e2e2;
+}
+
+.modal-setting__container .modal-setting__input-search:focus {
+    border: 1px solid #019160;
+}
+
+.modal-setting__container .modal-setting__input-search::placeholder {
+    font-family: MISA_AMIS_ITALIC;
+    font-size: 12px;
+}
+
+.modal-setting__container .modal-setting__icon-search {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    width: 16px;
+    height: 16px;
+    transform: translateY(-50%);
+    background-color: inherit;
+    cursor: pointer;
+}
+
+.modal-setting__toolbar-action .show-layout-info {
+    text-align: right;
+    font-size: 13px;
+    color: #0075c0;
+    cursor: pointer;
+}
+
+.modal-setting__container .modal-setting__body {
+    padding: 0 16px 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+    height: calc(100vh - 78px - 32px - 12px - 60px);
+}
+
+/* Table Grid Setting */
+
+.modal-setting__table {
+    width: 100%;
+    border-spacing: 0;
+}
+
+.modal-setting__table .table-setting__header tr {
+    position: sticky;
+    top: 0;
+    z-index: 9;
+}
+
+.modal-setting__table .table-setting__header th {
+    font-size: 12px;
+    height: 35px !important;
+    text-align: left !important;
+    background-color: #e5e8ec;
+    border-top: none;
+    text-transform: uppercase;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+.modal-setting__table .table-setting__body td {
+    height: 44px;
+    max-height: 44px;
+    text-align: left !important;
+    border-bottom: 1px solid #c7c7c7;
+    padding: 0 10px;
+}
+
+.modal-setting__table .table-setting__body tr td:last-child {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-setting__table .table-setting__checkbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.modal-setting__table input[type="checkbox"] {
+    display: none;
+}
+
+.modal-setting__table
+    input[type="checkbox"]:checked
+    ~ .table-setting__checkbox
+    .table-setting__icon-checkbox {
+    border: 1px solid #2ca01c;
+    background-image: url("../../../assets/img/Sprites.64af8f61.svg");
+    background-position: -1224px -360px;
+    transform: rotate(0deg);
+}
+
+.modal-setting__table .table-setting__icon-checkbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 2px;
+    transform: rotate(-90deg);
+    transition: transform 0.1s linear;
+    color: #fff;
+}
+
+.modal-setting__table .table-setting__body .bg-selected {
+    background: rgb(229, 243, 255) !important;
+}
+
+.modal-setting__container .modal-setting__line {
+    height: 4px;
+    background: #f4f5f8;
+    width: 100%;
+}
+
+.modal-setting__container .modal-setting__footer {
+    display: flex;
+    justify-content: space-between;
+    position: sticky;
+    bottom: 0;
+    z-index: 9;
+    display: flex;
+    align-items: center;
+    padding: 16px 16px;
+    position: relative;
+}
+
+.modal-setting__footer .modal-setting__footer--left {
+    display: flex;
+}

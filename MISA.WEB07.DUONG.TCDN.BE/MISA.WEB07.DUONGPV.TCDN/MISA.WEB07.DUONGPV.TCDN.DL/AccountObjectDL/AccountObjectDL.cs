@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using MISA.WEB07.DUONGPV.TCDN.Common.Attributes;
 using MISA.WEB07.DUONGPV.TCDN.Common.Entities;
 using MISA.WEB07.DUONGPV.TCDN.Common.Entities.DTO;
 using Npgsql;
@@ -33,7 +34,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                 parametersAccountObject.Add(propertyName, propertyValue);
             }
 
-            var keyAccountObjectProperty = typeof(AccountObject).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(KeyAttribute), true).Count() > 0);
+            var keyAccountObjectProperty = typeof(AccountObject).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(PrimaryKeyAttribute), true).Count() > 0);
             parametersAccountObject.Add($"@v_{keyAccountObjectProperty?.Name}", newGuid);
 
             bool isInsertAccountObject = false;
@@ -62,7 +63,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                                     parametersSupplierConstraint.Add(propertyName, propertyValue);
                                 }
 
-                                var keySupplierConstraintProperty = typeof(SupplierConstraint).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(KeyAttribute), true).Count() > 0);
+                                var keySupplierConstraintProperty = typeof(SupplierConstraint).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(PrimaryKeyAttribute), true).Count() > 0);
                                 parametersSupplierConstraint.Add($"@v_{keySupplierConstraintProperty?.Name}", newGuid);
 
                                 isInsertSupplierConstraint = await npgSqlConnection.QueryFirstAsync<bool>(insertConstraintStoredProcedureName, parametersSupplierConstraint, commandType: System.Data.CommandType.StoredProcedure);
@@ -94,11 +95,11 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
 
             // Chuẩn bị tham số đầu vào của stored procedure
             var parameterAccountObjects = new DynamicParameters();
-            var keyAccountObjectProperty = typeof(AccountObject).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(KeyAttribute), true).Count() > 0);
+            var keyAccountObjectProperty = typeof(AccountObject).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(PrimaryKeyAttribute), true).Count() > 0);
             parameterAccountObjects.Add($"@v_{keyAccountObjectProperty?.Name}", id);
 
             var parameterSupplierConstraints = new DynamicParameters();
-            var keySupplierConstraintProperty = typeof(SupplierConstraint).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(KeyAttribute), true).Count() > 0);
+            var keySupplierConstraintProperty = typeof(SupplierConstraint).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(PrimaryKeyAttribute), true).Count() > 0);
             parameterSupplierConstraints.Add($"@v_{keySupplierConstraintProperty?.Name}", id);
 
             // Thực hiện gọi vào DB để chạy câu lệnh stored procedure với tham số đầu vào ở trên
@@ -138,7 +139,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                 parametersAccountObject.Add(propertyName, propertyValue);
             }
 
-            var keyAccountObjectProperty = typeof(AccountObject).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(KeyAttribute), true).Count() > 0);
+            var keyAccountObjectProperty = typeof(AccountObject).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(PrimaryKeyAttribute), true).Count() > 0);
             parametersAccountObject.Add($"@v_{keyAccountObjectProperty?.Name}", id);
 
             bool isUpdateAccountObject = false;
@@ -152,7 +153,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                 isUpdateAccountObject = await npgSqlConnection.QueryFirstAsync<bool>(updateStoredProcedureName, parametersAccountObject, commandType: System.Data.CommandType.StoredProcedure);
 
                 bool isDeleteSupplierConstraint = false;
-                var keySupplierConstraintProperty = typeof(SupplierConstraint).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(KeyAttribute), true).Count() > 0);
+                var keySupplierConstraintProperty = typeof(SupplierConstraint).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(PrimaryKeyAttribute), true).Count() > 0);
                 var parametersSupplierConstraintDelete = new DynamicParameters();
                 parametersSupplierConstraintDelete.Add($"@v_{keySupplierConstraintProperty?.Name}", id);
 
@@ -207,7 +208,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
 
             // Chuẩn bị tham số đầu vào của stored procedure
             var parameterAccountObjects = new DynamicParameters();
-            var keyAccountObjectProperty = typeof(AccountObject).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(KeyAttribute), true).Count() > 0);
+            var keyAccountObjectProperty = typeof(AccountObject).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(PrimaryKeyAttribute), true).Count() > 0);
             parameterAccountObjects.Add($"@v_{keyAccountObjectProperty?.Name}", id);
 
             // Thực hiện gọi vào DB để chạy câu lệnh stored procedure với tham số đầu vào ở trên

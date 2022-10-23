@@ -188,6 +188,7 @@ export default {
                         ],
                         footerRight: [],
                         enterKeyFunc: this.onHandleHidePopup,
+                        escKeyFunc: this.onHandleHidePopup
                     },
                     noticeMessage:
                         "Tính năng đang phát triển. Vui lòng thử lại sau.",
@@ -221,7 +222,6 @@ export default {
                     ).then((data) => {
                         if (data) {
                             this.isShowModal = false;
-                            this.onHandleReload();
                         }
                     });
                 } else if (this.receiptPayment.is_edit) {
@@ -232,7 +232,6 @@ export default {
                     ).then((data) => {
                         if (data) {
                             this.isShowModal = false;
-                            this.onHandleReload();
                         }
                     });
                 }
@@ -247,20 +246,17 @@ export default {
                     this.receiptPayment = {
                         account_object_code: "",
                         account_object_contact_name: "",
-                        account_object_id: "",
                         account_object_name: "",
                         accounting_date: common.formatDate(new Date()),
                         adding_number: 0,
                         address: "",
                         created_by: "",
                         created_date: "",
-                        employee_id: "",
                         employee_name: "",
                         modified_by: "",
                         modified_date: "",
                         reason: "Thu tiền của ",
                         receipt_payment_date: common.formatDate(new Date()),
-                        receipt_payment_id: "",
                         receipt_payment_number: "",
                         total_money: 0,
                         is_add: true,
@@ -274,8 +270,6 @@ export default {
                             debt_account: "",
                             credit_account: "",
                             amount_money: 0,
-                            account_object_id:
-                                this.receiptPayment.account_object_id,
                             account_object_code:
                                 this.receiptPayment.account_object_code,
                             account_object_name:
@@ -286,20 +280,17 @@ export default {
                     this.receiptPayment = {
                         account_object_code: "",
                         account_object_contact_name: "",
-                        account_object_id: "",
                         account_object_name: "",
                         accounting_date: common.formatDate(new Date()),
                         adding_number: 0,
                         address: "",
                         created_by: "",
                         created_date: "",
-                        employee_id: "",
                         employee_name: "",
                         modified_by: "",
                         modified_date: "",
                         reason: "Chi tiền cho ",
                         receipt_payment_date: common.formatDate(new Date()),
-                        receipt_payment_id: "",
                         receipt_payment_number: "",
                         total_money: 0,
                         is_add: true,
@@ -313,8 +304,6 @@ export default {
                             debt_account: "",
                             credit_account: "",
                             amount_money: 0,
-                            account_object_id:
-                                this.receiptPayment.account_object_id,
                             account_object_code:
                                 this.receiptPayment.account_object_code,
                             account_object_name:

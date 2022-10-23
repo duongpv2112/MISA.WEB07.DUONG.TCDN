@@ -20,7 +20,7 @@
             :name="dataField"
             :value="
                 isInputNumber
-                    ? common.formatCurrency(valueInput || '0')
+                    ? common.formatCurrency(valueInput || 0)
                     : valueInput
             "
             :tabindex="tabindex"

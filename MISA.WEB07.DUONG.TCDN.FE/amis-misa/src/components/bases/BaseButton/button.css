@@ -97,6 +97,10 @@
     border: 1px solid #8d9096;
 }
 
+.button.button-border-modal:hover {
+    background-color: #d2d3d6;
+}
+
 .button.button-border-radius-left {
     border-radius: 0 3px 3px 0;
     padding: 6px 8px 6px 6px;

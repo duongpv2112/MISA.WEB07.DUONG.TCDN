@@ -68,6 +68,11 @@
     align-items: center !important;
 }
 
+.flex-end {
+    justify-content: flex-end !important;
+    align-items: flex-end !important;
+}
+
 .flex-column {
     flex-direction: column !important;
 }
@@ -97,6 +102,14 @@
     text-decoration: none;
 }
 
+.text-center {
+    text-align: center !important;
+}
+
+.text-right {
+    text-align: right !important;
+}
+
 /* Margin CSS */
 .mb-0 {
     margin-bottom: 0 !important;
@@ -124,6 +137,10 @@
 
 .ml-20 {
     margin-left: 20px !important;
+}
+
+.mr-6 {
+    margin-right: 6px !important;
 }
 
 .mr-12 {

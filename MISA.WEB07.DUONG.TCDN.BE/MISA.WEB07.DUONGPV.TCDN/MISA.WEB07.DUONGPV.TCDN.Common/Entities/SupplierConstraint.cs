@@ -19,7 +19,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// ID Nhà cung cấp
         /// </summary>
-        [Key]
+        [PrimaryKey("supplier_id")]
         public Guid supplier_id { get; set; }
 
         /// <summary>

@@ -7,7 +7,14 @@
                 v-for="column in columns"
                 :key="'col_' + column.dataField"
             >
-                <div class="d-flex">
+                <div
+                    class="d-flex"
+                    :class="{
+                        'flex-center':
+                            column.dataField == firstColumn.nameColumn,
+                        'flex-end': column.dataField == columnShow,
+                    }"
+                >
                     {{
                         column.dataField == firstColumn.nameColumn && dataReady
                             ? firstColumn.valueColumn

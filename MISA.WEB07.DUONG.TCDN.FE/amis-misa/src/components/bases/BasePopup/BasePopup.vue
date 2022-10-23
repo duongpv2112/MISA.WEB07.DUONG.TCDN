@@ -86,8 +86,13 @@ export default {
          */
         eventHandleKey() {
             var keyCodePress = event;
-            if(keyCodePress.keyCode == 13){
-                this.footerPopup.enterKeyFunc(this.footerPopup.valueEnterKeyFunc);
+            if (keyCodePress.keyCode == 13) {
+                this.footerPopup.enterKeyFunc(
+                    this.footerPopup.valueEnterKeyFunc
+                );
+            }
+            if (keyCodePress.keyCode == 27) {
+                this.footerPopup.escKeyFunc();
             }
         },
     },

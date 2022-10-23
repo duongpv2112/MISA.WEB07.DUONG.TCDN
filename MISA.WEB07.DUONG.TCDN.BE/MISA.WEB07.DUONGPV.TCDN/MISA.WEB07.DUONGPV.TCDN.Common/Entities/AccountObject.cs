@@ -21,19 +21,19 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// ID Đối tượng
         /// </summary>
-        [Key]
+        [PrimaryKey("account_object_id")]
         public Guid account_object_id { get; set; }
 
         /// <summary>
         /// Mã đối tượng
         /// </summary>
-        [Required]
+        [IsNotNullOrEmpty("Mã đối tượng không được trống")]
         public string account_object_code { get; set; }
 
         /// <summary>
         /// Tên đối tượng
         /// </summary>
-        [Required]
+        [IsNotNullOrEmpty("Tên đối tượng không được trống")]
         public string account_object_name { get; set; }
 
         /// <summary>
