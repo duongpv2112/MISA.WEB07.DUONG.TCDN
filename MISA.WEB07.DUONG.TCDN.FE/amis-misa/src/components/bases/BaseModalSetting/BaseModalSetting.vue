@@ -15,7 +15,10 @@
                         </div>
                     </div>
 
-                    <div class="tooltip square-24 icon icon-times" @click="this.onClose">
+                    <div
+                        class="tooltip square-24 icon icon-times"
+                        @click="this.onClose"
+                    >
                         <BaseTooltip
                             :content="'Đóng (ESC)'"
                             :className="['tooltip-default']"
@@ -50,7 +53,12 @@
                         <tr>
                             <th style="width: 44px"></th>
                             <th scope="col" style="width: 38px">
-                                <input type="checkbox" id="checkAllSetting" />
+                                <input
+                                    type="checkbox"
+                                    id="checkAllSetting"
+                                    v-model="isCheckAll"
+                                    @click="checkAllColumn"
+                                />
                                 <label
                                     class="table-setting__checkbox"
                                     for="checkAllSetting"
@@ -87,10 +95,9 @@
                         <tr
                             v-for="(data, index) in dataColumns"
                             :key="'row_' + index"
-                            @click="setRowIndexSelected('row_' + index)"
+                            @click="setRowIndexSelected(index)"
                             :class="{
-                                'bg-selected':
-                                    rowIndexSelected == 'row_' + index,
+                                'bg-selected': rowIndexSelected == index,
                             }"
                         >
                             <td>
@@ -101,7 +108,7 @@
                             <td>
                                 <input
                                     type="checkbox"
-                                    :checked="data.isShow"
+                                    v-model="data.isShow"
                                     :id="data.dataField + '_show'"
                                 />
                                 <label
@@ -128,14 +135,14 @@
                                         column.dataField != 'isFix' &&
                                         (column.dataField == 'name_column' ||
                                             !isShowInput ||
-                                            rowIndexSelected != 'row_' + index)
+                                            rowIndexSelected != index)
                                     "
                                 >
                                     {{
                                         column.dataField != "isFix" &&
                                         (column.dataField == "name_column" ||
                                             !isShowInput ||
-                                            rowIndexSelected != "row_" + index)
+                                            rowIndexSelected != index)
                                             ? data[column.dataField]
                                             : ""
                                     }}
@@ -146,7 +153,7 @@
                                         column.dataField != 'isFix' &&
                                         column.dataField != 'name_column' &&
                                         isShowInput &&
-                                        rowIndexSelected == 'row_' + index
+                                        rowIndexSelected == index
                                     "
                                     :type="'text'"
                                     :className="[
@@ -156,12 +163,14 @@
                                         'mb-0',
                                     ]"
                                     :valueField="data[column.dataField]"
+                                    :dataField="column.dataField"
+                                    @setValue="updateDataColumn"
                                 />
 
                                 <div v-if="column.dataField == 'isFix'">
                                     <input
                                         type="checkbox"
-                                        :checked="data.isShow"
+                                        v-model="data.isFix"
                                         :id="data.dataField + '_fix'"
                                     />
                                     <label
@@ -189,6 +198,7 @@
                             'button-border-modal',
                         ]"
                         :isButtonCancel="true"
+                        :functionz="onClose"
                     />
                 </div>
                 <div class="modal-setting__footer--right">
@@ -201,6 +211,7 @@
                             'tooltip',
                             'mr-12',
                         ]"
+                        :functionz="defaultSampling"
                     />
                     <BaseButton
                         :title="'Cất'"
@@ -210,6 +221,7 @@
                             'button-text-bold',
                             'tooltip',
                         ]"
+                        :functionz="onSave"
                     />
                 </div>
             </div>
@@ -225,11 +237,17 @@ export default {
     components: { BaseTooltip, BaseInput, BaseButton },
 
     props: {
-        onClose: Function
+        propDatas: null,
+        propDatasDefault: null,
+        onClose: Function,
     },
+
+    emits: ["onSaveTemplate"],
 
     data() {
         return {
+            isCheckAll: false,
+
             isEditColumn: false,
 
             rowIndexSelected: null,
@@ -271,43 +289,46 @@ export default {
                 },
             ],
 
-            dataColumns: [
-                {
-                    name_column: "Mã nhà cung cấp",
-                    fieldName: "Mã nhà cung cấp",
-                    dataField: "account_object_code",
-                    width: 155,
-                    isShow: true,
-                    isFix: true,
-                },
-                {
-                    name_column: "Tên nhà cung cấp",
-                    fieldName: "Tên nhà cung cấp",
-                    dataField: "account_object_name",
-                    width: 250,
-                    isShow: true,
-                    isFix: true,
-                },
-                {
-                    name_column: "Địa chỉ",
-                    fieldName: "Địa chỉ",
-                    dataField: "address",
-                    width: 250,
-                    isShow: false,
-                    isFix: false,
-                },
-                {
-                    name_column: "Mã số thuế",
-                    fieldName: "Mã số thuế",
-                    dataField: "tax_code",
-                    width: 164,
-                    isShow: false,
-                    isFix: false,
-                },
-            ],
+            dataColumns: null,
         };
     },
+
+    created() {
+        this.dataColumns = JSON.parse(this.propDatas);
+        this.checkIsCheckAll();
+    },
+
     methods: {
+        checkIsCheckAll() {
+            try {
+                this.dataColumns.forEach((item) => {
+                    if (item.isShow == false) {
+                        this.isCheckAll = false;
+                    }else {
+                        this.isCheckAll = true;
+                    }
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        checkAllColumn() {
+            try {
+                if (!this.isCheckAll) {
+                    this.dataColumns.forEach((item) => {
+                        item.isShow = true;
+                    });
+                } else {
+                    this.dataColumns.forEach((item) => {
+                        item.isShow = false;
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
         showEditColumn() {
             this.columns.forEach((item) => {
                 if (item.dataField != "name_column") {
@@ -320,6 +341,26 @@ export default {
             try {
                 this.rowIndexSelected = value;
                 this.isShowInput = true;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        updateDataColumn(value, dataField) {
+            try {
+                this.dataColumns[this.rowIndexSelected][dataField] = value;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        defaultSampling() {
+            this.dataColumns = JSON.parse(this.propDatasDefault);
+        },
+
+        onSave() {
+            try {
+                this.$emit("onSaveTemplate", this.dataColumns);
             } catch (error) {
                 console.log(error);
             }

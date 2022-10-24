@@ -1,5 +1,12 @@
 <template>
-    <tfoot class="table-foot">
+    <tfoot
+        class="table-foot"
+        v-if="
+            columns.filter((item) => {
+                return item.isShow == true;
+            }).length > 0
+        "
+    >
         <tr>
             <th scope="col"></th>
             <th
@@ -33,7 +40,6 @@
                     </span>
                 </div>
             </th>
-            <th scope="col"></th>
         </tr>
     </tfoot>
 </template>

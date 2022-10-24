@@ -29,68 +29,10 @@ export default {
         onDelete: Function,
         onDetail: Function,
         onReplication: Function,
+        columns: Array,
     },
     data() {
         return {
-            columns: [
-                {
-                    fieldName: "Mã nhà cung cấp",
-                    dataField: "account_object_code",
-                    styleObject: {
-                        "min-width": "237px !important",
-                    },
-                    isHidden: false,
-                },
-                {
-                    fieldName: "Tên nhà cung cấp",
-                    dataField: "account_object_name",
-                    styleObject: {
-                        "min-width": "237px !important",
-                    },
-                    isHidden: false,
-                },
-                {
-                    fieldName: "Địa chỉ",
-                    dataField: "address",
-                    styleObject: {
-                        "min-width": "237px !important",
-                    },
-                    isHidden: false,
-                },
-                {
-                    fieldName: "Mã số thuế",
-                    dataField: "tax_code",
-                    styleObject: {
-                        "min-width": "237px !important",
-                    },
-                    isHidden: false,
-                },
-                {
-                    fieldName: "Điện thoại",
-                    dataField: "phone_number",
-                    styleObject: {
-                        "min-width": "140px !important",
-                    },
-                    isHidden: false,
-                },
-                {
-                    fieldName: "Website",
-                    dataField: "website",
-                    styleObject: {
-                        "min-width": "120px !important",
-                    },
-                    isHidden: false,
-                },
-                {
-                    fieldName: "Số CMND",
-                    dataField: "identity_number",
-                    styleObject: {
-                        "min-width": "100px !important",
-                    },
-                    isHidden: false,
-                },
-            ],
-
             columnActions: {
                 actionPrimary: {
                     nameAction: "Sửa",

@@ -27,15 +27,17 @@
         /// <summary>
         /// Message lỗi trả về cho client
         /// </summary>
-        public string ErrorMessage;
+        public string Message;
         #endregion
 
         #region Contructor
 
         public IsNotNullOrEmptyAttribute(string errorMessage)
         {
-            ErrorMessage = errorMessage;
+            Message = errorMessage;
         }
+
+        public string ErrorMessage { get { return Message; } }
 
         #endregion
     }
@@ -56,4 +58,51 @@
         public string Name { get { return ForeignKeyName; } }
     }
 
+    /// <summary>
+    /// Attribute dùng để xác định ngày nhập không lớn hơn ngày hiện tại
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public class DateBiggerCurrentAttribute : Attribute
+    {
+        public string PropertyName;
+
+        public DateBiggerCurrentAttribute(string propertyName)
+        {
+            PropertyName = propertyName;
+        }
+
+        public string Name { get { return PropertyName; } }
+    }
+
+    /// <summary>
+    /// Attribute dùng để xác định email đúng định dạng
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public class MISAEmailAttribute : Attribute
+    {
+        public string PropertyName;
+
+        public MISAEmailAttribute(string propertyName)
+        {
+            PropertyName = propertyName;
+        }
+
+        public string Name { get { return PropertyName; } }
+    }
+
+    /// <summary>
+    /// Attribute dùng để xác định số điện thoại có đúng định dạng
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public class MISAPhoneAttribute : Attribute
+    {
+        public string PropertyName;
+
+        public MISAPhoneAttribute(string propertyName)
+        {
+            PropertyName = propertyName;
+        }
+
+        public string Name { get { return PropertyName; } }
+    }
 }

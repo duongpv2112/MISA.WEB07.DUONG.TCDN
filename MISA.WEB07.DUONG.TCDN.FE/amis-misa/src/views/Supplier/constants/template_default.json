@@ -1,0 +1,65 @@
+[
+    {
+        "name_column": "Mã nhà cung cấp",
+        "fieldName": "Mã nhà cung cấp",
+        "dataField": "account_object_code",
+        "styleObject": {},
+        "width": 180,
+        "isShow": true,
+        "isFix": false
+    },
+    {
+        "name_column": "Tên nhà cung cấp",
+        "fieldName": "Tên nhà cung cấp",
+        "dataField": "account_object_name",
+        "styleObject": {},
+        "width": 250,
+        "isShow": true,
+        "isFix": false
+    },
+    {
+        "name_column": "Địa chỉ",
+        "fieldName": "Địa chỉ",
+        "dataField": "address",
+        "styleObject": {},
+        "width": 250,
+        "isShow": true,
+        "isFix": false
+    },
+    {
+        "name_column": "Mã số thuế",
+        "fieldName": "Mã số thuế",
+        "dataField": "tax_code",
+        "styleObject": {},
+        "width": 150,
+        "isShow": true,
+        "isFix": false
+    },
+    {
+        "name_column": "Điện thoại",
+        "fieldName": "Điện thoại",
+        "dataField": "phone_number",
+        "styleObject": {},
+        "width": 150,
+        "isShow": true,
+        "isFix": false
+    },
+    {
+        "name_column": "Website",
+        "fieldName": "Website",
+        "dataField": "website",
+        "styleObject": {},
+        "width": 180,
+        "isShow": true,
+        "isFix": false
+    },
+    {
+        "name_column": "Số CMND",
+        "fieldName": "Số CMND",
+        "dataField": "identity_number",
+        "styleObject": {},
+        "width": 150,
+        "isShow": true,
+        "isFix": false
+    }
+]

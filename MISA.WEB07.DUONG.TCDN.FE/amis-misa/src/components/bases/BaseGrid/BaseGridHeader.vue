@@ -1,5 +1,12 @@
 <template>
-    <thead class="table-head">
+    <thead
+        class="table-head"
+        v-if="
+            columns.filter((item) => {
+                return item.isShow == true;
+            }).length > 0
+        "
+    >
         <tr>
             <th scope="col">
                 <input type="checkbox" id="checkAll" />
@@ -9,9 +16,16 @@
             </th>
             <th
                 scope="col"
-                v-for="column in columns"
+                v-for="column in columns.filter((item) => {
+                    return item.isShow == true;
+                })"
                 :key="column.fieldName"
-                :style="column.styleObject"
+                :style="[
+                    column.styleObject,
+                    {
+                        'min-width': `${column.width}px !important`,
+                    },
+                ]"
             >
                 <div
                     class="d-flex"

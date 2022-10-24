@@ -37,6 +37,7 @@
     border-right: 1px solid #c7c7c7 !important;
     border-bottom: 1px solid #c7c7c7 !important;
     cursor: pointer;
+    white-space: nowrap;
 }
 
 .table .table-head th:first-child {

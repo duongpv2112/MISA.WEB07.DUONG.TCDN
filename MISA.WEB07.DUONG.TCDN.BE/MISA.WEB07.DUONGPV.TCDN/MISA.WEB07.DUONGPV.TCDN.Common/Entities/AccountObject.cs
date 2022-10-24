@@ -54,11 +54,13 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// Số điện thoại
         /// </summary>
+        [MISAPhone("Số điện thoại di động")]
         public string? phone_number { get; set; }
 
         /// <summary>
         /// Số điện thoại cố định
         /// </summary>
+        [MISAPhone("Số điện thoại cố định")]
         public string? telephone_number  { get; set; }
 
         /// <summary>
@@ -69,6 +71,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// Ngày cấp CMND
         /// </summary>
+        [DateBiggerCurrent("identity_date")]
         public string? identity_date { get; set; }
 
         /// <summary>
@@ -104,6 +107,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// Email
         /// </summary>
+        [MISAEmail("email")]
         public string? email { get; set; }
 
         /// <summary>

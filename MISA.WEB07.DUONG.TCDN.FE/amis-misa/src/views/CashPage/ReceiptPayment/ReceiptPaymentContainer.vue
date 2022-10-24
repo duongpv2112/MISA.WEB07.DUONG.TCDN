@@ -335,7 +335,10 @@
 
     <BaseModalSetting
         v-if="isShowModalSetting"
+        :propDatas="JSON.stringify(columns)"
+        :propDatasDefault="JSON.stringify(columns_default)"
         :onClose="onHandleHideSettingPage"
+        @onSaveTemplate="onSaveTemplate"
     />
 </template>
 <script>
@@ -344,7 +347,7 @@ import { RECEIPT_PAYMENT_ENUM } from "@/views/CashPage/ReceiptPayment/constants/
 import { API_RESOURCE } from "@/views/CashPage/ReceiptPayment/constants/api";
 import { common } from "@/libs/common/common";
 import api from "@/services/api";
-import { template } from "@/views/CashPage/ReceiptPayment/constants/template";
+import template_default from "@/views/CashPage/ReceiptPayment/constants/template_default.json";
 import BaseButton from "@/components/bases/BaseButton/BaseButton.vue";
 import BaseTooltip from "@/components/bases/BaseTooltip/BaseTooltip.vue";
 import ReceiptPaymentGrid from "./components/ReceiptPaymentGrid.vue";
@@ -371,6 +374,8 @@ export default {
     data() {
         return {
             columns: Array,
+
+            columns_default: Array,
 
             dataReady: Boolean,
 
@@ -1342,6 +1347,22 @@ export default {
 
         async exportData() {
             try {
+                var columnsExport = this.columns
+                    .filter((item) => {
+                        return item.isShow;
+                    })
+                    .map((item) => {
+                        return {
+                            caption: item.fieldName,
+                            key: item.dataField,
+                            width: item.width,
+                        };
+                    });
+                columnsExport.unshift({
+                    caption: "STT",
+                    key: "stt",
+                    width: 155,
+                });
                 var fileNameDownload = "";
                 var reportTitle = "";
                 if (
@@ -1362,38 +1383,7 @@ export default {
                     reportTitle = "DANH SÁCH CHI TIỀN";
                 }
                 var bodyExport = {
-                    columns: [
-                        {
-                            caption: "STT",
-                            key: "stt",
-                            width: 155,
-                        },
-                        {
-                            caption: "Ngày hạch toán",
-                            key: "accounting_date",
-                            width: 155,
-                        },
-                        {
-                            caption: "Ngày chứng từ",
-                            key: "receipt_payment_date",
-                            width: 155,
-                        },
-                        {
-                            caption: "Số chứng từ",
-                            key: "receipt_payment_number",
-                            width: 155,
-                        },
-                        {
-                            caption: "Diễn giải",
-                            key: "reason",
-                            width: 155,
-                        },
-                        {
-                            caption: "Số tiền",
-                            key: "total_money",
-                            width: 155,
-                        },
-                    ],
+                    columns: columnsExport,
                     reportTitle: reportTitle,
                     fileNameDownload: fileNameDownload,
                     keyword: this.keyWord,
@@ -1423,6 +1413,32 @@ export default {
         onHandleHideSettingPage() {
             this.isShowModalSetting = false;
         },
+
+        onLoadTemplate() {
+            try {
+                if (localStorage.getItem("receipt_payment_template") === null) {
+                    this.columns = template_default;
+                } else
+                    this.columns = JSON.parse(
+                        localStorage.getItem("receipt_payment_template")
+                    );
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        onSaveTemplate(value) {
+            try {
+                this.columns = value;
+                this.isShowModalSetting = false;
+                localStorage.setItem(
+                    "receipt_payment_template",
+                    JSON.stringify(value)
+                );
+            } catch (error) {
+                console.log(error);
+            }
+        },
     },
 
     created() {
@@ -1433,7 +1449,8 @@ export default {
         this.totalCount = 0;
         this.isShowModal = false;
         this.isShowModalSetting = false;
-        this.columns = template;
+        this.onLoadTemplate();
+        this.columns_default = template_default;
         this.getReceiptPayments(this.currentRecord, this.currentPage);
     },
 };

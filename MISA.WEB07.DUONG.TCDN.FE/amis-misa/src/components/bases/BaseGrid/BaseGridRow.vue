@@ -1,5 +1,13 @@
 <template>
-    <tbody class="table-body" v-if="dataReady">
+    <tbody
+        class="table-body"
+        v-if="
+            dataReady &&
+            columns.filter((item) => {
+                return item.isShow == true;
+            }).length > 0
+        "
+    >
         <tr
             class="table-row"
             v-for="(item, index) in data"
@@ -17,7 +25,9 @@
                 </label>
             </td>
             <BaseGridCol
-                v-for="(column, index) in columns"
+                v-for="(column, index) in columns.filter((item) => {
+                    return item.isShow == true;
+                })"
                 :key="'Col_' + (index + 1)"
                 :value="item[column.dataField]"
                 :isCenter="column.isCenter"
@@ -72,41 +82,29 @@
             </td>
         </tr>
     </tbody>
-    <tbody class="table-body" v-if="!dataReady">
-        <tr v-for="(item, index) of 10" :key="index">
+    <tbody
+        class="table-body"
+        v-if="
+            !dataReady &&
+            columns.filter((item) => {
+                return item.isShow == true;
+            }).length > 0
+        "
+    >
+        <tr v-for="index in 10" :key="index">
             <td class="table-cell-loader">
                 <div class="loading-animation"></div>
             </td>
-            <td class="table-cell-loader">
+            <td
+                class="table-cell-loader"
+                v-for="index in columns.filter((item) => {
+                    return item.isShow == true;
+                }).length"
+                :key="'col_load_' + index"
+            >
                 <div class="loading-animation"></div>
             </td>
-            <td class="table-cell-loader">
-                <div class="loading-animation"></div>
-            </td>
-            <td class="table-cell-loader">
-                <div class="loading-animation"></div>
-            </td>
-            <td class="table-cell-loader">
-                <div class="loading-animation"></div>
-            </td>
-            <td class="table-cell-loader">
-                <div class="loading-animation"></div>
-            </td>
-            <td class="table-cell-loader">
-                <div class="loading-animation"></div>
-            </td>
-            <td class="table-cell-loader">
-                <div class="loading-animation"></div>
-            </td>
-            <td class="table-cell-loader">
-                <div class="loading-animation"></div>
-            </td>
-            <td class="table-cell-loader">
-                <div class="loading-animation"></div>
-            </td>
-            <td class="table-cell-loader">
-                <div class="loading-animation"></div>
-            </td>
+
             <td class="table-cell-loader" style="min-width: 120px">
                 <div class="loading-animation"></div>
             </td>

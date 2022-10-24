@@ -117,7 +117,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="FUNC_ACOUNT_OBJECT_GETPAGING" xml:space="preserve">
-    <value>func_account_object_getpaging</value>
+  <data name="DevMsg_ActionFailed" xml:space="preserve">
+    <value>Action failed</value>
+    <comment>Message cho dev đọc khi thêm dữ liệu vào DB không thành công</comment>
+  </data>
+  <data name="DevMsg_DuplicateCode" xml:space="preserve">
+    <value>Duplicate code unique</value>
+    <comment>Message cho dev đọc khi mã bị trùng</comment>
+  </data>
+  <data name="DevMsg_Exception" xml:space="preserve">
+    <value>Catched an exception</value>
+    <comment>Message cho dev đọc khi chức năng gặp exception</comment>
+  </data>
+  <data name="DevMsg_ValidateFailed" xml:space="preserve">
+    <value>One more or validation error occurred</value>
+    <comment>Message cho dev đọc khi validate dữ liệu đầu vào thất bại</comment>
+  </data>
+  <data name="ErrorDateBiggerCurrent" xml:space="preserve">
+    <value>Trường {0} không được lớn hơn ngày hiện tại</value>
+    <comment>Thông báo nếu trường thông tin lớn hơn ngày hiện tại</comment>
+  </data>
+  <data name="ErrorEmail" xml:space="preserve">
+    <value>Email không đúng định dạng</value>
+    <comment>Thông báo nếu trường email không đúng định dạng</comment>
+  </data>
+  <data name="ErrorPhoneNumber" xml:space="preserve">
+    <value>Trường {0} không đúng định dạng</value>
+  </data>
+  <data name="Error_IsNotNullOrEmpty" xml:space="preserve">
+    <value>Trường {0} không được để trống</value>
+    <comment>Thông báo nếu trường thông tin required bị trống</comment>
+  </data>
+  <data name="MoreInfo" xml:space="preserve">
+    <value>https://www.google.com.vn/?hl=vi</value>
+    <comment>Đường dẫn tới trang mô tả lỗi</comment>
+  </data>
+  <data name="UserMsg_ActionFailed" xml:space="preserve">
+    <value>{0} dữ liệu không thành công</value>
+    <comment>Message cho người dùng đọc khi thêm dữ liệu vào DB không thành công</comment>
+  </data>
+  <data name="UserMsg_DuplicateCode" xml:space="preserve">
+    <value>{0} đã tồn tại trong hệ thống</value>
+    <comment>Message cho người dùng đọc khi mã bị trùng</comment>
+  </data>
+  <data name="UserMsg_Exception" xml:space="preserve">
+    <value>Có lỗi xảy ra vui lòng liên hệ với MISA!</value>
+    <comment>Message cho người dùng đọc khi chức năng gặp exception</comment>
+  </data>
+  <data name="UserMsg_ValidateFailed" xml:space="preserve">
+    <value>Dữ liệu đầu vào không hợp lệ</value>
+    <comment>Message cho người dùng đọc khi validate dữ liệu đầu vào thất bại</comment>
   </data>
 </root>

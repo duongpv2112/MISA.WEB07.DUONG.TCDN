@@ -1,0 +1,77 @@
+[
+    {
+        "name_column": "Ngày hạch toán",
+        "fieldName": "Ngày hạch toán",
+        "dataField": "accounting_date",
+        "styleObject": {},
+        "width": 180,
+        "isShow": true,
+        "isFix": false,
+        "isCenter": true
+    },
+    {
+        "name_column": "Ngày chứng từ",
+        "fieldName": "Ngày chứng từ",
+        "dataField": "receipt_payment_date",
+        "styleObject": {},
+        "width": 180,
+        "isShow": true,
+        "isFix": false,
+        "isCenter": true
+    },
+    {
+        "name_column": "Số chứng từ",
+        "fieldName": "Số chứng từ",
+        "dataField": "receipt_payment_number",
+        "styleObject": {},
+        "width": 150,
+        "isShow": true,
+        "isFix": false
+    },
+    {
+        "name_column": "Diễn giải",
+        "fieldName": "Diễn giải",
+        "dataField": "reason",
+        "styleObject": {},
+        "width": 237,
+        "isShow": true,
+        "isFix": false
+    },
+    {
+        "name_column": "Số tiền",
+        "fieldName": "Số tiền",
+        "dataField": "total_money",
+        "styleObject": {},
+        "width": 140,
+        "isShow": true,
+        "isFix": false,
+        "isRight": true
+    },
+    {
+        "name_column": "Mã đối tượng",
+        "fieldName": "Mã đối tượng",
+        "dataField": "account_object_code",
+        "styleObject": {},
+        "width": 120,
+        "isShow": true,
+        "isFix": false
+    },
+    {
+        "name_column": "Đối tượng",
+        "fieldName": "Đối tượng",
+        "dataField": "account_object_name",
+        "styleObject": {},
+        "width": 200,
+        "isShow": true,
+        "isFix": false
+    },
+    {
+        "name_column": "Địa chỉ",
+        "fieldName": "Địa chỉ",
+        "dataField": "address",
+        "styleObject": {},
+        "width": 250,
+        "isShow": true,
+        "isFix": false
+    }
+]

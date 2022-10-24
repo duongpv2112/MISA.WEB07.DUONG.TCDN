@@ -22,7 +22,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resource {
+    public class Resource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MISA.WEB07.DUONGPV.TCDN.Common.Resources.Resource", typeof(Resource).Assembly);
@@ -51,7 +51,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,11 +61,119 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to func_account_object_getpaging.
+        ///   Looks up a localized string similar to Action failed.
         /// </summary>
-        internal static string FUNC_ACOUNT_OBJECT_GETPAGING {
+        public static string DevMsg_ActionFailed {
             get {
-                return ResourceManager.GetString("FUNC_ACOUNT_OBJECT_GETPAGING", resourceCulture);
+                return ResourceManager.GetString("DevMsg_ActionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate code unique.
+        /// </summary>
+        public static string DevMsg_DuplicateCode {
+            get {
+                return ResourceManager.GetString("DevMsg_DuplicateCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Catched an exception.
+        /// </summary>
+        public static string DevMsg_Exception {
+            get {
+                return ResourceManager.GetString("DevMsg_Exception", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One more or validation error occurred.
+        /// </summary>
+        public static string DevMsg_ValidateFailed {
+            get {
+                return ResourceManager.GetString("DevMsg_ValidateFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trường {0} không được để trống.
+        /// </summary>
+        public static string Error_IsNotNullOrEmpty {
+            get {
+                return ResourceManager.GetString("Error_IsNotNullOrEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trường {0} không được lớn hơn ngày hiện tại.
+        /// </summary>
+        public static string ErrorDateBiggerCurrent {
+            get {
+                return ResourceManager.GetString("ErrorDateBiggerCurrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email không đúng định dạng.
+        /// </summary>
+        public static string ErrorEmail {
+            get {
+                return ResourceManager.GetString("ErrorEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trường {0} không đúng định dạng.
+        /// </summary>
+        public static string ErrorPhoneNumber {
+            get {
+                return ResourceManager.GetString("ErrorPhoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.google.com.vn/?hl=vi.
+        /// </summary>
+        public static string MoreInfo {
+            get {
+                return ResourceManager.GetString("MoreInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} dữ liệu không thành công.
+        /// </summary>
+        public static string UserMsg_ActionFailed {
+            get {
+                return ResourceManager.GetString("UserMsg_ActionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} đã tồn tại trong hệ thống.
+        /// </summary>
+        public static string UserMsg_DuplicateCode {
+            get {
+                return ResourceManager.GetString("UserMsg_DuplicateCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Có lỗi xảy ra vui lòng liên hệ với MISA!.
+        /// </summary>
+        public static string UserMsg_Exception {
+            get {
+                return ResourceManager.GetString("UserMsg_Exception", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dữ liệu đầu vào không hợp lệ.
+        /// </summary>
+        public static string UserMsg_ValidateFailed {
+            get {
+                return ResourceManager.GetString("UserMsg_ValidateFailed", resourceCulture);
             }
         }
     }

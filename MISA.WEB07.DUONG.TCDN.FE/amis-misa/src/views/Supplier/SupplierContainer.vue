@@ -221,6 +221,7 @@
                 <SupplierGrid
                     :dataReady="dataReady"
                     :data="data"
+                    :columns="columns"
                     :totalCount="totalCount"
                     :currentPage="currentPage"
                     :currentRecord="currentRecord"
@@ -272,7 +273,10 @@
 
     <BaseModalSetting
         v-if="isShowModalSetting"
+        :propDatas="JSON.stringify(columns)"
+        :propDatasDefault="JSON.stringify(columns_default)"
         :onClose="onHandleHideSettingPage"
+        @onSaveTemplate="onSaveTemplate"
     />
 </template>
 <script>
@@ -280,6 +284,7 @@ import { API_RESOURCE } from "./constants/api";
 import { SUPPLIER_TEXT_CONFIG } from "@/views/Supplier/constants/resource";
 import { TYPE_CLOSE } from "@/views/Supplier/constants/type-close";
 import { common } from "@/libs/common/common";
+import template_default from "@/views/Supplier/constants/template_default.json";
 import api from "@/services/api";
 import SupplierGrid from "./components/SupplierGrid.vue";
 import SupplierForm from "./components/SupplierForm.vue";
@@ -306,6 +311,10 @@ export default {
 
     data() {
         return {
+            columns: Array,
+
+            columns_default: Array,
+
             dataReady: Boolean,
 
             totalCount: Number,
@@ -580,7 +589,7 @@ export default {
                                     },
                                 ],
                                 enterKeyFunc: this.onSaveSupplier,
-                                escKeyFunc: this.onHandleHidePopup
+                                escKeyFunc: this.onHandleHidePopup,
                             },
 
                             noticeMessage:
@@ -665,7 +674,7 @@ export default {
                         ],
                         enterKeyFunc: this.onHandleDelete,
                         valueEnterKeyFunc: value.account_object_id,
-                        escKeyFunc: this.onHandleHidePopup
+                        escKeyFunc: this.onHandleHidePopup,
                     },
 
                     noticeMessage: `Bạn có thực sự muốn xóa nhân viên <${value.account_object_code}> không?`,
@@ -905,39 +914,24 @@ export default {
 
         async exportData() {
             try {
+                var columnsExport = this.columns
+                    .filter((item) => {
+                        return item.isShow;
+                    })
+                    .map((item) => {
+                        return {
+                            caption: item.fieldName,
+                            key: item.dataField,
+                            width: item.width,
+                        };
+                    });
+                columnsExport.unshift({
+                    caption: "STT",
+                    key: "stt",
+                    width: 155,
+                });
                 var bodyExport = {
-                    columns: [
-                        {
-                            caption: "STT",
-                            key: "stt",
-                            width: 155,
-                        },
-                        {
-                            caption: "Mã nhà cung cấp",
-                            key: "account_object_code",
-                            width: 155,
-                        },
-                        {
-                            caption: "Tên nhà cung cấp",
-                            key: "account_object_name",
-                            width: 155,
-                        },
-                        {
-                            caption: "Địa chỉ",
-                            key: "address",
-                            width: 155,
-                        },
-                        {
-                            caption: "Ngày cấp",
-                            key: "identity_date",
-                            width: 155,
-                        },
-                        {
-                            caption: "Số nợ tối đa",
-                            key: "maximum_debt_amount",
-                            width: 155,
-                        },
-                    ],
+                    columns: columnsExport,
                     reportTitle: "DANH SÁCH NHÀ CUNG CẤP",
                     fileNameDownload: "Danh_sach_nha_cung_cap",
                     keyword: this.keyWord,
@@ -961,11 +955,41 @@ export default {
         },
 
         onHandleShowSettingPage() {
-            this.isShowModalSetting = true;
+            try {
+                this.isShowModalSetting = true;
+            } catch (error) {
+                console.log(error);
+            }
         },
 
         onHandleHideSettingPage() {
             this.isShowModalSetting = false;
+        },
+
+        onLoadTemplate() {
+            try {
+                if (localStorage.getItem("supplier_template") === null) {
+                    this.columns = template_default;
+                } else
+                    this.columns = JSON.parse(
+                        localStorage.getItem("supplier_template")
+                    );
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        onSaveTemplate(value) {
+            try {
+                this.columns = value;
+                this.isShowModalSetting = false;
+                localStorage.setItem(
+                    "supplier_template",
+                    JSON.stringify(value)
+                );
+            } catch (error) {
+                console.log(error);
+            }
         },
     },
 
@@ -978,6 +1002,8 @@ export default {
         this.currentPage = 1;
         this.totalCount = 0;
         this.isShowModalSetting = false;
+        this.onLoadTemplate();
+        this.columns_default = template_default;
         this.getSuppliers(this.currentRecord, this.currentPage);
     },
 };

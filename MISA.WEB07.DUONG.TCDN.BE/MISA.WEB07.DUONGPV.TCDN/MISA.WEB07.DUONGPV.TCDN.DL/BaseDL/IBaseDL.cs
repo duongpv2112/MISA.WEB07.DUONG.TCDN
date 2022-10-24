@@ -40,5 +40,6 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
         /// <returns>Danh sách bản ghi được export</returns>
         /// Created by: DUONGPV (04/10/2022)
         public Task<List<T>> ExportData(string? keyword = "", int? filter = null, string? orderBy = "");
+
     }
 }
