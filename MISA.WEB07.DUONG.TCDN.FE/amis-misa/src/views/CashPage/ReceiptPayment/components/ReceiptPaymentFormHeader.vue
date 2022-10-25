@@ -7,7 +7,8 @@
                 :value="stringTypeVoucher"
                 :listData="listDataCombobox"
                 :isHideLable="true"
-                :isBottom="true"    
+                :isBottom="true"   
+                :isReadOnly="isViewDetail" 
             />
         </div>
     </BaseModalHeader>

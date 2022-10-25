@@ -1,5 +1,6 @@
 ﻿
 using MISA.WEB07.DUONGPV.TCDN.Common.Attributes;
+using MISA.WEB07.DUONGPV.TCDN.Common.Exceptions;
 using MISA.WEB07.DUONGPV.TCDN.Common.Resources;
 using System.Text.RegularExpressions;
 
@@ -10,13 +11,13 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL.Utilities
         public static void Validate(T entity)
         {
             List<string> errors = new List<string>();
-            var properties = entity.GetType().GetProperties();
+            var properties = entity?.GetType().GetProperties();
             foreach (var property in properties)
             {
                 var propertyRequired = (IsNotNullOrEmptyAttribute?)Attribute.GetCustomAttribute(property, typeof(IsNotNullOrEmptyAttribute));
                 var propertyEmail = property.GetCustomAttributes(typeof(MISAEmailAttribute), true);
                 var propertyDateBigger = property.GetCustomAttributes(typeof(DateBiggerCurrentAttribute), true);
-                var propertyPhone = (IsNotNullOrEmptyAttribute?)Attribute.GetCustomAttribute(property, typeof(IsNotNullOrEmptyAttribute));
+                var propertyPhone = property.GetCustomAttributes(typeof(MISAPhoneAttribute), true);
                 if (propertyRequired != null && string.IsNullOrEmpty(property.GetValue(entity)?.ToString()))
                 {
                     errors.Add(propertyRequired.ErrorMessage);
@@ -48,14 +49,25 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL.Utilities
                         }
                     }
                 }
-                if (propertyRequired != null && string.IsNullOrEmpty(property.GetValue(entity)?.ToString()))
+                if (propertyPhone.Count() > 0)
                 {
-                    errors.Add(propertyRequired.ErrorMessage);
+                    if (property.PropertyType == typeof(string))
+                    {
+                        string? propertyValue = (string?)property.GetValue(entity);
+                        if (propertyValue != null && propertyValue != "")
+                        {
+                            string regexPhone = @"\(?\d{3}\)?-? *\d{3}-? *-?\d{4}";
+                            Regex phone = new Regex(regexPhone);
+                            if (propertyValue != null && !phone.IsMatch(propertyValue))
+                                errors.Add(string.Format(Resource.ErrorPhoneNumber, property.Name));
+
+                        }
+                    }
                 }
             }
             if (errors.Count > 0)
             {
-                //throw new MISAException(errors);
+                throw new MISAException(errors);
             }
         }
 

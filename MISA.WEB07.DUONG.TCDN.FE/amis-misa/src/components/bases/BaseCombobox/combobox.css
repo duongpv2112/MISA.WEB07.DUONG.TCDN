@@ -98,6 +98,13 @@
     z-index: 9;
 }
 
+.combobox .combobox-data.absolute-bottom-right {
+    top: calc(100% + 15%);
+    right: 25px;
+    animation: growUp linear 0.2s;
+    z-index: 9;
+}
+
 .combobox .combobox-table {
     width: 100%;
     border-collapse: collapse;

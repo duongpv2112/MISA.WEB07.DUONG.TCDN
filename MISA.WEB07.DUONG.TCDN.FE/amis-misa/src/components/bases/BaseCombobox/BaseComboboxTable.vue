@@ -25,9 +25,7 @@
                     :ref="propValue"
                     @input="onHandleChangeInputData"
                     @keydown="selecItemUpDown"
-                    @blur="
-                        (this.borderFocus = false)
-                    "
+                    @blur="this.borderFocus = false"
                     @focus="this.borderFocus = true"
                 />
             </div>
@@ -79,7 +77,7 @@
                         </th>
                     </tr>
                 </thead>
-                <BaseLoading v-if="isLoading" />
+                <BaseLoading v-if="isLoading" :className="['top-32']" />
                 <tbody v-if="!isLoading">
                     <tr
                         v-for="(data, index) in dataCombobox"
@@ -139,6 +137,7 @@ export default {
         isHideIconPlus: Boolean,
         isAbsoluteLayer: Boolean,
         isAbsoluteFull: Boolean,
+        isAbsoluteBottomRight: Boolean,
         classListData: Array,
     },
     emits: ["setValue", "setValidateData"],
@@ -206,6 +205,7 @@ export default {
                     this.isLoading = false;
                 } else {
                     this.dataCombobox = this.listData;
+                    this.isLoading = false;
                 }
             } catch (error) {
                 console.log(error);
@@ -250,16 +250,30 @@ export default {
          */
         btnSelectDataOnClick() {
             if (!this.isAbsoluteLayer) {
-                this.styleListData = {
-                    top: `${
-                        event.target.parentElement.offsetParent.offsetTop +
-                        event.target.parentElement.offsetParent.offsetHeight +
-                        5
-                    }px`,
-                    left: `${event.target.parentElement.offsetParent.offsetLeft}px`,
-                    "max-width": "382px",
-                    "z-index": "999999",
-                };
+                if (!this.isAbsoluteBottomRight) {
+                    this.styleListData = {
+                        top: `${
+                            event.target.parentElement.offsetParent.offsetTop +
+                            event.target.parentElement.offsetParent
+                                .offsetHeight +
+                            5
+                        }px`,
+                        left: `${event.target.parentElement.offsetParent.offsetLeft}px`,
+                        "max-width": "382px",
+                        "z-index": "999999",
+                    };
+                } else {
+                    this.styleListData = {
+                        top: `${
+                            event.target.parentElement.offsetParent.offsetTop +
+                            event.target.parentElement.offsetParent
+                                .offsetHeight +
+                            5
+                        }px`,
+                        "max-width": "382px",
+                        "z-index": "999999",
+                    };
+                }
 
                 if (this.isAbsoluteFull) {
                     this.styleListData = {
@@ -309,7 +323,7 @@ export default {
                     this.propValue
                 );
             }
-            this.onHandleSearch(this.textInput)
+            this.onHandleSearch(this.textInput);
             if (this.dataCombobox.length == 0) {
                 this.getData(this.pageNumber);
             }
@@ -360,7 +374,7 @@ export default {
                 var keyCodePress = event.keyCode;
                 var elToFocus = null;
                 switch (keyCodePress) {
-                    case 9: 
+                    case 9:
                         this.isShowListData = false;
                         break;
                     case keyCode.ESC:

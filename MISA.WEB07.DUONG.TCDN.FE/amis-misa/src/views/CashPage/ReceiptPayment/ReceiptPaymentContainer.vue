@@ -10,6 +10,24 @@
                         <span class="icon square-24 icon-tour"></span>
                         <a href="#" class="guide-tour__link">Hướng dẫn</a>
                     </div>
+
+                    <div class="mr-12" v-if="false">
+                        <BaseButton
+                            :isIconText="true"
+                            :title="RESOURCE.RECEIPT_PAYMENT_UTILITIES_BTN"
+                            :className="[
+                                'button-text',
+                                'button-border',
+                                'button-radius-all',
+                                'button-icon-text-padding',
+                            ]"
+                            :classNameIcon="[
+                                'square-16',
+                                'icon-arrow-up--black',
+                            ]"
+                        />
+                    </div>
+
                     <div
                         class="d-flex"
                         :class="{
@@ -307,7 +325,7 @@
     >
         <template v-slot:header>
             <ReceiptPaymentFormHeader
-                :isViewDetail="true"
+                :isViewDetail="isViewDetail"
                 :listDataCombobox="listDataCombobox"
                 :stringTypeVoucher="valueTypeVoucher"
             />
@@ -322,6 +340,9 @@
                 :onSave="onSave"
                 :setValue="setValueRecieptPayment"
                 :setListValue="setValueRecieptPaymentDetail"
+                :isViewDetail="isViewDetail"
+                :onHandleEdit="setIsViewDetail"
+                :key="keyFormComponent"
             />
         </template>
     </BaseModal>
@@ -340,6 +361,8 @@
         :onClose="onHandleHideSettingPage"
         @onSaveTemplate="onSaveTemplate"
     />
+
+    <BaseLoading v-if="isLoading" :className="['bg-fade']" />
 </template>
 <script>
 import { RECEIPT_PAYMENT_TEXT_CONFIG } from "@/views/CashPage/ReceiptPayment/constants/resources";
@@ -356,6 +379,7 @@ import ReceiptPaymentFormHeader from "./components/ReceiptPaymentFormHeader.vue"
 import ReceiptPaymentForm from "./components/ReceiptPaymentForm.vue";
 import BasePopup from "@/components/bases/BasePopup/BasePopup.vue";
 import BaseModalSetting from "@/components/bases/BaseModalSetting/BaseModalSetting.vue";
+import BaseLoading from "@/components/bases/BaseLoading/BaseLoading.vue";
 
 export default {
     name: "ReceiptPaymentContainer",
@@ -369,6 +393,7 @@ export default {
         ReceiptPaymentForm,
         BasePopup,
         BaseModalSetting,
+        BaseLoading,
     },
 
     data() {
@@ -436,6 +461,10 @@ export default {
             fieldErrorFocus: null,
 
             isShowModalSetting: Boolean,
+
+            keyFormComponent: 0,
+
+            isLoading: false,
         };
     },
 
@@ -602,6 +631,8 @@ export default {
 
         async onEdit(value) {
             try {
+                this.isLoading = true;
+                this.isViewDetail = false;
                 if (value.is_receipt) {
                     let urlGetOne = `${API_RESOURCE.PAGING_DATA_RECEIPT_PAYMENT}/${value.receipt_payment_id}?typeRecord=0`;
 
@@ -625,6 +656,7 @@ export default {
                     await this.setValueModal(1);
                     this.typeVoucher = 1;
                 }
+                this.isLoading = false;
                 this.isShowModal = true;
             } catch (error) {
                 console.log(error);
@@ -701,7 +733,34 @@ export default {
 
         async onDetail(value) {
             try {
-                console.log(value);
+                this.isLoading = true;
+                if (value.is_receipt) {
+                    let urlGetOne = `${API_RESOURCE.PAGING_DATA_RECEIPT_PAYMENT}/${value.receipt_payment_id}?typeRecord=0`;
+
+                    await api.get(urlGetOne).then((data) => {
+                        this.receiptPayment = data.receiptPayment;
+                        this.receiptPaymentDetail = data.receiptPaymentDetails;
+                    });
+                    this.receiptPayment.is_edit = true;
+                    this.receiptPayment.is_add = false;
+                    await this.setValueModal(0);
+                    this.isViewDetail = true;
+                    this.typeVoucher = 0;
+                } else if (value.is_payment) {
+                    let urlGetOne = `${API_RESOURCE.PAGING_DATA_RECEIPT_PAYMENT}/${value.receipt_payment_id}?typeRecord=1`;
+
+                    await api.get(urlGetOne).then((data) => {
+                        this.receiptPayment = data.receiptPayment;
+                        this.receiptPaymentDetail = data.receiptPaymentDetails;
+                    });
+                    this.receiptPayment.is_edit = true;
+                    this.receiptPayment.is_add = false;
+                    await this.setValueModal(1);
+                    this.isViewDetail = true;
+                    this.typeVoucher = 1;
+                }
+                this.isLoading = false;
+                this.isShowModal = true;
             } catch (error) {
                 console.log(error);
             }
@@ -715,7 +774,7 @@ export default {
             }
         },
 
-        async onSave(type) {
+        async onSave(type, typeSave) {
             try {
                 this.receiptPaymentDetail.map((item) => {
                     if (typeof item.amount_money == "string") {
@@ -739,7 +798,6 @@ export default {
                         )
                         .then((data) => {
                             if (data) {
-                                this.isShowModal = false;
                                 this.onHandleReload();
                             }
                         });
@@ -752,10 +810,16 @@ export default {
                         )
                         .then((data) => {
                             if (data) {
-                                this.isShowModal = false;
                                 this.onHandleReload();
                             }
                         });
+                }
+
+                if (typeSave && typeSave == 1) {
+                    await this.onHandleShowModal(this.typeVoucher);
+                    this.keyFormComponent += 1;
+                } else {
+                    this.isShowModal = false;
                 }
             } catch (error) {
                 console.log(error);
@@ -764,6 +828,8 @@ export default {
 
         async onHandleShowModal(type) {
             try {
+                this.isLoading = true;
+                this.isViewDetail = false;
                 if (type == this.ENUM.TYPE_RECEIPT) {
                     this.receiptPayment = {
                         account_object_code: "",
@@ -833,9 +899,9 @@ export default {
                         },
                     ];
                 }
-
                 await this.setValueModal(type, true);
                 this.typeVoucher = type;
+                this.isLoading = false;
                 this.isShowModal = true;
             } catch (error) {
                 console.log(error);
@@ -843,439 +909,449 @@ export default {
         },
 
         async setValueModal(type, isNewCode) {
-            if (type == this.ENUM.TYPE_RECEIPT) {
-                this.listDataCombobox = [
-                    {
-                        type_voucher: 1,
-                        value_show:
-                            "1. Thu tiền khách hàng (không theo hóa đơn)",
-                    },
-                    {
-                        type_voucher: 2,
-                        value_show: "2. Thu hoàn ứng nhân viên",
-                    },
-                    {
-                        type_voucher: 3,
-                        value_show: "3. Rút tiền gửi về nhập quỹ",
-                    },
-                    {
-                        type_voucher: 4,
-                        value_show: "4. Thu khác",
-                    },
-                ];
-
-                this.valueTypeVoucher = "4. Thu khác";
-
-                this.columnsAccouting = [
-                    {
-                        fieldName: "Diễn giải",
-                        dataField: "reason",
-                        styleObject: {
-                            "min-width": "252px !important",
+            try {
+                if (type == this.ENUM.TYPE_RECEIPT) {
+                    this.listDataCombobox = [
+                        {
+                            type_voucher: 1,
+                            value_show:
+                                "1. Thu tiền khách hàng (không theo hóa đơn)",
                         },
-                        isHidden: false,
-                        dataInput: {
-                            isInput: true,
-                            isInputNumber: false,
+                        {
+                            type_voucher: 2,
+                            value_show: "2. Thu hoàn ứng nhân viên",
+                        },
+                        {
+                            type_voucher: 3,
+                            value_show: "3. Rút tiền gửi về nhập quỹ",
+                        },
+                        {
+                            type_voucher: 4,
+                            value_show: "4. Thu khác",
+                        },
+                    ];
+
+                    this.valueTypeVoucher = "4. Thu khác";
+
+                    this.columnsAccouting = [
+                        {
+                            fieldName: "Diễn giải",
                             dataField: "reason",
+                            styleObject: {
+                                "min-width": "252px !important",
+                            },
+                            isHidden: false,
+                            dataInput: {
+                                isInput: true,
+                                isInputNumber: false,
+                                dataField: "reason",
+                            },
+                            dataCombobox: {
+                                isCombobox: false,
+                            },
                         },
-                        dataCombobox: {
-                            isCombobox: false,
+                        {
+                            fieldName: "TK Nợ",
+                            dataField: "debt_account",
+                            styleObject: {
+                                "min-width": "127px !important",
+                            },
+                            isHidden: false,
+                            dataInput: {
+                                isInput: false,
+                                isInputNumber: false,
+                                dataField: "",
+                            },
+                            dataCombobox: {
+                                isCombobox: true,
+                                url: API_RESOURCE.PAGING_DATA_ACCOUNT,
+                                propValue: "debt_account",
+                                propText: "debt_account",
+                                dataField: "account_number",
+                                dataText: "account_number",
+                                placeholder: "Tài khoản nợ",
+                                classListData: [""],
+                                nameRows: [
+                                    {
+                                        fieldName: "Số tài khoản",
+                                        dataField: "account_number",
+                                    },
+                                    {
+                                        fieldName: "Tên tài khoản",
+                                        dataField: "account_name",
+                                    },
+                                ],
+                            },
                         },
-                    },
-                    {
-                        fieldName: "TK Nợ",
-                        dataField: "debt_account",
-                        styleObject: {
-                            "min-width": "127px !important",
+                        {
+                            fieldName: "TK Có",
+                            dataField: "credit_account",
+                            styleObject: {
+                                "min-width": "137px !important",
+                            },
+                            isHidden: false,
+                            dataInput: {
+                                isInput: false,
+                                isInputNumber: false,
+                                dataField: "",
+                            },
+                            dataCombobox: {
+                                isCombobox: true,
+                                url: API_RESOURCE.PAGING_DATA_ACCOUNT,
+                                propValue: "credit_account",
+                                propText: "credit_account",
+                                dataField: "account_number",
+                                dataText: "account_number",
+                                placeholder: "Tài khoản có",
+                                classListData: [""],
+                                nameRows: [
+                                    {
+                                        fieldName: "Số tài khoản",
+                                        dataField: "account_number",
+                                    },
+                                    {
+                                        fieldName: "Tên tài khoản",
+                                        dataField: "account_name",
+                                    },
+                                ],
+                            },
                         },
-                        isHidden: false,
-                        dataInput: {
-                            isInput: false,
-                            isInputNumber: false,
-                            dataField: "",
-                        },
-                        dataCombobox: {
-                            isCombobox: true,
-                            url: API_RESOURCE.PAGING_DATA_ACCOUNT,
-                            propValue: "debt_account",
-                            propText: "debt_account",
-                            dataField: "account_number",
-                            dataText: "account_number",
-                            classListData: [""],
-                            nameRows: [
-                                {
-                                    fieldName: "Số tài khoản",
-                                    dataField: "account_number",
-                                },
-                                {
-                                    fieldName: "Tên tài khoản",
-                                    dataField: "account_name",
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        fieldName: "TK Có",
-                        dataField: "credit_account",
-                        styleObject: {
-                            "min-width": "137px !important",
-                        },
-                        isHidden: false,
-                        dataInput: {
-                            isInput: false,
-                            isInputNumber: false,
-                            dataField: "",
-                        },
-                        dataCombobox: {
-                            isCombobox: true,
-                            url: API_RESOURCE.PAGING_DATA_ACCOUNT,
-                            propValue: "credit_account",
-                            propText: "credit_account",
-                            dataField: "account_number",
-                            dataText: "account_number",
-                            classListData: [""],
-                            nameRows: [
-                                {
-                                    fieldName: "Số tài khoản",
-                                    dataField: "account_number",
-                                },
-                                {
-                                    fieldName: "Tên tài khoản",
-                                    dataField: "account_name",
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        fieldName: "Số tiền",
-                        dataField: "amount_money",
-                        styleObject: {
-                            "min-width": "200px !important",
-                            "text-align": "right !important",
-                        },
-                        isHidden: false,
-                        dataInput: {
-                            isInput: true,
-                            isInputNumber: true,
+                        {
+                            fieldName: "Số tiền",
                             dataField: "amount_money",
+                            styleObject: {
+                                "min-width": "200px !important",
+                                "text-align": "right !important",
+                            },
+                            isHidden: false,
+                            dataInput: {
+                                isInput: true,
+                                isInputNumber: true,
+                                dataField: "amount_money",
+                            },
+                            dataCombobox: {
+                                isCombobox: false,
+                            },
                         },
-                        dataCombobox: {
-                            isCombobox: false,
-                        },
-                    },
-                    {
-                        fieldName: "Đối tượng",
-                        dataField: "account_object_code",
-                        styleObject: {
-                            "min-width": "150px !important",
-                        },
-                        isHidden: false,
-                        dataInput: {
-                            isInput: false,
-                            isInputNumber: false,
-                            dataField: "",
-                        },
-                        dataCombobox: {
-                            isCombobox: true,
-                            isComboboxFullWidth: true,
-                            url: API_RESOURCE.PAGING_DATA_ACCOUNT_OBJECT,
-                            propValue: "account_object_id",
-                            propText: "account_object_code",
-                            dataField: "account_object_id",
-                            dataText: "account_object_code",
-                            classListData: ["h-large-combobox-table"],
-                            nameRows: [
-                                {
-                                    fieldName: "Đối tượng",
-                                    dataField: "account_object_code",
-                                    styleObject: {
-                                        "min-width": "120px",
+                        {
+                            fieldName: "Đối tượng",
+                            dataField: "account_object_code",
+                            styleObject: {
+                                "min-width": "150px !important",
+                            },
+                            isHidden: false,
+                            dataInput: {
+                                isInput: false,
+                                isInputNumber: false,
+                                dataField: "",
+                            },
+                            dataCombobox: {
+                                isCombobox: true,
+                                isComboboxFullWidth: true,
+                                url: API_RESOURCE.PAGING_DATA_ACCOUNT_OBJECT,
+                                propValue: "account_object_id",
+                                propText: "account_object_code",
+                                dataField: "account_object_id",
+                                dataText: "account_object_code",
+                                placeholder: "Đối tượng",
+                                classListData: ["h-large-combobox-table"],
+                                nameRows: [
+                                    {
+                                        fieldName: "Đối tượng",
+                                        dataField: "account_object_code",
+                                        styleObject: {
+                                            "min-width": "120px",
+                                        },
                                     },
-                                },
-                                {
-                                    fieldName: "Tên đối tượng",
-                                    dataField: "account_object_name",
-                                    styleObject: {
-                                        "min-width": "280px",
+                                    {
+                                        fieldName: "Tên đối tượng",
+                                        dataField: "account_object_name",
+                                        styleObject: {
+                                            "min-width": "280px",
+                                        },
                                     },
-                                },
-                                {
-                                    fieldName: "Mã số thuế",
-                                    dataField: "tax_code",
-                                    styleObject: {
-                                        "min-width": "140px",
+                                    {
+                                        fieldName: "Mã số thuế",
+                                        dataField: "tax_code",
+                                        styleObject: {
+                                            "min-width": "140px",
+                                        },
                                     },
-                                },
-                                {
-                                    fieldName: "Địa chỉ",
-                                    dataField: "address",
-                                    styleObject: {
-                                        "min-width": "250px",
+                                    {
+                                        fieldName: "Địa chỉ",
+                                        dataField: "address",
+                                        styleObject: {
+                                            "min-width": "250px",
+                                        },
                                     },
-                                },
-                                {
-                                    fieldName: "Điện thoại",
-                                    dataField: "phone_number",
-                                    styleObject: {
-                                        "min-width": "100px",
+                                    {
+                                        fieldName: "Điện thoại",
+                                        dataField: "phone_number",
+                                        styleObject: {
+                                            "min-width": "100px",
+                                        },
                                     },
-                                },
-                            ],
+                                ],
+                            },
                         },
-                    },
-                    {
-                        fieldName: "Tên đối tượng",
-                        dataField: "account_object_name",
-                        styleObject: {
-                            "min-width": "251px !important",
+                        {
+                            fieldName: "Tên đối tượng",
+                            dataField: "account_object_name",
+                            styleObject: {
+                                "min-width": "251px !important",
+                            },
+                            isHidden: false,
+                            dataInput: {
+                                isInput: false,
+                                isInputNumber: false,
+                                dataField: "",
+                            },
+                            dataCombobox: {
+                                isCombobox: false,
+                            },
                         },
-                        isHidden: false,
-                        dataInput: {
-                            isInput: false,
-                            isInputNumber: false,
-                            dataField: "",
-                        },
-                        dataCombobox: {
-                            isCombobox: false,
-                        },
-                    },
-                ];
+                    ];
 
-                if (isNewCode) {
-                    await api
-                        .get(
-                            `${API_RESOURCE.RECEIPT_PAYMENT_GET_NEW_CODE}?typeRecord=` +
-                                this.ENUM.TYPE_RECEIPT
-                        )
-                        .then((data) => {
-                            this.receiptPayment.receipt_payment_number = data;
-                        });
-                }
+                    if (isNewCode) {
+                        await api
+                            .get(
+                                `${API_RESOURCE.RECEIPT_PAYMENT_GET_NEW_CODE}?typeRecord=` +
+                                    this.ENUM.TYPE_RECEIPT
+                            )
+                            .then((data) => {
+                                this.receiptPayment.receipt_payment_number =
+                                    data;
+                            });
+                    }
 
-                this.titleHeaderModal = `Phiếu thu ${this.receiptPayment.receipt_payment_number}`;
-            } else if (type == this.ENUM.TYPE_PAYMENT) {
-                this.listDataCombobox = [
-                    {
-                        type_voucher: 1,
-                        value_show:
-                            "1. Trả tiền nhà cung cấp(Không theo hóa đơn)",
-                    },
-                    {
-                        type_voucher: 2,
-                        value_show: "2. Tạm ứng cho nhân viên",
-                    },
-                    {
-                        type_voucher: 3,
-                        value_show: "3. Chi mua ngoài có hóa đơn",
-                    },
-                    {
-                        type_voucher: 4,
-                        value_show: "4. Trả lương nhân viên",
-                    },
-                    {
-                        type_voucher: 5,
-                        value_show: "5. Chuyển tiền cho chi nhánh khác",
-                    },
-                    {
-                        type_voucher: 6,
-                        value_show: "6. Gửi tiền vào ngân hàng",
-                    },
-                    {
-                        type_voucher: 7,
-                        value_show: "7. Chi khác",
-                    },
-                ];
-
-                this.valueTypeVoucher = "7. Chi khác";
-
-                this.columnsAccouting = [
-                    {
-                        fieldName: "Diễn giải",
-                        dataField: "reason",
-                        styleObject: {
-                            "min-width": "252px !important",
+                    this.titleHeaderModal = `Phiếu thu ${this.receiptPayment.receipt_payment_number}`;
+                } else if (type == this.ENUM.TYPE_PAYMENT) {
+                    this.listDataCombobox = [
+                        {
+                            type_voucher: 1,
+                            value_show:
+                                "1. Trả tiền nhà cung cấp(Không theo hóa đơn)",
                         },
-                        isHidden: false,
-                        dataInput: {
-                            isInput: true,
-                            isInputNumber: false,
+                        {
+                            type_voucher: 2,
+                            value_show: "2. Tạm ứng cho nhân viên",
+                        },
+                        {
+                            type_voucher: 3,
+                            value_show: "3. Chi mua ngoài có hóa đơn",
+                        },
+                        {
+                            type_voucher: 4,
+                            value_show: "4. Trả lương nhân viên",
+                        },
+                        {
+                            type_voucher: 5,
+                            value_show: "5. Chuyển tiền cho chi nhánh khác",
+                        },
+                        {
+                            type_voucher: 6,
+                            value_show: "6. Gửi tiền vào ngân hàng",
+                        },
+                        {
+                            type_voucher: 7,
+                            value_show: "7. Chi khác",
+                        },
+                    ];
+
+                    this.valueTypeVoucher = "7. Chi khác";
+
+                    this.columnsAccouting = [
+                        {
+                            fieldName: "Diễn giải",
                             dataField: "reason",
+                            styleObject: {
+                                "min-width": "252px !important",
+                            },
+                            isHidden: false,
+                            dataInput: {
+                                isInput: true,
+                                isInputNumber: false,
+                                dataField: "reason",
+                            },
+                            dataCombobox: {
+                                isCombobox: false,
+                            },
                         },
-                        dataCombobox: {
-                            isCombobox: false,
+                        {
+                            fieldName: "TK Nợ",
+                            dataField: "debt_account",
+                            styleObject: {
+                                "min-width": "127px !important",
+                            },
+                            isHidden: false,
+                            dataInput: {
+                                isInput: false,
+                                isInputNumber: false,
+                                dataField: "",
+                            },
+                            dataCombobox: {
+                                isCombobox: true,
+                                url: API_RESOURCE.PAGING_DATA_ACCOUNT,
+                                propValue: "debt_account",
+                                propText: "debt_account",
+                                dataField: "account_number",
+                                dataText: "account_number",
+                                classListData: [""],
+                                nameRows: [
+                                    {
+                                        fieldName: "Số tài khoản",
+                                        dataField: "account_number",
+                                    },
+                                    {
+                                        fieldName: "Tên tài khoản",
+                                        dataField: "account_name",
+                                    },
+                                ],
+                            },
                         },
-                    },
-                    {
-                        fieldName: "TK Nợ",
-                        dataField: "debt_account",
-                        styleObject: {
-                            "min-width": "127px !important",
+                        {
+                            fieldName: "TK Có",
+                            dataField: "credit_account",
+                            styleObject: {
+                                "min-width": "137px !important",
+                            },
+                            isHidden: false,
+                            dataInput: {
+                                isInput: false,
+                                isInputNumber: false,
+                                dataField: "",
+                            },
+                            dataCombobox: {
+                                isCombobox: true,
+                                url: API_RESOURCE.PAGING_DATA_ACCOUNT,
+                                propValue: "credit_account",
+                                propText: "credit_account",
+                                dataField: "account_number",
+                                dataText: "account_number",
+                                classListData: [""],
+                                nameRows: [
+                                    {
+                                        fieldName: "Số tài khoản",
+                                        dataField: "account_number",
+                                    },
+                                    {
+                                        fieldName: "Tên tài khoản",
+                                        dataField: "account_name",
+                                    },
+                                ],
+                            },
                         },
-                        isHidden: false,
-                        dataInput: {
-                            isInput: false,
-                            isInputNumber: false,
-                            dataField: "",
-                        },
-                        dataCombobox: {
-                            isCombobox: true,
-                            url: API_RESOURCE.PAGING_DATA_ACCOUNT,
-                            propValue: "debt_account",
-                            propText: "debt_account",
-                            dataField: "account_number",
-                            dataText: "account_number",
-                            classListData: [""],
-                            nameRows: [
-                                {
-                                    fieldName: "Số tài khoản",
-                                    dataField: "account_number",
-                                },
-                                {
-                                    fieldName: "Tên tài khoản",
-                                    dataField: "account_name",
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        fieldName: "TK Có",
-                        dataField: "credit_account",
-                        styleObject: {
-                            "min-width": "137px !important",
-                        },
-                        isHidden: false,
-                        dataInput: {
-                            isInput: false,
-                            isInputNumber: false,
-                            dataField: "",
-                        },
-                        dataCombobox: {
-                            isCombobox: true,
-                            url: API_RESOURCE.PAGING_DATA_ACCOUNT,
-                            propValue: "credit_account",
-                            propText: "credit_account",
-                            dataField: "account_number",
-                            dataText: "account_number",
-                            classListData: [""],
-                            nameRows: [
-                                {
-                                    fieldName: "Số tài khoản",
-                                    dataField: "account_number",
-                                },
-                                {
-                                    fieldName: "Tên tài khoản",
-                                    dataField: "account_name",
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        fieldName: "Số tiền",
-                        dataField: "amount_money",
-                        styleObject: {
-                            "min-width": "200px !important",
-                            "text-align": "right !important",
-                        },
-                        isHidden: false,
-                        dataInput: {
-                            isInput: true,
-                            isInputNumber: true,
+                        {
+                            fieldName: "Số tiền",
                             dataField: "amount_money",
+                            styleObject: {
+                                "min-width": "200px !important",
+                                "text-align": "right !important",
+                            },
+                            isHidden: false,
+                            dataInput: {
+                                isInput: true,
+                                isInputNumber: true,
+                                dataField: "amount_money",
+                            },
+                            dataCombobox: {
+                                isCombobox: false,
+                            },
                         },
-                        dataCombobox: {
-                            isCombobox: false,
-                        },
-                    },
-                    {
-                        fieldName: "Đối tượng",
-                        dataField: "account_object_code",
-                        styleObject: {
-                            "min-width": "150px !important",
-                        },
-                        isHidden: false,
-                        dataInput: {
-                            isInput: false,
-                            isInputNumber: false,
-                            dataField: "",
-                        },
-                        dataCombobox: {
-                            isCombobox: true,
-                            isComboboxFullWidth: true,
-                            url: API_RESOURCE.PAGING_DATA_ACCOUNT_OBJECT,
-                            propValue: "account_object_id",
-                            propText: "account_object_code",
-                            dataField: "account_object_id",
-                            dataText: "account_object_code",
-                            classListData: ["h-large-combobox-table"],
-                            nameRows: [
-                                {
-                                    fieldName: "Đối tượng",
-                                    dataField: "account_object_code",
-                                    styleObject: {
-                                        "min-width": "120px",
+                        {
+                            fieldName: "Đối tượng",
+                            dataField: "account_object_code",
+                            styleObject: {
+                                "min-width": "150px !important",
+                            },
+                            isHidden: false,
+                            dataInput: {
+                                isInput: false,
+                                isInputNumber: false,
+                                dataField: "",
+                            },
+                            dataCombobox: {
+                                isCombobox: true,
+                                isComboboxFullWidth: true,
+                                url: API_RESOURCE.PAGING_DATA_ACCOUNT_OBJECT,
+                                propValue: "account_object_id",
+                                propText: "account_object_code",
+                                dataField: "account_object_id",
+                                dataText: "account_object_code",
+                                classListData: ["h-large-combobox-table"],
+                                nameRows: [
+                                    {
+                                        fieldName: "Đối tượng",
+                                        dataField: "account_object_code",
+                                        styleObject: {
+                                            "min-width": "120px",
+                                        },
                                     },
-                                },
-                                {
-                                    fieldName: "Tên đối tượng",
-                                    dataField: "account_object_name",
-                                    styleObject: {
-                                        "min-width": "280px",
+                                    {
+                                        fieldName: "Tên đối tượng",
+                                        dataField: "account_object_name",
+                                        styleObject: {
+                                            "min-width": "280px",
+                                        },
                                     },
-                                },
-                                {
-                                    fieldName: "Mã số thuế",
-                                    dataField: "tax_code",
-                                    styleObject: {
-                                        "min-width": "140px",
+                                    {
+                                        fieldName: "Mã số thuế",
+                                        dataField: "tax_code",
+                                        styleObject: {
+                                            "min-width": "140px",
+                                        },
                                     },
-                                },
-                                {
-                                    fieldName: "Địa chỉ",
-                                    dataField: "address",
-                                    styleObject: {
-                                        "min-width": "250px",
+                                    {
+                                        fieldName: "Địa chỉ",
+                                        dataField: "address",
+                                        styleObject: {
+                                            "min-width": "250px",
+                                        },
                                     },
-                                },
-                                {
-                                    fieldName: "Điện thoại",
-                                    dataField: "phone_number",
-                                    styleObject: {
-                                        "min-width": "100px",
+                                    {
+                                        fieldName: "Điện thoại",
+                                        dataField: "phone_number",
+                                        styleObject: {
+                                            "min-width": "100px",
+                                        },
                                     },
-                                },
-                            ],
+                                ],
+                            },
                         },
-                    },
-                    {
-                        fieldName: "Tên đối tượng",
-                        dataField: "account_object_name",
-                        styleObject: {
-                            "min-width": "251px !important",
+                        {
+                            fieldName: "Tên đối tượng",
+                            dataField: "account_object_name",
+                            styleObject: {
+                                "min-width": "251px !important",
+                            },
+                            isHidden: false,
+                            dataInput: {
+                                isInput: false,
+                                isInputNumber: false,
+                                dataField: "",
+                            },
+                            dataCombobox: {
+                                isCombobox: false,
+                            },
                         },
-                        isHidden: false,
-                        dataInput: {
-                            isInput: false,
-                            isInputNumber: false,
-                            dataField: "",
-                        },
-                        dataCombobox: {
-                            isCombobox: false,
-                        },
-                    },
-                ];
+                    ];
 
-                if (isNewCode) {
-                    await api
-                        .get(
-                            `${API_RESOURCE.RECEIPT_PAYMENT_GET_NEW_CODE}?typeRecord=` +
-                                this.ENUM.TYPE_PAYMENT
-                        )
-                        .then((data) => {
-                            this.receiptPayment.receipt_payment_number = data;
-                        });
+                    if (isNewCode) {
+                        await api
+                            .get(
+                                `${API_RESOURCE.RECEIPT_PAYMENT_GET_NEW_CODE}?typeRecord=` +
+                                    this.ENUM.TYPE_PAYMENT
+                            )
+                            .then((data) => {
+                                this.receiptPayment.receipt_payment_number =
+                                    data;
+                            });
+                    }
+                    this.titleHeaderModal = `Phiếu chi ${this.receiptPayment.receipt_payment_number}`;
                 }
-                this.titleHeaderModal = `Phiếu chi ${this.receiptPayment.receipt_payment_number}`;
+                this.renderAccountings();
+            } catch (error) {
+                console.log(error);
             }
         },
 
@@ -1332,6 +1408,7 @@ export default {
                 } else if (typeof valueField != "object") {
                     this.receiptPayment[dataField] = valueField;
                 }
+                this.renderAccountings();
             } catch (error) {
                 console.log(error);
             }
@@ -1439,6 +1516,41 @@ export default {
                 console.log(error);
             }
         },
+
+        renderAccountings() {
+            try {
+                this.receiptPaymentDetail = this.receiptPaymentDetail.map(
+                    (item) => {
+                        return {
+                            reason: item.reason,
+                            debt_account: item.debt_account,
+                            credit_account: item.credit_account,
+                            amount_money: common.formatDecimalCurrency(
+                                item.amount_money
+                            ),
+                            account_object_id: item.account_object_id,
+                            account_object_code: item.account_object_code,
+                            account_object_name: item.account_object_name,
+                            receipt_payment_id: item.receipt_payment_id,
+                            created_date: item.created_date,
+                            created_by: item.created_by,
+                            modified_date: item.modified_date,
+                            modified_by: item.modified_by,
+                        };
+                    }
+                );
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        setIsViewDetail(value) {
+            try {
+                this.isViewDetail = value;
+            } catch (error) {
+                console.log(error);
+            }
+        },
     },
 
     created() {
@@ -1451,6 +1563,7 @@ export default {
         this.isShowModalSetting = false;
         this.onLoadTemplate();
         this.columns_default = template_default;
+        this.isViewDetail = false;
         this.getReceiptPayments(this.currentRecord, this.currentPage);
     },
 };

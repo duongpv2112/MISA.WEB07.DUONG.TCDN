@@ -264,6 +264,9 @@
     cursor: pointer;
 }
 
+.grid-input-control .grid-input-upload input[type="file"]:read-only {
+}
+
 .grid-input-control .grid-input-upload span {
     min-width: 264px;
     display: block;
@@ -307,6 +310,10 @@
     position: unset !important;
 }
 
+.grid-data tr.bg-selected {
+    background: rgb(229, 243, 255) !important;
+}
+
 .grid-data .combobox .combobox-table td {
     height: 32px;
     max-height: 32px;
@@ -320,4 +327,9 @@
 .grid-data .combobox .combobox-table td:first-child,
 .grid-data .combobox .combobox-table td:last-child {
     background-color: unset !important;
+}
+
+.grid-data tr.bg-selected td:first-child,
+.grid-data tr.bg-selected td:last-child {
+    background: rgb(229, 243, 255) !important;
 }

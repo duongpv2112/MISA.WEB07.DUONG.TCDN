@@ -96,13 +96,13 @@
     [AttributeUsage(AttributeTargets.Property)]
     public class MISAPhoneAttribute : Attribute
     {
-        public string PropertyName;
+        public string Message;
 
-        public MISAPhoneAttribute(string propertyName)
+        public MISAPhoneAttribute(string errorMessage)
         {
-            PropertyName = propertyName;
+            Message = errorMessage;
         }
 
-        public string Name { get { return PropertyName; } }
+        public string ErrorMessage { get { return Message; } }
     }
 }

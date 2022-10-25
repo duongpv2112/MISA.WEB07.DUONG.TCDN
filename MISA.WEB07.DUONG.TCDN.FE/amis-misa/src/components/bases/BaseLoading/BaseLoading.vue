@@ -1,20 +1,31 @@
 <template>
-    <div class="d-flex flex-center loading">
+    <div class="d-flex flex-center loading" :class="className">
         <span class="loading-icon"></span>
     </div>
 </template>
 <script>
 export default {
     name: "BaseLoading",
+    props: {
+        className: Array
+    }
 };
 </script>
 <style scoped>
 .loading {
     position: absolute;
-    top: 32px;
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
+    z-index: 99999;
+}
+.loading.top-32 {
+    top: 32px;
+}
+
+.loading.bg-fade {
+    background-color: rgba(159, 159, 159, 0.4);
 }
 
 .loading .loading-icon {

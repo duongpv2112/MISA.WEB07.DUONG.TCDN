@@ -54,13 +54,13 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// Số điện thoại
         /// </summary>
-        [MISAPhone("Số điện thoại di động")]
+        [MISAPhone("Số điện thoại di động không đúng định dạng")]
         public string? phone_number { get; set; }
 
         /// <summary>
         /// Số điện thoại cố định
         /// </summary>
-        [MISAPhone("Số điện thoại cố định")]
+        [MISAPhone("Số điện thoại cố định không đúng định dạng")]
         public string? telephone_number  { get; set; }
 
         /// <summary>
