@@ -252,7 +252,6 @@
                 :supplierConstraints="supplier_constraints"
                 :isViewDetail="isViewDetail"
                 :typeSupplier="typeSupplier"
-                :supplierValue="supplierData"
                 :onClose="onHandleHideModal"
                 :onSave="onSaveSupplier"
                 :onEdit="onEdit"
@@ -261,6 +260,8 @@
                 :setValidateData="setValidateData"
                 :setValue="setValue"
                 :setValueList="setValueList"
+                :isLoading="isLoadingForm"
+                :key="keyFormComponent"
             />
         </template>
     </BaseModal>
@@ -278,8 +279,10 @@
         :onClose="onHandleHideSettingPage"
         @onSaveTemplate="onSaveTemplate"
     />
+    <BaseLoading v-if="isLoading" :className="['bg-fade']" />
 </template>
 <script>
+import { useToast } from "vue-toastification";
 import { API_RESOURCE } from "./constants/api";
 import { SUPPLIER_TEXT_CONFIG } from "@/views/Supplier/constants/resource";
 import { TYPE_CLOSE } from "@/views/Supplier/constants/type-close";
@@ -294,9 +297,15 @@ import SupplierFormHeader from "./components/SupplierFormHeader.vue";
 import BasePopup from "@/components/bases/BasePopup/BasePopup.vue";
 import BaseTooltip from "@/components/bases/BaseTooltip/BaseTooltip.vue";
 import BaseModalSetting from "@/components/bases/BaseModalSetting/BaseModalSetting.vue";
+import BaseLoading from "@/components/bases/BaseLoading/BaseLoading.vue";
 
 export default {
     name: "SupplierContainer",
+
+    setup() {
+        const toast = useToast();
+        return { toast };
+    },
 
     components: {
         SupplierGrid,
@@ -307,6 +316,7 @@ export default {
         BasePopup,
         BaseTooltip,
         BaseModalSetting,
+        BaseLoading,
     },
 
     data() {
@@ -338,11 +348,6 @@ export default {
             isShowPopup: Boolean,
 
             typeSupplier: Number,
-
-            supplierData: {
-                accountObject: null,
-                supplierConstraints: null,
-            },
 
             popupData: null,
 
@@ -417,6 +422,12 @@ export default {
             fieldErrorFocus: null,
 
             isShowModalSetting: Boolean,
+
+            keyFormComponent: 0,
+
+            isLoading: false,
+
+            isLoadingForm: false,
         };
     },
 
@@ -503,18 +514,24 @@ export default {
 
         async onHandleShowModal() {
             try {
+                if (!this.isLoadingForm) {
+                    this.isLoading = true;
+                }
                 common.refreshObject(this.account_object);
-                this.account_object.account_object_id = "";
-                this.supplierData = null;
+                this.keyFormComponent += 1;
+                this.supplier_constraints = [];
                 this.typeSupplier = 0;
                 this.isViewDetail = false;
                 let urlGetNewCode = `${API_RESOURCE.SUPPLIER_GET_NEW_CODE}`;
                 await api.get(urlGetNewCode).then((data) => {
-                    this.account_object.account_object_code = data;
+                    this.account_object["account_object_code"] = data;
+                    this.account_object.isEdit = false;
+                    this.account_object.isAdd = true;
+                    this.keyFormComponent += 1;
+                    this.isLoading = false;
+                    this.isLoadingForm = false;
+                    this.isShowModal = true;
                 });
-                this.account_object.isEdit = false;
-                this.account_object.isAdd = true;
-                this.isShowModal = true;
             } catch (error) {
                 console.log(error);
             }
@@ -557,7 +574,7 @@ export default {
                 } else {
                     isChange = common.objCompare(
                         this.account_object,
-                        this.supplierData.accountObject
+                        this.supplier_constraints
                     );
                 }
 
@@ -634,13 +651,14 @@ export default {
 
         async onEdit(value) {
             try {
+                this.isLoading = true;
                 let urlGetOne = `${API_RESOURCE.PAGING_DATA_SUPPLIER}/${value.account_object_id}`;
 
                 await api.get(urlGetOne).then((data) => {
-                    this.supplierData = data;
                     this.account_object = data.accountObject;
                     this.supplier_constraints = data.supplierConstraints;
                     this.onChangTypeSupplier(data.accountObject.supplier_type);
+                    this.isLoading = false;
                 });
                 this.account_object.isEdit = true;
                 this.account_object.isAdd = false;
@@ -693,6 +711,7 @@ export default {
                 await api.delete(urlFilter).then((data) => {
                     if (data) {
                         this.onHandleReload();
+                        this.toast.success("Xóa bản ghi thành công!");
                     }
                 });
             } catch (error) {
@@ -702,11 +721,14 @@ export default {
 
         async onDetail(value) {
             try {
+                this.isLoading = true;
                 this.isViewDetail = true;
                 let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}/${value.account_object_id}`;
                 await api.get(urlFilter).then((data) => {
-                    this.supplierData = data;
+                    this.account_object = data.accountObject;
+                    this.supplier_constraints = data.supplierConstraints;
                     this.onChangTypeSupplier(data.accountObject.supplier_type);
+                    this.isLoading = false;
                 });
                 this.isShowModal = true;
             } catch (error) {
@@ -714,9 +736,28 @@ export default {
             }
         },
 
-        onReplication(value) {
+        async onReplication(value) {
             try {
-                console.log(value);
+                this.isLoading = true;
+                let urlGetNewCode = `${API_RESOURCE.SUPPLIER_GET_NEW_CODE}`;
+                let urlGetOne = `${API_RESOURCE.PAGING_DATA_SUPPLIER}/${value.account_object_id}`;
+
+                await api.get(urlGetOne).then((data) => {
+                    this.account_object = data.accountObject;
+                    this.supplier_constraints = data.supplierConstraints;
+                    this.onChangTypeSupplier(data.accountObject.supplier_type);
+                });
+                await api.get(urlGetNewCode).then((data) => {
+                    this.account_object["account_object_code"] = data;
+                    this.account_object.tax_code = null;
+                    this.account_object.isEdit = false;
+                    this.account_object.isAdd = true;
+                    this.keyFormComponent += 1;
+                    this.isLoading = false;
+                    this.isLoadingForm = false;
+                    this.isViewDetail = false;
+                    this.isShowModal = true;
+                });
             } catch (error) {
                 console.log(error);
             }
@@ -776,8 +817,8 @@ export default {
                         let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}/${this.account_object.account_object_id}`;
                         await api.put(urlFilter, bodyData).then((response) => {
                             if (response) {
-                                this.isShowModal = false;
                                 this.isShowPopup = false;
+                                this.toast.success("Sửa bản ghi thành công!");
                             }
                         });
                     } else if (this.account_object.isAdd) {
@@ -785,16 +826,19 @@ export default {
                         let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}`;
                         await api.post(urlFilter, bodyData).then((response) => {
                             if (response) {
-                                this.isShowModal = false;
                                 this.isShowPopup = false;
+                                this.toast.success("Thêm bản ghi thành công!");
                             }
                         });
                     }
                     if (type && type == 1) {
+                        this.isLoadingForm = true;
                         this.onHandleShowModal();
+                    } else {
+                        this.isShowModal = false;
                     }
+                    this.onHandleReload();
                 }
-                this.onHandleReload();
             } catch (error) {
                 console.log(error);
             }
@@ -946,7 +990,7 @@ export default {
                     )
                     .then((data) => {
                         if (data) {
-                            console.log("a");
+                            this.toast.success("Xuất dữ liệu thành công!");
                         }
                     });
             } catch (error) {

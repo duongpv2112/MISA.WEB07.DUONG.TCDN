@@ -3,6 +3,8 @@ import App from "./App.vue";
 import router from "./routers";
 import VCalendar from "v-calendar";
 import "v-calendar/dist/style.css";
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
 
 /* Sử dụng */
 const app = createApp(App);
@@ -53,6 +55,11 @@ app.directive("keyboardoutside", {
 app.use(VCalendar, {
     componentPrefix: "vc",
 });
+const options = {
+    timeout: 1500,
+};
+
+app.use(Toast, options);
 
 app.use(router);
 app.mount("#app");

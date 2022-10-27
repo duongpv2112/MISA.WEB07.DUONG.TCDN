@@ -342,6 +342,14 @@
                 :setListValue="setValueRecieptPaymentDetail"
                 :isViewDetail="isViewDetail"
                 :onHandleEdit="setIsViewDetail"
+                :setValidateReceiptPayment="setValidateReceiptPayment"
+                :setValidateReceiptPaymentDetail="
+                    setValidateReceiptPaymentDetail
+                "
+                :fieldFocus="fieldErrorReceiptPaymentFocus"
+                :fieldDetailFocus="fieldErrorReceiptPaymentDetailFocus"
+                :setPopupData="setPopupData"
+                :onHandleHidePopup="onHandleHidePopup"
                 :key="keyFormComponent"
             />
         </template>
@@ -365,8 +373,12 @@
     <BaseLoading v-if="isLoading" :className="['bg-fade']" />
 </template>
 <script>
+import { useToast } from "vue-toastification";
 import { RECEIPT_PAYMENT_TEXT_CONFIG } from "@/views/CashPage/ReceiptPayment/constants/resources";
-import { RECEIPT_PAYMENT_ENUM } from "@/views/CashPage/ReceiptPayment/constants/enums";
+import {
+    RECEIPT_PAYMENT_ENUM,
+    TYPE_CLOSE,
+} from "@/views/CashPage/ReceiptPayment/constants/enums";
 import { API_RESOURCE } from "@/views/CashPage/ReceiptPayment/constants/api";
 import { common } from "@/libs/common/common";
 import api from "@/services/api";
@@ -383,6 +395,11 @@ import BaseLoading from "@/components/bases/BaseLoading/BaseLoading.vue";
 
 export default {
     name: "ReceiptPaymentContainer",
+
+    setup() {
+        const toast = useToast();
+        return { toast };
+    },
 
     components: {
         BaseButton,
@@ -450,7 +467,7 @@ export default {
 
             columnsAccouting: Array,
 
-            receiptDetail: null,
+            receiptPaymentDetail: null,
 
             receiptPayment: null,
 
@@ -458,13 +475,40 @@ export default {
 
             isShowPopup: Boolean,
 
-            fieldErrorFocus: null,
+            fieldErrorReceiptPaymentFocus: null,
+            fieldErrorReceiptPaymentDetailFocus: null,
 
             isShowModalSetting: Boolean,
 
             keyFormComponent: 0,
 
             isLoading: false,
+
+            validateReceiptPayment: [],
+
+            validateReceiptPaymentDetail: [],
+
+            newObject: {
+                accounting_date: common.formatDate(new Date()),
+                receipt_payment_date: common.formatDate(new Date()),
+                receipt_payment_number: "",
+                account_object_id: "",
+                account_object_name: "",
+                account_object_contact_name: "",
+                address: "",
+                employee_id: "",
+                employee_name: "",
+                reason: "",
+                adding_number: 0,
+                total_money: 0,
+                created_date: "",
+                created_by: "",
+                modified_date: "",
+                modified_by: "",
+                account_object_code: "",
+                is_add: true,
+                is_edit: false,
+            },
         };
     },
 
@@ -704,17 +748,19 @@ export default {
                 if (value.is_receipt) {
                     let url = `${API_RESOURCE.PAGING_DATA_RECEIPT_PAYMENT}/${value.receipt_payment_id}?typeRecord=0`;
 
-                    await api.delete(url).then((data) => {
+                    await api.delete(url).then(async (data) => {
                         if (data) {
-                            this.onHandleReload();
+                            await this.onHandleReload();
+                            this.toast.success("Xóa bản ghi thành công!");
                         }
                     });
                 } else if (value.is_payment) {
                     let url = `${API_RESOURCE.PAGING_DATA_RECEIPT_PAYMENT}/${value.receipt_payment_id}?typeRecord=1`;
 
-                    await api.delete(url).then((data) => {
+                    await api.delete(url).then(async (data) => {
                         if (data) {
-                            this.onHandleReload();
+                            await this.onHandleReload();
+                            this.toast.success("Xóa bản ghi thành công!");
                         }
                     });
                 }
@@ -726,6 +772,27 @@ export default {
         onHandleHidePopup() {
             try {
                 this.isShowPopup = false;
+
+                var listValidateReceiptPayment =
+                    this.validateReceiptPayment.filter((e) => {
+                        return e.isInValid == true;
+                    });
+                var listValidateReceiptPaymentDetail =
+                    this.validateReceiptPaymentDetail.filter((e) => {
+                        return e.isInValid == true;
+                    });
+                if (listValidateReceiptPayment.length > 0) {
+                    this.setFieldReceiptPaymentErrorFocus(
+                        listValidateReceiptPayment[0].fieldName
+                    );
+                }
+
+                if (listValidateReceiptPaymentDetail.length > 0) {
+                    this.setFieldReceiptPaymentDetailErrorFocus(
+                        listValidateReceiptPaymentDetail[0].fieldName,
+                        listValidateReceiptPaymentDetail[0].rowIndex
+                    );
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -766,9 +833,35 @@ export default {
             }
         },
 
-        onReplication(value) {
+        async onReplication(value) {
             try {
-                console.log(value);
+                this.isViewDetail = false;
+                this.isLoading = true;
+                if (value.is_receipt) {
+                    let urlGetOne = `${API_RESOURCE.PAGING_DATA_RECEIPT_PAYMENT}/${value.receipt_payment_id}?typeRecord=0`;
+
+                    await api.get(urlGetOne).then((data) => {
+                        this.receiptPayment = data.receiptPayment;
+                        this.receiptPaymentDetail = data.receiptPaymentDetails;
+                    });
+                    this.receiptPayment.is_edit = false;
+                    this.receiptPayment.is_add = true;
+                    await this.setValueModal(0, true);
+                    this.typeVoucher = 0;
+                } else if (value.is_payment) {
+                    let urlGetOne = `${API_RESOURCE.PAGING_DATA_RECEIPT_PAYMENT}/${value.receipt_payment_id}?typeRecord=1`;
+
+                    await api.get(urlGetOne).then((data) => {
+                        this.receiptPayment = data.receiptPayment;
+                        this.receiptPaymentDetail = data.receiptPaymentDetails;
+                    });
+                    this.receiptPayment.is_edit = false;
+                    this.receiptPayment.is_add = true;
+                    await this.setValueModal(1, true);
+                    this.typeVoucher = 1;
+                }
+                this.isLoading = false;
+                this.isShowModal = true;
             } catch (error) {
                 console.log(error);
             }
@@ -776,50 +869,89 @@ export default {
 
         async onSave(type, typeSave) {
             try {
-                this.receiptPaymentDetail.map((item) => {
-                    if (typeof item.amount_money == "string") {
-                        item.amount_money = Number(
-                            item.amount_money.replace(/\D+/g, "")
-                        );
-                    }
-                    return item;
-                });
-                var bodyData = {
-                    receiptPayment: this.receiptPayment,
-                    receiptPaymentDetails: this.receiptPaymentDetail,
-                };
-                if (this.receiptPayment.is_add) {
-                    delete bodyData.receiptPayment.receipt_payment_id;
-                    await api
-                        .post(
-                            `${API_RESOURCE.PAGING_DATA_RECEIPT_PAYMENT}?typeRecord=` +
-                                type,
-                            bodyData
-                        )
-                        .then((data) => {
-                            if (data) {
-                                this.onHandleReload();
-                            }
-                        });
-                } else if (this.receiptPayment.is_edit) {
-                    await api
-                        .put(
-                            `${API_RESOURCE.PAGING_DATA_RECEIPT_PAYMENT}/${this.receiptPayment.receipt_payment_id}?typeRecord=` +
-                                type,
-                            bodyData
-                        )
-                        .then((data) => {
-                            if (data) {
-                                this.onHandleReload();
-                            }
-                        });
-                }
-
-                if (typeSave && typeSave == 1) {
-                    await this.onHandleShowModal(this.typeVoucher);
-                    this.keyFormComponent += 1;
+                this.setFieldReceiptPaymentErrorFocus(null);
+                this.setFieldReceiptPaymentDetailErrorFocus(null, null);
+                if (await this.checkValidateReceiptPayment()) {
+                    this.isShowPopup = true;
+                } else if (await this.checkValidateReceiptPaymentDetail()) {
+                    this.isShowPopup = true;
                 } else {
-                    this.isShowModal = false;
+                    this.receiptPaymentDetail.map((item) => {
+                        if (typeof item.amount_money == "string") {
+                            item.amount_money = Number(
+                                item.amount_money.replace(/\D+/g, "")
+                            );
+                        }
+                        return item;
+                    });
+                    var bodyData = {
+                        receiptPayment: this.receiptPayment,
+                        receiptPaymentDetails: this.receiptPaymentDetail,
+                    };
+                    if (this.receiptPayment.is_add) {
+                        delete bodyData.receiptPayment.receipt_payment_id;
+                        await api
+                            .post(
+                                `${API_RESOURCE.PAGING_DATA_RECEIPT_PAYMENT}?typeRecord=` +
+                                    type,
+                                bodyData
+                            )
+                            .then(async (data) => {
+                                if (data) {
+                                    this.toast.success(
+                                        "Thêm bản ghi thành công!"
+                                    );
+                                    this.onHandleReload();
+                                    if (typeSave && typeSave == 1) {
+                                        await this.onHandleShowModal(
+                                            this.typeVoucher
+                                        );
+                                        this.keyFormComponent += 1;
+                                    } else {
+                                        this.isShowModal = false;
+                                    }
+                                    this.isShowPopup = false;
+                                }
+                            });
+                    } else if (this.receiptPayment.is_edit) {
+                        if (bodyData.receiptPayment.account_object_id == null) {
+                            delete bodyData.receiptPayment.account_object_id;
+                        }
+                        if (bodyData.receiptPayment.employee_id == null) {
+                            delete bodyData.receiptPayment.employee_id;
+                        }
+                        bodyData.receiptPaymentDetails.forEach((item) => {
+                            if (
+                                item.account_object_id == null ||
+                                item.account_object_id == ""
+                            ) {
+                                delete item.account_object_id;
+                            }
+                        });
+                        await api
+                            .put(
+                                `${API_RESOURCE.PAGING_DATA_RECEIPT_PAYMENT}/${this.receiptPayment.receipt_payment_id}?typeRecord=` +
+                                    type,
+                                bodyData
+                            )
+                            .then(async (data) => {
+                                if (data) {
+                                    this.toast.success(
+                                        "Sửa bản ghi thành công!"
+                                    );
+                                    this.onHandleReload();
+                                    if (typeSave && typeSave == 1) {
+                                        await this.onHandleShowModal(
+                                            this.typeVoucher
+                                        );
+                                        this.keyFormComponent += 1;
+                                    } else {
+                                        this.isShowModal = false;
+                                    }
+                                    this.isShowPopup = false;
+                                }
+                            });
+                    }
                 }
             } catch (error) {
                 console.log(error);
@@ -1121,6 +1253,8 @@ export default {
                             .then((data) => {
                                 this.receiptPayment.receipt_payment_number =
                                     data;
+                                this.newObject.receipt_payment_number = data;
+                                this.newObject.reason = "Thu tiền của ";
                             });
                     }
 
@@ -1345,6 +1479,8 @@ export default {
                             .then((data) => {
                                 this.receiptPayment.receipt_payment_number =
                                     data;
+                                this.newObject.receipt_payment_number = data;
+                                this.newObject.reason = "Chi tiền cho ";
                             });
                     }
                     this.titleHeaderModal = `Phiếu chi ${this.receiptPayment.receipt_payment_number}`;
@@ -1355,9 +1491,61 @@ export default {
             }
         },
 
-        onHandleHideModal() {
+        onHandleHideModal(typeClose) {
             try {
-                this.isShowModal = false;
+                let isChange = false;
+                if (!this.receiptPayment.receipt_payment_id) {
+                    isChange = common.objCompare(
+                        this.receiptPayment,
+                        this.newObject
+                    );
+                } else {
+                    isChange = true;
+                }
+
+                if (typeClose == TYPE_CLOSE.TYPE_CLOSE_CHECK_CHANGE) {
+                    if (!isChange) {
+                        this.popupData = {
+                            typePopup: 0,
+                            footerPopup: {
+                                footerLeft: [
+                                    {
+                                        buttonName: "Hủy",
+                                        buttonAction: this.onHandleHidePopup,
+                                        classButton: "",
+                                        valueFunction: "",
+                                    },
+                                ],
+                                footerRight: [
+                                    {
+                                        buttonName: "Không",
+                                        buttonAction: this.onHandleHideModal,
+                                        classButton: "",
+                                        valueFunction: 1,
+                                    },
+                                    {
+                                        buttonName: "Có",
+                                        buttonAction: this.onSave,
+                                        classButton: ["btn-confirm"],
+                                        valueFunction: "",
+                                    },
+                                ],
+                                enterKeyFunc: this.onSave,
+                                escKeyFunc: this.onHandleHidePopup,
+                            },
+
+                            noticeMessage:
+                                "Dữ liệu đã bị thay đổi. Bạn có muốn cất không?",
+                        };
+                        this.isShowPopup = true;
+                    } else {
+                        this.isShowModal = false;
+                        this.isShowPopup = false;
+                    }
+                } else if (typeClose == TYPE_CLOSE.TYPE_CLOSE_DEFAULT) {
+                    this.isShowModal = false;
+                    this.isShowPopup = false;
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -1405,6 +1593,40 @@ export default {
                         valueField["account_object_id"];
                     this.receiptPayment.employee_name =
                         valueField["account_object_name"];
+                } else if (dataField == "accounting_date") {
+                    if (
+                        this.receiptPayment.accounting_date ==
+                        this.receiptPayment.receipt_payment_date
+                    ) {
+                        this.receiptPayment.accounting_date = valueField;
+                        this.receiptPayment.receipt_payment_date = valueField;
+                    } else {
+                        this.receiptPayment.accounting_date = valueField;
+                    }
+                    this.keyFormComponent += 1;
+                } else if (dataField == "receipt_payment_date") {
+                    if (
+                        this.receiptPayment.accounting_date >=
+                        this.receiptPayment.receipt_payment_date
+                    ) {
+                        this.setValidateReceiptPayment(
+                            true,
+                            "",
+                            "accounting_date"
+                        );
+                    }
+                    this.receiptPayment.receipt_payment_date = valueField;
+                    this.keyFormComponent += 1;
+                } else if (dataField == "reason") {
+                    for (let i = 0; i < this.receiptPaymentDetail.length; i++) {
+                        if (
+                            this.receiptPaymentDetail[i].reason ==
+                            this.receiptPayment.reason
+                        ) {
+                            this.receiptPaymentDetail[i].reason = valueField;
+                        }
+                    }
+                    this.receiptPayment.reason = valueField;
                 } else if (typeof valueField != "object") {
                     this.receiptPayment[dataField] = valueField;
                 }
@@ -1417,6 +1639,7 @@ export default {
         setValueRecieptPaymentDetail(value) {
             try {
                 this.receiptPaymentDetail = value;
+                this.renderAccountings();
             } catch (error) {
                 console.log(error);
             }
@@ -1521,6 +1744,11 @@ export default {
             try {
                 this.receiptPaymentDetail = this.receiptPaymentDetail.map(
                     (item) => {
+                        if (typeof item.amount_money == "string") {
+                            item.amount_money = Number(
+                                item.amount_money.replace(/\D+/g, "")
+                            );
+                        }
                         return {
                             reason: item.reason,
                             debt_account: item.debt_account,
@@ -1547,6 +1775,230 @@ export default {
         setIsViewDetail(value) {
             try {
                 this.isViewDetail = value;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        setValidateReceiptPayment(isError, errorMessage, dataField) {
+            try {
+                if (
+                    this.validateReceiptPayment != null &&
+                    this.validateReceiptPayment.length > 0
+                ) {
+                    var field = this.validateReceiptPayment.findIndex((e) => {
+                        return e.fieldName == dataField;
+                    });
+                    if (field != -1) {
+                        this.validateReceiptPayment[field].isInValid = isError;
+                        this.validateReceiptPayment[field].errorMessage =
+                            errorMessage;
+                    } else {
+                        this.validateReceiptPayment.push({
+                            isInValid: isError,
+                            fieldName: dataField,
+                            errorMessage: errorMessage,
+                        });
+                    }
+                } else {
+                    this.validateReceiptPayment.push({
+                        isInValid: isError,
+                        fieldName: dataField,
+                        errorMessage: errorMessage,
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        setValidateReceiptPaymentDetail(
+            isError,
+            errorMessage,
+            dataField,
+            rowIndex
+        ) {
+            try {
+                if (
+                    this.validateReceiptPaymentDetail != null &&
+                    this.validateReceiptPaymentDetail.length > 0
+                ) {
+                    var field = this.validateReceiptPaymentDetail.findIndex(
+                        (e) => {
+                            return (
+                                e.fieldName == dataField &&
+                                e.rowIndex == rowIndex
+                            );
+                        }
+                    );
+                    if (field != -1) {
+                        this.validateReceiptPaymentDetail[field].isInValid =
+                            isError;
+                        this.validateReceiptPaymentDetail[field].errorMessage =
+                            errorMessage;
+                        this.validateReceiptPaymentDetail[field].rowIndex =
+                            rowIndex;
+                    } else {
+                        this.validateReceiptPaymentDetail.push({
+                            isInValid: isError,
+                            fieldName: dataField,
+                            errorMessage: errorMessage,
+                            rowIndex: rowIndex,
+                        });
+                    }
+                } else {
+                    this.validateReceiptPaymentDetail.push({
+                        isInValid: isError,
+                        fieldName: dataField,
+                        errorMessage: errorMessage,
+                        rowIndex: rowIndex,
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async checkEmptyReceiptPayment() {
+            try {
+                if (
+                    this.receiptPayment.accounting_date <
+                    this.receiptPayment.receipt_payment_date
+                ) {
+                    await this.setValidateReceiptPayment(
+                        true,
+                        `Ngày hạch toán phải lớn hơn hoặc bằng Ngày chứng từ
+                        <${common.formatDateWithType(
+                            this.receiptPayment.receipt_payment_date,
+                            "DD/MM/YYYY"
+                        )}>. Xin vui lòng kiểm tra lại.`,
+                        "accounting_date"
+                    );
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async checkValidateReceiptPayment() {
+            try {
+                await this.checkEmptyReceiptPayment();
+                var listValidate = this.validateReceiptPayment.filter((e) => {
+                    return e.isInValid == true;
+                });
+                if (listValidate.length > 0) {
+                    var noticeMessage = listValidate[0].errorMessage;
+                    this.popupData = {
+                        typePopup: 1,
+                        footerPopup: {
+                            footerLeft: [
+                                {
+                                    buttonName: "Đồng ý",
+                                    buttonAction: this.onHandleHidePopup,
+                                    classButton: ["btn-confirm"],
+                                    valueFunction: "",
+                                },
+                            ],
+                            footerRight: [],
+                            enterKeyFunc: this.onHandleHidePopup,
+                            escKeyFunc: this.onHandleHidePopup,
+                        },
+                        noticeMessage: noticeMessage,
+                    };
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async checkValidateReceiptPaymentDetail() {
+            try {
+                if (this.receiptPaymentDetail.length == 0) {
+                    await this.setValidateReceiptPaymentDetail(
+                        true,
+                        "Bạn phải nhập chứng từ chi tiết",
+                        "debt_account",
+                        0
+                    );
+                } else {
+                    this.receiptPaymentDetail.forEach(async (item, index) => {
+                        if (item.debt_account == "") {
+                            await this.setValidateReceiptPaymentDetail(
+                                true,
+                                "Tài khoản nợ không được để trống!",
+                                "debt_account",
+                                index
+                            );
+                        }
+
+                        if (item.credit_account == "") {
+                            await this.setValidateReceiptPaymentDetail(
+                                true,
+                                "Tài khoản có không được để trống!",
+                                "credit_account",
+                                index
+                            );
+                        }
+                    });
+                }
+
+                var listValidate = this.validateReceiptPaymentDetail.filter(
+                    (e) => {
+                        return e.isInValid == true;
+                    }
+                );
+                if (listValidate.length > 0) {
+                    var noticeMessage = listValidate[0].errorMessage;
+                    this.popupData = {
+                        typePopup: 1,
+                        footerPopup: {
+                            footerLeft: [
+                                {
+                                    buttonName: "Đồng ý",
+                                    buttonAction: this.onHandleHidePopup,
+                                    classButton: ["btn-confirm"],
+                                    valueFunction: "",
+                                },
+                            ],
+                            footerRight: [],
+                            enterKeyFunc: this.onHandleHidePopup,
+                            escKeyFunc: this.onHandleHidePopup,
+                        },
+                        noticeMessage: noticeMessage,
+                    };
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        setFieldReceiptPaymentErrorFocus(fieldError) {
+            try {
+                this.fieldErrorReceiptPaymentFocus = fieldError;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        setFieldReceiptPaymentDetailErrorFocus(fieldError, rowIndex) {
+            try {
+                this.fieldErrorReceiptPaymentDetailFocus = {
+                    fieldError: fieldError,
+                    rowIndex: rowIndex,
+                };
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        setPopupData(popupData) {
+            try {
+                this.popupData = popupData;
+                this.isShowPopup = true;
             } catch (error) {
                 console.log(error);
             }

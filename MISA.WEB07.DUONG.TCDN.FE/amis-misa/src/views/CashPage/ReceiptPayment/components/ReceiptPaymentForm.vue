@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-keyboardoutside="eventHandleKey">
         <div class="modal__body p-relative">
             <div class="modal__body-top">
                 <div class="main-infomation">
@@ -73,7 +73,13 @@
                                         "
                                         :isReadOnly="isViewDetail"
                                         :isBottom="true"
+                                        :isFieldErrorFocus="
+                                            fieldFocus == 'account_object_id'
+                                        "
                                         @setValue="setDataAccountObject"
+                                        @setValidateData="
+                                            setValidateReceiptPayment
+                                        "
                                     />
                                 </div>
                                 <BaseInput
@@ -158,7 +164,7 @@
                                     :fieldName="RESOURCE.PAYMENT_REASON_FIELD"
                                     :key="keyComponent"
                                     :isReadonly="isViewDetail"
-                                    @setValue="setValue"
+                                    @setValue="setDataReason"
                                 />
                                 <div class="d-flex col-12">
                                     <div
@@ -240,6 +246,9 @@
                                             :isBottom="true"
                                             :isAbsoluteLayer="false"
                                             @setValue="setValue"
+                                            @setValidateData="
+                                                setValidateReceiptPayment
+                                            "
                                         />
                                     </div>
 
@@ -258,7 +267,7 @@
                                         "
                                         :key="keyComponent"
                                         :isReadonly="isViewDetail"
-                                        @setValue="setValue"
+                                        @setValue="setDataReason"
                                     />
 
                                     <BaseInput
@@ -300,14 +309,13 @@
                                     Ngày hạch toán
                                 </label>
                                 <vc-date-picker
-                                    v-model="receiptPaymentForm.accounting_date"
+                                    v-model="accounting_date"
                                     :popover="{
                                         visibility: 'focus',
                                     }"
                                     mode="date"
                                     :attributes="datepicker"
-                                    :key="keyComponent"
-                                    @dayclick="checkValidateDate"
+                                    @dayclick="checkDate('accounting_date')"
                                 >
                                     <template
                                         v-slot="{ inputValue, inputEvents }"
@@ -335,7 +343,13 @@
                                                 <input
                                                     class="modal__control modal__datepicker"
                                                     v-on="inputEvents"
-                                                    ref="identity_date"
+                                                    ref="accounting_date"
+                                                    :class="{
+                                                        'border-red':
+                                                            validateDateAD?.isInValid ||
+                                                            fieldFocus ==
+                                                                'accounting_date',
+                                                    }"
                                                     :value="inputValue"
                                                     :placeholder="
                                                         RESOURCE.ACCOUNTING_DATE_FIELD
@@ -371,16 +385,15 @@
                                     }}
                                 </label>
                                 <vc-date-picker
-                                    v-model="
-                                        receiptPaymentForm.receipt_payment_date
-                                    "
+                                    v-model="receipt_payment_date"
                                     :popover="{
                                         visibility: 'focus',
                                     }"
                                     mode="date"
                                     :attributes="datepicker"
-                                    :key="keyComponent"
-                                    @dayclick="checkValidateDate"
+                                    @dayclick="
+                                        checkDate('receipt_payment_date')
+                                    "
                                 >
                                     <template
                                         v-slot="{ inputValue, inputEvents }"
@@ -408,7 +421,13 @@
                                                 <input
                                                     class="modal__control modal__datepicker"
                                                     v-on="inputEvents"
-                                                    ref="identity_date"
+                                                    ref="receipt_payment_date"
+                                                    :class="{
+                                                        'border-red':
+                                                            validateDateRP?.isInValid ||
+                                                            fieldFocus ==
+                                                                'receipt_payment_date',
+                                                    }"
                                                     :value="inputValue"
                                                     :placeholder="
                                                         typeVoucher ==
@@ -453,9 +472,16 @@
                                                 : RESOURCE.RECEIPT_NUMBER_FIELD
                                         "
                                         :dataField="'receipt_payment_number'"
+                                        :isRequired="true"
                                         :isReadonly="isViewDetail"
-                                        :key="keyComponent"
+                                        :isFieldErrorFocus="
+                                            fieldFocus ==
+                                            'receipt_payment_number'
+                                        "
                                         @setValue="setValue"
+                                        @setValidateData="
+                                            setValidateReceiptPayment
+                                        "
                                     />
                                 </div>
                             </div>
@@ -474,7 +500,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="grid-accounting" :key="keyComponent">
+                <div class="grid-accounting" :key="keyAccountingComponent">
                     <div class="tab-detail">
                         <div class="tab-detail-title">Hạch toán</div>
                         <div class="tab-header-extend">
@@ -645,20 +671,34 @@
                                             :placeholder="
                                                 column.dataCombobox.placeholder
                                             "
+                                            :isFieldErrorFocus="
+                                                fieldDetailFocus?.rowIndex ==
+                                                    indextr &&
+                                                fieldDetailFocus?.fieldError ==
+                                                    column.dataField
+                                            "
+                                            :paramFunction="indextr"
                                             @setValue="updateRow"
+                                            @setValidateData="
+                                                setValidateReceiptPaymentDetail
+                                            "
                                         />
                                         {{
                                             rowSelected !== indextr ||
                                             isViewDetail ||
                                             (!column.dataInput.isInput &&
                                                 !column.dataCombobox.isCombobox)
-                                                ? item[column.dataField]
+                                                ? column.dataInput.isInputNumber
+                                                    ? common.formatCurrency(
+                                                          item[column.dataField]
+                                                      )
+                                                    : item[column.dataField]
                                                 : ""
                                         }}
                                     </td>
                                     <td>
                                         <span
-                                            @click="removeRow(item)"
+                                            @click="removeRow(item, indextr)"
                                             class="square-16 icon icon-delete"
                                         ></span>
                                     </td>
@@ -694,7 +734,7 @@
                             <span class="grid-btn-title">Thêm dòng</span>
                         </button>
 
-                        <button class="grid-btn" @click="removeAllRow">
+                        <button class="grid-btn" @click="actionRemoveAll">
                             <span class="grid-btn-title">Xóa hết dòng</span>
                         </button>
                     </div>
@@ -889,7 +929,7 @@
             </button>
             <button
                 class="modal__button modal__button--close tooltip"
-                @click="onClose"
+                @click="this.onClose(0)"
             >
                 <i class="square-24 icon icon-times"></i>
                 <BaseTooltip
@@ -898,7 +938,6 @@
                 />
             </button>
         </div>
-        <BaseLoading v-if="isLoading" :className="['bg-fade']" />
     </div>
 </template>
 <script>
@@ -910,7 +949,6 @@ import BaseTooltip from "@/components/bases/BaseTooltip/BaseTooltip.vue";
 import BaseButton from "@/components/bases/BaseButton/BaseButton.vue";
 import BaseInput from "@/components/bases/BaseInput/BaseInput.vue";
 import BaseComboboxTable from "@/components/bases/BaseCombobox/BaseComboboxTable.vue";
-import BaseLoading from "@/components/bases/BaseLoading/BaseLoading.vue";
 
 export default {
     name: "ReceiptPaymentForm",
@@ -920,7 +958,6 @@ export default {
         BaseButton,
         BaseInput,
         BaseComboboxTable,
-        BaseLoading,
     },
 
     props: {
@@ -934,6 +971,12 @@ export default {
         isViewDetail: Boolean,
         onSave: Function,
         onHandleEdit: Function,
+        setValidateReceiptPayment: Function,
+        setValidateReceiptPaymentDetail: Function,
+        fieldFocus: null,
+        fieldDetailFocus: null,
+        setPopupData: Function,
+        onHandleHidePopup: Function
     },
 
     data() {
@@ -965,21 +1008,23 @@ export default {
 
             receiptPaymentForm: {
                 account_object_id: null,
-                accounting_date: new Date(),
-                receipt_payment_date: new Date(),
                 total_money: 0,
             },
+
+            accounting_date: new Date(),
+            receipt_payment_date: new Date(),
 
             validateDateAD: null,
             validateDateRP: null,
 
             keyComponent: 0,
+            keyAccountingComponent: 0,
 
             rowSelected: null,
 
             nameActionSave: null,
 
-            isLoading: false,
+            rowErrorSelected: null,
         };
     },
 
@@ -989,6 +1034,9 @@ export default {
             this.receiptPaymentForm = this.receiptPayment;
             this.receiptPaymentForm.total_money =
                 this.receiptPayment.total_money;
+            this.accounting_date = this.receiptPayment.accounting_date;
+            this.receipt_payment_date =
+                this.receiptPayment.receipt_payment_date;
         }
 
         if (this.accountings) {
@@ -1000,54 +1048,102 @@ export default {
 
     beforeUpdate() {
         this.sumTotalMoney();
-        if (!this.receiptPaymentForm.accounting_date) {
-            this.validateDateAD = {
-                isInValid: true,
-                errorMessage: "Ngày hạch toán không được để trống",
-            };
-        } else {
-            this.validateDateAD = {
-                isInValid: false,
-                errorMessage: "",
-            };
-        }
-        if (!this.receiptPaymentForm.receipt_payment_date) {
-            this.validateDateRP = {
-                isInValid: true,
-                errorMessage: "Ngày chứng từ không được để trống",
-            };
-        } else {
-            this.validateDateRP = {
-                isInValid: false,
-                errorMessage: "",
-            };
-        }
+    },
+
+    watch: {
+        fieldFocus(newValue) {
+            if (
+                newValue &&
+                (newValue == "accounting_date" ||
+                    newValue == "receipt_payment_date")
+            ) {
+                this.$refs[newValue].focus();
+            }
+        },
+
+        fieldDetailFocus(newValue) {
+            if (newValue) {
+                this.setRowSelected(newValue.rowIndex);
+            }
+        },
+
+        accountings(newValue) {
+            this.receiptPaymentDetail = newValue;
+        },
+
+        accounting_date(newValue) {
+            if (!newValue) {
+                this.validateDateAD = {
+                    isInValid: true,
+                    errorMessage: "Ngày hạch toán không được để trống",
+                };
+                this.setValidateReceiptPayment(
+                    true,
+                    this.validateDateAD.errorMessage,
+                    "accounting_date"
+                );
+            } else {
+                this.validateDateAD = {
+                    isInValid: false,
+                    errorMessage: "",
+                };
+                this.setValidateReceiptPayment(false, "", "accounting_date");
+            }
+        },
+
+        receipt_payment_date(newValue) {
+            if (!newValue) {
+                this.validateDateRP = {
+                    isInValid: true,
+                    errorMessage:
+                        this.typeVoucher == 0
+                            ? "Ngày phiếu thu không được để trống"
+                            : "Ngày phiếu chi không được để trống",
+                };
+                this.setValidateReceiptPayment(
+                    true,
+                    this.validateDateRP.errorMessage,
+                    "receipt_payment_date"
+                );
+            } else {
+                this.validateDateRP = {
+                    isInValid: false,
+                    errorMessage: "",
+                };
+                this.setValidateReceiptPayment(
+                    false,
+                    "",
+                    "receipt_payment_date"
+                );
+            }
+        },
     },
 
     methods: {
+        checkDate(nameDate) {
+            try {
+                if (nameDate == "accounting_date") {
+                    this.setValue(
+                        common.formatDate(this.accounting_date),
+                        "accounting_date"
+                    );
+                } else if (nameDate == "receipt_payment_date") {
+                    this.setValue(
+                        common.formatDate(this.receipt_payment_date),
+                        "receipt_payment_date"
+                    );
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
         onHandleShowButtonCombobox() {
             this.isShowButtonCombobox = !this.isShowButtonCombobox;
         },
 
         onHideButtonCombobox() {
             this.isShowButtonCombobox = false;
-        },
-
-        checkValidateDate() {
-            try {
-                this.setValue(
-                    common.formatDate(this.receiptPaymentForm.accounting_date),
-                    "accounting_date"
-                );
-                this.setValue(
-                    common.formatDate(
-                        this.receiptPaymentForm.receipt_payment_date
-                    ),
-                    "receipt_payment_date"
-                );
-            } catch (error) {
-                console.log(error);
-            }
         },
 
         setRowSelected(index) {
@@ -1175,10 +1271,43 @@ export default {
                         return item != valueRow;
                     });
                     this.setListValue(this.receiptPaymentDetail);
-                    this.keyComponent += 1;
+                    this.keyAccountingComponent += 1;
                 }
             } catch (error) {
                 console.log(error);
+            }
+        },
+
+        actionRemoveAll(){
+            try {
+                this.setPopupData({
+                    typePopup: 2,
+                    footerPopup: {
+                        footerLeft: [
+                            {
+                                buttonName: "Không",
+                                buttonAction: this.onHandleHidePopup,
+                                classButton: "",
+                                valueFunction: "",
+                            },
+                        ],
+                        footerRight: [
+                            {
+                                buttonName: "Có",
+                                buttonAction: this.removeAllRow,
+                                classButton: ["btn-confirm"],
+                                valueFunction: "",
+                            },
+                        ],
+                        enterKeyFunc: this.removeAllRow,
+                        valueEnterKeyFunc: "",
+                        escKeyFunc: this.onHandleHidePopup,
+                    },
+
+                    noticeMessage: `Bạn có thực sự muốn xóa tất cả các dòng đã nhập không?`,
+                })
+            } catch (error) {
+                console.log(error)
             }
         },
 
@@ -1197,6 +1326,7 @@ export default {
                     ];
                     this.setRowSelected(0);
                     this.setListValue(this.receiptPaymentDetail);
+                    this.onHandleHidePopup();
                 }
             } catch (error) {
                 console.log(error);
@@ -1207,6 +1337,16 @@ export default {
             try {
                 await this.setValue(value, dataField);
                 this.keyComponent += 1;
+                this.keyAccountingComponent += 1;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async setDataReason(value, dataField) {
+            try {
+                await this.setValue(value, dataField);
+                this.keyAccountingComponent += 1;
             } catch (error) {
                 console.log(error);
             }
@@ -1248,7 +1388,7 @@ export default {
             }
         },
 
-        setNameActionSave(nameButton, nameTooltip, paramFunction) {
+        setNameActionSave(nameButton, nameTooltip, paramFunction, isKeyCode) {
             try {
                 this.nameActionSave = {
                     nameButton: nameButton,
@@ -1259,9 +1399,42 @@ export default {
                     "name_action_save",
                     JSON.stringify(this.nameActionSave)
                 );
-                this.onHandleActionSave(paramFunction);
+                if (!isKeyCode) {
+                    this.onHandleActionSave(paramFunction);
+                }
             } catch (error) {
                 console.log(error);
+            }
+        },
+
+        /**
+         * Function kiểm tra người dùng nhấn các key để thao tác với modal
+         * @param {*} $event: Giá trị thẻ đang được chọn
+         * @author: DUONGPV (08/09/2022)
+         */
+        eventHandleKey($event) {
+            if ($event.ctrlKey) {
+                if ($event.keyCode == 83) {
+                    if ($event.shiftKey) {
+                        this.onSave(this.typeVoucher, 1);
+                        this.setNameActionSave(
+                            "Cất và Thêm",
+                            "Ctrl + Shift + S",
+                            1,
+                            true
+                        );
+                    } else {
+                        $event.preventDefault();
+                        this.onSave(this.typeVoucher);
+                    }
+                } else if ($event.keyCode == 81) {
+                    this.onSave(this.typeVoucher);
+                    this.setNameActionSave("Cất và Đóng", "Ctrl + Q", 1, true);
+                }
+            }
+            if ($event.keyCode == 27) {
+                event.stopPropagation();
+                this.onClose(0);
             }
         },
     },

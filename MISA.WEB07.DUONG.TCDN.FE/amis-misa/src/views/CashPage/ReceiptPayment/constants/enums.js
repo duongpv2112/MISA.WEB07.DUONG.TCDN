@@ -3,3 +3,8 @@ export const RECEIPT_PAYMENT_ENUM = {
     TYPE_RECEIPT: 0,
     TYPE_PAYMENT: 1,
 };
+
+export const TYPE_CLOSE = {
+    TYPE_CLOSE_CHECK_CHANGE: 0,
+    TYPE_CLOSE_DEFAULT: 1,
+};

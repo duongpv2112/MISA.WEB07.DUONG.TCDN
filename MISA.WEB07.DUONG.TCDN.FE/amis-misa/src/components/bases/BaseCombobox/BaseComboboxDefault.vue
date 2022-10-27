@@ -158,6 +158,7 @@ export default {
                         this.isShowListData = false;
                         break;
                     case keyCode.ArrowDown:
+                        this.dataFilter = this.listData;
                         this.isShowListData = true;
                         elToFocus =
                             this.$refs[`toFocus_${this.indexItemFocus + 1}`];
@@ -172,6 +173,7 @@ export default {
                         }
                         break;
                     case keyCode.ArrowUp:
+                        this.dataFilter = this.listData;
                         this.isShowListData = true;
                         elToFocus =
                             this.$refs[`toFocus_${this.indexItemFocus - 1}`];

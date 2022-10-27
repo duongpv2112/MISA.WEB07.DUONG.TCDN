@@ -40,7 +40,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL
         /// Author: DUONGPV (04/10/2022)
         public async Task<bool> InsertOneRecord(SupplierDTO record)
         {
-            //ValidateEntity<AccountObject>.Validate(record.accountObject);
+            ValidateEntity<AccountObject>.Validate(record.accountObject);
             return await _accountObjectDL.InsertOneRecord(record);
         }
 

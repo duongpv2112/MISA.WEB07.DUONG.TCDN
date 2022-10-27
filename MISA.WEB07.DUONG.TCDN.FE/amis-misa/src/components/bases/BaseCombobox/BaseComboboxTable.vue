@@ -25,7 +25,7 @@
                     :ref="propValue"
                     @input="onHandleChangeInputData"
                     @keydown="selecItemUpDown"
-                    @blur="this.borderFocus = false"
+                    @blur="this.checkChangeFocus()"
                     @focus="this.borderFocus = true"
                 />
             </div>
@@ -138,6 +138,8 @@ export default {
         isAbsoluteLayer: Boolean,
         isAbsoluteFull: Boolean,
         isAbsoluteBottomRight: Boolean,
+        isRequired: Boolean,
+        paramFunction: null,
         classListData: Array,
     },
     emits: ["setValue", "setValidateData"],
@@ -249,48 +251,7 @@ export default {
          * @author: DUONGPV (08/09/2022)
          */
         btnSelectDataOnClick() {
-            if (!this.isAbsoluteLayer) {
-                if (!this.isAbsoluteBottomRight) {
-                    this.styleListData = {
-                        top: `${
-                            event.target.parentElement.offsetParent.offsetTop +
-                            event.target.parentElement.offsetParent
-                                .offsetHeight +
-                            5
-                        }px`,
-                        left: `${event.target.parentElement.offsetParent.offsetLeft}px`,
-                        "max-width": "382px",
-                        "z-index": "999999",
-                    };
-                } else {
-                    this.styleListData = {
-                        top: `${
-                            event.target.parentElement.offsetParent.offsetTop +
-                            event.target.parentElement.offsetParent
-                                .offsetHeight +
-                            5
-                        }px`,
-                        "max-width": "382px",
-                        "z-index": "999999",
-                    };
-                }
-
-                if (this.isAbsoluteFull) {
-                    this.styleListData = {
-                        top: `${
-                            event.target.parentElement.offsetParent.offsetTop +
-                            event.target.parentElement.offsetParent
-                                .offsetHeight +
-                            6
-                        }px`,
-                        "z-index": "99",
-                        right: "0",
-                        "min-width": "1000px",
-                        "max-width": "1000px",
-                    };
-                }
-            }
-
+            this.setPosition();
             this.isShowListData = !this.isShowListData;
             this.$refs[this.propValue].focus();
             if (this.dataCombobox.length == 0) {
@@ -303,7 +264,8 @@ export default {
          * @author: DUONGPV (08/09/2022)
          */
         onHandleChangeInputData() {
-            this.$emit("setValue", "", this.propValue);
+            this.$emit("setValue", this.textInput, this.propValue);
+
             if (this.textInput) {
                 this.checkData.isInValid = true;
                 this.checkData.errorMessage = `Dữ liệu <${this.placeholder}> không có trong danh mục.`;
@@ -311,7 +273,8 @@ export default {
                     "setValidateData",
                     true,
                     this.checkData.errorMessage,
-                    this.propValue
+                    this.propValue,
+                    this.paramFunction
                 );
             } else {
                 this.checkData.isInValid = false;
@@ -320,13 +283,18 @@ export default {
                     "setValidateData",
                     false,
                     this.checkData.errorMessage,
-                    this.propValue
+                    this.propValue,
+                    this.paramFunction
                 );
             }
+
             this.onHandleSearch(this.textInput);
             if (this.dataCombobox.length == 0) {
                 this.getData(this.pageNumber);
             }
+
+            this.setPosition();
+
             this.isShowListData = true;
         },
 
@@ -358,7 +326,8 @@ export default {
                     "setValidateData",
                     false,
                     this.checkData.errorMessage,
-                    this.propValue
+                    this.propValue,
+                    this.paramFunction
                 );
             } catch (error) {
                 console.log(error);
@@ -382,6 +351,7 @@ export default {
                         event.stopPropagation();
                         break;
                     case keyCode.ArrowDown:
+                        this.setPosition();
                         this.isShowListData = true;
                         event.stopPropagation();
                         if (this.dataCombobox.length == 0) {
@@ -401,6 +371,7 @@ export default {
                         }
                         break;
                     case keyCode.ArrowUp:
+                        this.setPosition();
                         this.isShowListData = true;
                         event.stopPropagation();
                         if (this.dataCombobox.length == 0) {
@@ -418,6 +389,7 @@ export default {
                             this.indexItemFocus -= 1;
                             this.fixScrolling();
                         }
+                        
                         break;
                     case keyCode.Enter:
                         event.stopPropagation();
@@ -440,6 +412,65 @@ export default {
             var height =
                 this.$refs[`toFocus_${this.indexItemFocus}`][0].clientHeight;
             this.$refs.scrollComponent.scrollTop = height * this.indexItemFocus;
+        },
+
+        checkChangeFocus() {
+            try {
+                this.borderFocus = false;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        setPosition() {
+            try {
+                if (!this.isAbsoluteLayer) {
+                    if (!this.isAbsoluteBottomRight) {
+                        this.styleListData = {
+                            top: `${
+                                event.target.parentElement.offsetParent
+                                    .offsetTop +
+                                event.target.parentElement.offsetParent
+                                    .offsetHeight +
+                                5
+                            }px`,
+                            left: `${event.target.parentElement.offsetParent.offsetLeft}px`,
+                            "max-width": "382px",
+                            "z-index": "999999",
+                        };
+                    } else {
+                        this.styleListData = {
+                            top: `${
+                                event.target.parentElement.offsetParent
+                                    .offsetTop +
+                                event.target.parentElement.offsetParent
+                                    .offsetHeight +
+                                5
+                            }px`,
+                            "max-width": "382px",
+                            "z-index": "999999",
+                        };
+                    }
+
+                    if (this.isAbsoluteFull) {
+                        this.styleListData = {
+                            top: `${
+                                event.target.parentElement.offsetParent
+                                    .offsetTop +
+                                event.target.parentElement.offsetParent
+                                    .offsetHeight +
+                                6
+                            }px`,
+                            "z-index": "99",
+                            right: "0",
+                            "min-width": "1000px",
+                            "max-width": "1000px",
+                        };
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
         },
     },
     components: { BaseTooltip, BaseLoading },
