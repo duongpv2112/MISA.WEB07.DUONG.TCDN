@@ -73,5 +73,52 @@
         "width": 250,
         "isShow": true,
         "isFix": false
+    },
+    {
+        "name_column": "Người nhận/Người nộp",
+        "fieldName": "Người nhận/Người nộp",
+        "dataField": "account_object_contact_name",
+        "styleObject": {},
+        "width": 250,
+        "isShow": false,
+        "isFix": false
+    },
+    {
+        "name_column": "Ngày tạo",
+        "fieldName": "Ngày tạo",
+        "dataField": "created_date",
+        "styleObject": {},
+        "width": 150,
+        "isShow": false,
+        "isFix": false,
+        "isCenter": true
+    },
+    {
+        "name_column": "Người tạo",
+        "fieldName": "Người tạo",
+        "dataField": "created_by",
+        "styleObject": {},
+        "width": 150,
+        "isShow": false,
+        "isFix": false
+    },
+    {
+        "name_column": "Ngày sửa",
+        "fieldName": "Ngày sửa",
+        "dataField": "modified_date",
+        "styleObject": {},
+        "width": 150,
+        "isShow": false,
+        "isFix": false,
+        "isCenter": true
+    },
+    {
+        "name_column": "Người sửa",
+        "fieldName": "Người sửa",
+        "dataField": "modified_by",
+        "styleObject": {},
+        "width": 150,
+        "isShow": false,
+        "isFix": false
     }
 ]

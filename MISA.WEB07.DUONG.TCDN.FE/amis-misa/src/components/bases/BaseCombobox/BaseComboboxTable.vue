@@ -141,6 +141,7 @@ export default {
         isRequired: Boolean,
         paramFunction: null,
         classListData: Array,
+        firstFocus: Boolean,
     },
     emits: ["setValue", "setValidateData"],
 
@@ -153,6 +154,10 @@ export default {
         this.borderFocus = false;
         if (this.value) {
             this.textInput = this.value;
+        }
+        
+        if (this.firstFocus) {
+            this.$refs[this.dataField].focus();
         }
     },
 
@@ -389,7 +394,7 @@ export default {
                             this.indexItemFocus -= 1;
                             this.fixScrolling();
                         }
-                        
+
                         break;
                     case keyCode.Enter:
                         event.stopPropagation();

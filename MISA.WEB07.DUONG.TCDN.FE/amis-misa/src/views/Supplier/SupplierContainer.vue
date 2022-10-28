@@ -451,6 +451,7 @@ export default {
                         this.totalPage = data.totalPage;
                         this.keyWord = data.keyWord;
                         this.keyGrid += 1;
+                        this.renderTable();
                     })
                     .finally(() => {
                         this.dataReady = true;
@@ -1031,6 +1032,57 @@ export default {
                     "supplier_template",
                     JSON.stringify(value)
                 );
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        renderTable() {
+            try {
+                this.data = this.data.map((item) => {
+                    return {
+                        account_object_id: item.account_object_id,
+                        account_object_code: item.account_object_code,
+                        account_object_name: item.account_object_name,
+                        address: item.address,
+                        website: item.website,
+                        tax_code: item.tax_code,
+                        phone_number: item.phone_number,
+                        telephone_number: item.telephone_number,
+                        identity_number: item.identity_number,
+                        identity_date: common.formatDateWithType(
+                            item.identity_date,
+                            "DD/MM/YYYY"
+                        ),
+                        identity_place: item.identity_place,
+                        employee_id: item.employee_id,
+                        supplier_type: item.supplier_type,
+                        contact_name: item.contact_name,
+                        vocative_contact: item.vocative_contact,
+                        vocative_supplier: item.vocative_supplier,
+                        email: item.email,
+                        representative_name: item.representative_name,
+                        payment_term: item.payment_term,
+                        number_day_owed: item.number_day_owed,
+                        maximum_debt_amount: common.formatDecimalCurrency(
+                            item.maximum_debt_amount
+                        ),
+                        account_payable: item.account_payable,
+                        department_name: item.department_name,
+                        is_supplier: item.is_supplier,
+                        is_employee: item.is_employee,
+                        created_date: common.formatDateWithType(
+                            item.created_date,
+                            "DD/MM/YYYY"
+                        ),
+                        created_by: item.created_by,
+                        modified_date: common.formatDateWithType(
+                            item.modified_date,
+                            "DD/MM/YYYY"
+                        ),
+                        modified_by: item.modified_by,
+                    };
+                });
             } catch (error) {
                 console.log(error);
             }

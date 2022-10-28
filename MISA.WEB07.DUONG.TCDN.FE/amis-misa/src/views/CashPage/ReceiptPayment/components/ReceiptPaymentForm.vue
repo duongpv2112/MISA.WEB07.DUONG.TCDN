@@ -76,6 +76,8 @@
                                         :isFieldErrorFocus="
                                             fieldFocus == 'account_object_id'
                                         "
+                                        :tabindex="1"
+                                        :firstFocus="true"
                                         @setValue="setDataAccountObject"
                                         @setValidateData="
                                             setValidateReceiptPayment
@@ -101,9 +103,11 @@
                                         receiptPayment.account_object_name
                                     "
                                     :dataField="'account_object_name'"
-                                    :key="keyComponent"
+                                    :key="keyNameComponent"
                                     :isReadonly="isViewDetail"
-                                    @setValue="setValue"
+                                    :autocomplete="'off'"
+                                    :tabindex="2"
+                                    @setValue="setDataAccountObjectName"
                                 />
                                 <BaseInput
                                     :className="[
@@ -130,6 +134,8 @@
                                     :dataField="'account_object_contact_name'"
                                     :key="keyComponent"
                                     :isReadonly="isViewDetail"
+                                    :autocomplete="'off'"
+                                    :tabindex="4"
                                     @setValue="setValue"
                                 />
                                 <BaseInput
@@ -149,6 +155,8 @@
                                     :fieldName="RESOURCE.ADDRESS_FIELD"
                                     :key="keyComponent"
                                     :isReadonly="isViewDetail"
+                                    :autocomplete="'off'"
+                                    :tabindex="5"
                                     @setValue="setValue"
                                 />
                                 <BaseInput
@@ -164,6 +172,8 @@
                                     :fieldName="RESOURCE.PAYMENT_REASON_FIELD"
                                     :key="keyComponent"
                                     :isReadonly="isViewDetail"
+                                    :autocomplete="'off'"
+                                    :tabindex="7"
                                     @setValue="setDataReason"
                                 />
                                 <div class="d-flex col-12">
@@ -243,6 +253,7 @@
                                             :value="
                                                 receiptPayment.employee_name
                                             "
+                                            :tabindex="typeVoucher == 0 ? 7 : 9"
                                             :isBottom="true"
                                             :isAbsoluteLayer="false"
                                             @setValue="setValue"
@@ -267,6 +278,8 @@
                                         "
                                         :key="keyComponent"
                                         :isReadonly="isViewDetail"
+                                        :autocomplete="'off'"
+                                        :tabindex="8"
                                         @setValue="setDataReason"
                                     />
 
@@ -284,6 +297,8 @@
                                         :dataField="'adding_number'"
                                         :fieldName="RESOURCE.ADDING_FIELD"
                                         :isReadonly="isViewDetail"
+                                        :autocomplete="'off'"
+                                        :tabindex="typeVoucher == 0 ? 8 : 10"
                                         @setValue="setValue"
                                     />
                                     <span class="root-invoice px-2"
@@ -355,6 +370,7 @@
                                                         RESOURCE.ACCOUNTING_DATE_FIELD
                                                     "
                                                     :readonly="isViewDetail"
+                                                    :tabindex="3"
                                                 />
                                                 <BaseTooltip
                                                     v-if="
@@ -436,6 +452,7 @@
                                                             : RESOURCE.RECEIPT_DATE_FIELD
                                                     "
                                                     :readonly="isViewDetail"
+                                                    :tabindex="6"
                                                 />
                                                 <BaseTooltip
                                                     v-if="
@@ -478,6 +495,8 @@
                                             fieldFocus ==
                                             'receipt_payment_number'
                                         "
+                                        :autocomplete="'off'"
+                                        :tabindex="typeVoucher == 0 ? 10 : 8"
                                         @setValue="setValue"
                                         @setValidateData="
                                             setValidateReceiptPayment
@@ -546,6 +565,7 @@
                                     ]"
                                     :isHideIconPlus="true"
                                     :value="'VND'"
+                                    :tabindex="11"
                                     :isReadOnly="isViewDetail"
                                 />
                             </div>
@@ -623,6 +643,10 @@
                                                 column.dataInput.dataField
                                             "
                                             :isHideLable="true"
+                                            :autocomplete="
+                                                column.dataInput.autocomplete
+                                            "
+                                            :tabindex="12"
                                             @setValue="updateRow"
                                         />
 
@@ -678,6 +702,7 @@
                                                     column.dataField
                                             "
                                             :paramFunction="indextr"
+                                            :tabindex="12"
                                             @setValue="updateRow"
                                             @setValidateData="
                                                 setValidateReceiptPaymentDetail
@@ -976,7 +1001,7 @@ export default {
         fieldFocus: null,
         fieldDetailFocus: null,
         setPopupData: Function,
-        onHandleHidePopup: Function
+        onHandleHidePopup: Function,
     },
 
     data() {
@@ -1018,6 +1043,7 @@ export default {
             validateDateRP: null,
 
             keyComponent: 0,
+            keyNameComponent: 0,
             keyAccountingComponent: 0,
 
             rowSelected: null,
@@ -1278,7 +1304,7 @@ export default {
             }
         },
 
-        actionRemoveAll(){
+        actionRemoveAll() {
             try {
                 this.setPopupData({
                     typePopup: 2,
@@ -1305,9 +1331,9 @@ export default {
                     },
 
                     noticeMessage: `Bạn có thực sự muốn xóa tất cả các dòng đã nhập không?`,
-                })
+                });
             } catch (error) {
-                console.log(error)
+                console.log(error);
             }
         },
 
@@ -1338,6 +1364,17 @@ export default {
                 await this.setValue(value, dataField);
                 this.keyComponent += 1;
                 this.keyAccountingComponent += 1;
+                this.keyNameComponent += 1;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async setDataAccountObjectName(value, dataField) {
+            try {
+                await this.setValue(value, dataField);
+                this.keyComponent += 1;
+                this.keyAccountingComponent += 1;
             } catch (error) {
                 console.log(error);
             }
@@ -1347,6 +1384,7 @@ export default {
             try {
                 await this.setValue(value, dataField);
                 this.keyAccountingComponent += 1;
+                this.keyNameComponent += 1;
             } catch (error) {
                 console.log(error);
             }

@@ -26,6 +26,7 @@
                                     fieldFocus == listField.tax_code
                                 "
                                 :tabindex="typeSupplier == 0 ? 1 : 2"
+                                :autocomplete="'off'"
                                 @setValue="setValue"
                                 @setValidateData="setValidateData"
                             />
@@ -49,6 +50,7 @@
                                     fieldFocus == listField.account_object_code
                                 "
                                 :tabindex="typeSupplier == 0 ? 2 : 1"
+                                :autocomplete="'off'"
                                 @setValue="setValue"
                                 @setValidateData="setValidateData"
                             />
@@ -72,6 +74,7 @@
                                     fieldFocus == listField.account_object_name
                                 "
                                 :tabindex="5"
+                                :autocomplete="'off'"
                                 @setValue="setValue"
                                 @setValidateData="setValidateData"
                             />
@@ -140,6 +143,7 @@
                                             :isRequired="true"
                                             :isReadonly="isViewDetail"
                                             :tabindex="5"
+                                            :autocomplete="'off'"
                                             @setValue="setValue"
                                             @setValidateData="setValidateData"
                                         />
@@ -187,6 +191,7 @@
                                     fieldFocus == listField.telephone_number
                                 "
                                 :tabindex="3"
+                                :autocomplete="'off'"
                                 @setValue="setValue"
                                 @setValidateData="setValidateData"
                             />
@@ -205,6 +210,7 @@
                                 :fieldName="RESOURCE.SUPPLIER_WEBSITE_FIELD_LBL"
                                 :isReadonly="isViewDetail"
                                 :tabindex="4"
+                                :autocomplete="'off'"
                                 @setValue="setValue"
                             />
                         </div>
@@ -349,6 +355,7 @@
                                                 :isHideLable="true"
                                                 :isReadonly="isViewDetail"
                                                 :tabindex="10"
+                                                :autocomplete="'off'"
                                                 @setValue="setValue"
                                             />
                                         </div>
@@ -372,6 +379,7 @@
                                                 fieldFocus == listField.email
                                             "
                                             :tabindex="12"
+                                            :autocomplete="'off'"
                                             @setValue="setValue"
                                             @setValidateData="setValidateData"
                                         />
@@ -393,11 +401,13 @@
                                             :isHideLable="true"
                                             :isReadonly="isViewDetail"
                                             :patternValidate="'REGEX_PHONE'"
+                                            :isInputNumberString="true"
                                             :isFieldErrorFocus="
                                                 fieldFocus ==
                                                 listField.phone_number
                                             "
                                             :tabindex="13"
+                                            :autocomplete="'off'"
                                             @setValue="setValue"
                                             @setValidateData="setValidateData"
                                         />
@@ -425,6 +435,7 @@
                                     "
                                     :tabindex="11"
                                     :isReadonly="isViewDetail"
+                                    :autocomplete="'off'"
                                     @setValue="setValue"
                                 />
                             </div>
@@ -461,6 +472,7 @@
                                                 fieldFocus == listField.email
                                             "
                                             :tabindex="8"
+                                            :autocomplete="'off'"
                                             @setValue="setValue"
                                         />
 
@@ -491,6 +503,7 @@
                                                     listField.phone_number
                                                 "
                                                 :tabindex="10"
+                                                :autocomplete="'off'"
                                                 @setValue="setValue"
                                             />
                                         </div>
@@ -521,6 +534,7 @@
                                                     listField.telephone_number
                                                 "
                                                 :tabindex="12"
+                                                :autocomplete="'off'"
                                                 @setValue="setValue"
                                             />
                                         </div>
@@ -553,6 +567,7 @@
                                             "
                                             :isReadonly="isViewDetail"
                                             :tabindex="14"
+                                            :autocomplete="'off'"
                                             @setValue="setValue"
                                         />
                                     </div>
@@ -597,6 +612,7 @@
                                                     listField.identity_number
                                                 "
                                                 :tabindex="9"
+                                                :autocomplete="'off'"
                                                 @setValue="setValue"
                                             />
                                         </div>
@@ -659,6 +675,7 @@
                                                             :placeholder="
                                                                 RESOURCE.SUPPLIER_IDENTITY_DATE_FIELD_LBL
                                                             "
+                                                            :autocomplete="'off'"
                                                             :tabindex="11"
                                                         />
                                                         <BaseTooltip
@@ -697,6 +714,7 @@
                                             :isHideLable="true"
                                             :isReadonly="isViewDetail"
                                             :tabindex="13"
+                                            :autocomplete="'off'"
                                             @setValue="setValue"
                                         />
                                     </div>
@@ -753,6 +771,7 @@
                                     :maxlength="18"
                                     :isInputNumber="true"
                                     :isReadonly="isViewDetail"
+                                    :autocomplete="'off'"
                                     @setValue="setValue"
                                 />
                                 <BaseInput
@@ -775,6 +794,7 @@
                                     :maxlength="18"
                                     :isReadonly="isViewDetail"
                                     :isInputNumber="true"
+                                    :autocomplete="'off'"
                                     @setValue="setValue"
                                 />
                             </div>
@@ -800,6 +820,7 @@
                                     :isFieldErrorFocus="
                                         fieldFocus == listField.account_payable
                                     "
+                                    :autocomplete="'off'"
                                     @setValue="setValue"
                                     @setValidateData="setValidateData"
                                 />

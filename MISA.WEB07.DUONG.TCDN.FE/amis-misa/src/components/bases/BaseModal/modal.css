@@ -222,7 +222,7 @@
 
 .modal .modal-icon__calendar {
     position: absolute;
-    right: 4px;
+    right: 0;
     top: 0;
 }
 .modal .modal-icon__calendar:hover {

@@ -68,7 +68,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// Ngày cấp CMND
         /// </summary>
-        public DateTime? identity_date { get; set; }
+        public string? identity_date { get; set; }
 
         /// <summary>
         /// Nơi cấp CMND 
@@ -143,7 +143,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// Ngày tạo
         /// </summary>
-        public DateTime created_date { get; set; }
+        public string created_date { get; set; }
 
         /// <summary>
         /// Người tạo
@@ -153,7 +153,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// Ngày sửa gần nhất
         /// </summary>
-        public DateTime modified_date { get; set; }
+        public string modified_date { get; set; }
 
         /// <summary>
         /// Người sửa gần nhất

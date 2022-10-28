@@ -45,6 +45,15 @@
         "isFix": false
     },
     {
+        "name_column": "Điện thoại cố định",
+        "fieldName": "Điện thoại cố định",
+        "dataField": "telephone_number",
+        "styleObject": {},
+        "width": 150,
+        "isShow": false,
+        "isFix": false
+    },
+    {
         "name_column": "Website",
         "fieldName": "Website",
         "dataField": "website",
@@ -60,6 +69,110 @@
         "styleObject": {},
         "width": 150,
         "isShow": true,
+        "isFix": false
+    },
+    {
+        "name_column": "Ngày cấp",
+        "fieldName": "Ngày cấp",
+        "dataField": "identity_date",
+        "styleObject": {},
+        "width": 150,
+        "isShow": false,
+        "isFix": false,
+        "isCenter": true
+    },
+    {
+        "name_column": "Nơi cấp",
+        "fieldName": "Nơi cấp",
+        "dataField": "identity_place",
+        "styleObject": {},
+        "width": 350,
+        "isShow": false,
+        "isFix": false
+    },
+    {
+        "name_column": "Người liên hệ",
+        "fieldName": "Người liên hệ",
+        "dataField": "contact_name",
+        "styleObject": {},
+        "width": 150,
+        "isShow": false,
+        "isFix": false
+    },
+    {
+        "name_column": "Email",
+        "fieldName": "Email",
+        "dataField": "email",
+        "styleObject": {},
+        "width": 150,
+        "isShow": false,
+        "isFix": false
+    },
+    {
+        "name_column": "Người đại diện theo pháp luật",
+        "fieldName": "Người đại diện theo pháp luật",
+        "dataField": "representative_name",
+        "styleObject": {},
+        "width": 150,
+        "isShow": false,
+        "isFix": false
+    },
+    {
+        "name_column": "Số ngày được nợ",
+        "fieldName": "Số ngày được nợ",
+        "dataField": "number_day_owed",
+        "styleObject": {},
+        "width": 150,
+        "isShow": false,
+        "isFix": false,
+        "isRight": true
+    },
+    {
+        "name_column": "Số nợ tối đa",
+        "fieldName": "Số nợ tối đa",
+        "dataField": "maximum_debt_amount",
+        "styleObject": {},
+        "width": 150,
+        "isShow": false,
+        "isFix": false,
+        "isRight": true
+    },
+    {
+        "name_column": "Ngày tạo",
+        "fieldName": "Ngày tạo",
+        "dataField": "created_date",
+        "styleObject": {},
+        "width": 150,
+        "isShow": false,
+        "isFix": false,
+        "isCenter": true
+    },
+    {
+        "name_column": "Người tạo",
+        "fieldName": "Người tạo",
+        "dataField": "created_by",
+        "styleObject": {},
+        "width": 150,
+        "isShow": false,
+        "isFix": false
+    },
+    {
+        "name_column": "Ngày sửa",
+        "fieldName": "Ngày sửa",
+        "dataField": "modified_date",
+        "styleObject": {},
+        "width": 150,
+        "isShow": false,
+        "isFix": false,
+        "isCenter": true
+    },
+    {
+        "name_column": "Người sửa",
+        "fieldName": "Người sửa",
+        "dataField": "modified_by",
+        "styleObject": {},
+        "width": 150,
+        "isShow": false,
         "isFix": false
     }
 ]

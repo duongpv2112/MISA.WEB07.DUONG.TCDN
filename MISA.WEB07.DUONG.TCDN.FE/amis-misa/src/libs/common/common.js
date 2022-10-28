@@ -34,13 +34,16 @@ export const common = {
         }
     },
 
-    createUUID(){
+    createUUID() {
         var dt = new Date().getTime();
-        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = (dt + Math.random()*16)%16 | 0;
-            dt = Math.floor(dt/16);
-            return (c=='x' ? r :(r&0x3|0x8)).toString(16);
-        });
+        var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+            /[xy]/g,
+            function (c) {
+                var r = (dt + Math.random() * 16) % 16 | 0;
+                dt = Math.floor(dt / 16);
+                return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
+            }
+        );
         return uuid;
     },
 
@@ -57,19 +60,22 @@ export const common = {
     },
 
     formatDateWithType(date, type) {
-        let d = new Date(date);
-        var month = "" + (d.getMonth() + 1);
-        var day = "" + d.getDate();
-        var year = d.getFullYear();
+        if (date != null) {
+            let d = new Date(date);
+            var month = "" + (d.getMonth() + 1);
+            var day = "" + d.getDate();
+            var year = d.getFullYear();
 
-        if (month.length < 2) month = "0" + month;
-        if (day.length < 2) day = "0" + day;
-        switch (type) {
-            case "DD/MM/YYYY":
-                return [day, month, year].join("/");
-            case "YYYY-MM-DD":
-                return [year, month, day].join("-");
+            if (month.length < 2) month = "0" + month;
+            if (day.length < 2) day = "0" + day;
+            switch (type) {
+                case "DD/MM/YYYY":
+                    return [day, month, year].join("/");
+                case "YYYY-MM-DD":
+                    return [year, month, day].join("-");
+            }
         }
+        return "";
     },
 
     /**

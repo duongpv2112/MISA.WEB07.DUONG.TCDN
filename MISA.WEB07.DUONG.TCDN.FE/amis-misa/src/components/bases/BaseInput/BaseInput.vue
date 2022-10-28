@@ -110,7 +110,7 @@ export default {
     methods: {
         onHandleInput(dataField, event) {
             try {
-                this.valueInput = event.target.value.trim();
+                this.valueInput = event.target.value;
                 if (this.isInputNumber) {
                     this.valueInput = this.valueInput.replace(/\D+/g, "");
                 }

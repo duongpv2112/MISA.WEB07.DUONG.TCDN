@@ -651,9 +651,15 @@ export default {
                         total_money: common.formatDecimalCurrency(
                             item.total_money
                         ),
-                        created_date: item.created_date,
+                        created_date: common.formatDateWithType(
+                            item.created_date,
+                            "DD/MM/YYYY"
+                        ),
                         created_by: item.created_by,
-                        modified_date: item.modified_date,
+                        modified_date: common.formatDateWithType(
+                            item.modified_date,
+                            "DD/MM/YYYY"
+                        ),
                         modified_by: item.modified_by,
                         account_object_code: item.account_object_code,
                         is_receipt: item.is_receipt,
@@ -1077,6 +1083,7 @@ export default {
                                 isInput: true,
                                 isInputNumber: false,
                                 dataField: "reason",
+                                autocomplete: "off",
                             },
                             dataCombobox: {
                                 isCombobox: false,
@@ -1160,6 +1167,7 @@ export default {
                                 isInput: true,
                                 isInputNumber: true,
                                 dataField: "amount_money",
+                                autocomplete: "off",
                             },
                             dataCombobox: {
                                 isCombobox: false,
@@ -1306,6 +1314,7 @@ export default {
                                 isInput: true,
                                 isInputNumber: false,
                                 dataField: "reason",
+                                autocomplete: "off",
                             },
                             dataCombobox: {
                                 isCombobox: false,
@@ -1326,6 +1335,7 @@ export default {
                             dataCombobox: {
                                 isCombobox: true,
                                 url: API_RESOURCE.PAGING_DATA_ACCOUNT,
+                                placeholder: "Tài khoản nợ",
                                 propValue: "debt_account",
                                 propText: "debt_account",
                                 dataField: "account_number",
@@ -1358,6 +1368,7 @@ export default {
                             dataCombobox: {
                                 isCombobox: true,
                                 url: API_RESOURCE.PAGING_DATA_ACCOUNT,
+                                placeholder: "Tài khoản có",
                                 propValue: "credit_account",
                                 propText: "credit_account",
                                 dataField: "account_number",
@@ -1387,6 +1398,7 @@ export default {
                                 isInput: true,
                                 isInputNumber: true,
                                 dataField: "amount_money",
+                                autocomplete: "off",
                             },
                             dataCombobox: {
                                 isCombobox: false,
@@ -1408,6 +1420,7 @@ export default {
                                 isCombobox: true,
                                 isComboboxFullWidth: true,
                                 url: API_RESOURCE.PAGING_DATA_ACCOUNT_OBJECT,
+                                placeholder: "Đối tượng",
                                 propValue: "account_object_id",
                                 propText: "account_object_code",
                                 dataField: "account_object_id",
@@ -1584,6 +1597,31 @@ export default {
                         this.receiptPaymentDetail[i].reason =
                             this.receiptPayment.reason;
                     }
+                } else if (dataField == "account_object_name") {
+                    var nameReason = this.receiptPayment.reason.slice(13);
+                    if (
+                        this.typeVoucher == 0 &&
+                        (this.receiptPayment.reason == "Thu tiền của " ||
+                            nameReason ==
+                                this.receiptPayment.account_object_name)
+                    ) {
+                        this.receiptPayment.account_object_name = valueField;
+                        this.setValueRecieptPayment(
+                            `Thu tiền của ${valueField}`,
+                            "reason"
+                        );
+                    } else if (
+                        this.typeVoucher == 1 &&
+                        (this.receiptPayment.reason == "Chi tiền cho " ||
+                            nameReason ==
+                                this.receiptPayment.account_object_name)
+                    ) {
+                        this.setValueRecieptPayment(
+                            `Chi tiền cho ${valueField}`,
+                            "reason"
+                        );
+                    }
+                    this.receiptPayment.account_object_name = valueField;
                 } else if (
                     typeof valueField == "object" &&
                     valueField &&

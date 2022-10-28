@@ -37,18 +37,6 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL.Utilities
                         }
                     }
                 }
-                if (propertyDateBigger.Count() > 0)
-                {
-                    DateTime? propertyValue = (DateTime?)property.GetValue(entity);
-
-                    if (!CheckNullOrEmpty(propertyValue.ToString()))
-                    {
-                        if (propertyValue >= DateTime.Now)
-                        {
-                            errors.Add(string.Format(Resource.ErrorDateBiggerCurrent, property.Name));
-                        }
-                    }
-                }
                 if (propertyPhone.Count() > 0)
                 {
                     if (property.PropertyType == typeof(string))

@@ -11,7 +11,9 @@
             <th scope="col"></th>
             <th
                 scope="col"
-                v-for="column in columns"
+                v-for="column in columns.filter((item) => {
+                    return item.isShow == true;
+                })"
                 :key="'col_' + column.dataField"
             >
                 <div
@@ -40,6 +42,7 @@
                     </span>
                 </div>
             </th>
+            <th></th>
         </tr>
     </tfoot>
 </template>
