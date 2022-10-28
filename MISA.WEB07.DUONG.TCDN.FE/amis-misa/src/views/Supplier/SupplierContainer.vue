@@ -432,6 +432,14 @@ export default {
     },
 
     methods: {
+        /**
+         * Lấy toàn bộ danh sách thông tin nhà cung cấp
+         * @param {*} pageSize: Số bản ghi trên một trang
+         * @param {*} pageNumber: Trang cần hiển thị
+         * @param {*} keyword: Từ khóa cần tìm kiếm
+         * @param {*} orderBy: Giá trị cần sắp xếp
+         * @author: DUONGPV (04/10/2022)
+         */
         async getSuppliers(pageSize, pageNumber, keyword, orderBy) {
             try {
                 let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}?pageSize=${pageSize}&pageNumber=${pageNumber}`;
@@ -461,6 +469,11 @@ export default {
             }
         },
 
+        /**
+         * Thay đổi số trang cần hiển thị
+         * @param {*} pageNumber: Trang cần hiển thị
+         * @author: DUONGPV (04/10/2022)
+         */
         async onHandlePageChange(pageNumber) {
             try {
                 this.dataReady = false;
@@ -474,6 +487,11 @@ export default {
             }
         },
 
+        /**
+         * Thay đổi số bản ghi trên một trang cần hiển thị
+         * @param {*} pageSize: Số bản ghi trên một trang
+         * @author: DUONGPV (04/10/2022)
+         */
         async onHandlePageSizeChange(pageSize) {
             try {
                 this.dataReady = false;
@@ -487,6 +505,11 @@ export default {
             }
         },
 
+        /**
+         * Lấy thông tin danh sách nhà cung cấp dựa theo từ khóa tìm kiếm
+         * @param {*} searchParams: Từ khóa cần tìm kiếm
+         * @author: DUONGPV (04/10/2022)
+         */
         async onHandleSearch(searchParams) {
             try {
                 this.dataReady = false;
@@ -500,6 +523,10 @@ export default {
             }
         },
 
+        /**
+         * Lấy lại thông tin danh sách nhà cung cấp
+         * @author: DUONGPV (04/10/2022)
+         */
         async onHandleReload() {
             try {
                 this.dataReady = false;
@@ -513,6 +540,10 @@ export default {
             }
         },
 
+        /**
+         * Hiển thị popup modal
+         * @author: DUONGPV (04/10/2022)
+         */
         async onHandleShowModal() {
             try {
                 if (!this.isLoadingForm) {
@@ -538,6 +569,11 @@ export default {
             }
         },
 
+        /**
+         * Đóng popup modal
+         * @param {*} typeClose: Loại đóng(0: Đóng luôn, 1: Kiểm tra thay đổi rồi mới đóng)
+         * @author: DUONGPV (04/10/2022)
+         */
         onHandleHideModal(typeClose) {
             try {
                 let isChange = false;
@@ -628,6 +664,10 @@ export default {
             }
         },
 
+        /**
+         * Đóng popup thông báo
+         * @author: DUONGPV (04/10/2022)
+         */
         onHandleHidePopup() {
             try {
                 this.isShowPopup = false;
@@ -642,6 +682,11 @@ export default {
             }
         },
 
+        /**
+         * Thay đổi kiểu nhà cung cấp
+         * @param {*} value: Giá trị kiểu nhà cung cấp cần thay đổi
+         * @author: DUONGPV (04/10/2022)
+         */
         onChangTypeSupplier(value) {
             try {
                 this.typeSupplier = value;
@@ -650,6 +695,11 @@ export default {
             }
         },
 
+        /**
+         * Hiển thị popup modal sửa thông tin nhà cung cấp
+         * @param {*} value: Giá trị nhà cung cấp cần hiển thị để chỉnh sửa
+         * @author: DUONGPV (04/10/2022)
+         */
         async onEdit(value) {
             try {
                 this.isLoading = true;
@@ -670,6 +720,11 @@ export default {
             }
         },
 
+        /**
+         * Hiển thị popup thông báo xóa thông tin nhà cung cấp
+         * @param {*} value: Giá trị nhà cung cấp cần xóa
+         * @author: DUONGPV (04/10/2022)
+         */
         onDelete(value) {
             try {
                 this.popupData = {
@@ -704,6 +759,11 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện xóa thông tin nhà cung cấp
+         * @param {*} id: ID nhà cung cấp cần xóa
+         * @author: DUONGPV (04/10/2022)
+         */
         async onHandleDelete(id) {
             try {
                 this.isShowPopup = false;
@@ -720,6 +780,11 @@ export default {
             }
         },
 
+        /**
+         * Hiển thị popup modal xem chi tiết thông tin nhà cung cấp
+         * @param {*} value: Giá trị nhà cung cấp cần hiển thị để xem chi tiết
+         * @author: DUONGPV (04/10/2022)
+         */
         async onDetail(value) {
             try {
                 this.isLoading = true;
@@ -737,6 +802,11 @@ export default {
             }
         },
 
+        /**
+         * Hiển thị popup modal nhân bản thông tin nhà cung cấp
+         * @param {*} value: Giá trị nhà cung cấp cần hiển thị để nhân bản
+         * @author: DUONGPV (04/10/2022)
+         */
         async onReplication(value) {
             try {
                 this.isLoading = true;
@@ -764,6 +834,11 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện thêm/sửa thông tin nhà cung cấp
+         * @param {*} type: Kiểu lưu (0: Lưu xong đóng popup modal, 1: Lưu xong refresh lại object, không đóng popup modal)
+         * @author: DUONGPV (04/10/2022)
+         */
         async onSaveSupplier(type) {
             try {
                 this.setFieldErrorFocus(null);
@@ -845,6 +920,13 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện lưu lại lỗi trong khi người dùng thao tác
+         * @param {*} isError: True hoặc False
+         * @param {*} errorMessage: Message thông báo lỗi
+         * @param {*} dataField: Trường thông tin bị lỗi
+         * @author: DUONGPV (04/10/2022)
+         */
         setValidateData(isError, errorMessage, dataField) {
             try {
                 var field = this.validateData.findIndex((e) => {
@@ -865,6 +947,12 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện update dữ liệu của nhà cung cấp nhưng chưa lưu vào DB
+         * @param {*} valueField: Giá trị trường cần phải cập nhật
+         * @param {*} dataField: Trường cần cập nhật
+         * @author: DUONGPV (04/10/2022)
+         */
         setValue(valueField, dataField) {
             try {
                 this.account_object[dataField] = valueField;
@@ -882,6 +970,11 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện update dữ liệu nhóm nhà cung cấp của đối tượng nhà cung cấp
+         * @param {*} value: Giá trị nhóm nhà cung cấp cần phải cập nhật
+         * @author: DUONGPV (04/10/2022)
+         */
         setValueList(value) {
             try {
                 this.supplier_constraints = [];
@@ -899,6 +992,10 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện kiểm tra dữ liệu nếu tồn tại lỗi hiển thị popup thông báo
+         * @author: DUONGPV (04/10/2022)
+         */
         checkValidateData() {
             try {
                 if (!this.account_object.account_object_code) {
@@ -949,6 +1046,11 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện cập nhật trường lỗi đầu tiền cần focus
+         * @param {*} fieldError: Trường lỗi đầu cần focus
+         * @author: DUONGPV (04/10/2022)
+         */
         setFieldErrorFocus(fieldError) {
             try {
                 this.fieldErrorFocus = fieldError;
@@ -957,6 +1059,10 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện xuất khẩu dữ liệu
+         * @author: DUONGPV (04/10/2022)
+         */
         async exportData() {
             try {
                 var columnsExport = this.columns
@@ -999,6 +1105,10 @@ export default {
             }
         },
 
+        /**
+         * Mở modal popup chỉnh sửa giao diện
+         * @author: DUONGPV (04/10/2022)
+         */
         onHandleShowSettingPage() {
             try {
                 this.isShowModalSetting = true;
@@ -1007,10 +1117,18 @@ export default {
             }
         },
 
+        /**
+         * Đóng modal popup chỉnh sửa giao diện
+         * @author: DUONGPV (04/10/2022)
+         */
         onHandleHideSettingPage() {
             this.isShowModalSetting = false;
         },
 
+        /**
+         * Lấy thông tin giao diện cần hiển thị
+         * @author: DUONGPV (04/10/2022)
+         */
         onLoadTemplate() {
             try {
                 if (localStorage.getItem("supplier_template") === null) {
@@ -1024,6 +1142,11 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện lưu thông tin giao diện
+         * @param {*} value: Giá trị template cần lưu
+         * @author: DUONGPV (04/10/2022)
+         */
         onSaveTemplate(value) {
             try {
                 this.columns = value;
@@ -1037,6 +1160,10 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện render dữ liệu bảng
+         * @author: DUONGPV (04/10/2022)
+         */
         renderTable() {
             try {
                 this.data = this.data.map((item) => {

@@ -28,11 +28,6 @@ export default {
 
     emits: ["setValue"],
 
-    data() {
-        return {};
-    },
-
-    created() {},
 };
 </script>
 <style scoped></style>

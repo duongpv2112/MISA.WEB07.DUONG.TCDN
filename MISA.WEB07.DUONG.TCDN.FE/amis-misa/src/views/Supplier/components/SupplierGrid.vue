@@ -55,12 +55,6 @@ export default {
             },
         };
     },
-
-    methods: {
-        functionA() {
-            console.log("a");
-        },
-    },
 };
 </script>
 <style scoped>

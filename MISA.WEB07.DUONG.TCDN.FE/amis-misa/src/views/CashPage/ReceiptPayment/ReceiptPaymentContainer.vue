@@ -513,6 +513,10 @@ export default {
     },
 
     methods: {
+        /**
+         * Lấy tất cả danh sách thông tin chứng từ
+         * @author: DUONGPV (04/10/2022)
+         */
         async getReceiptPayments(
             pageSize,
             pageNumber,
@@ -555,6 +559,11 @@ export default {
             }
         },
 
+        /**
+         * Thay đổi số ttrang cần hiển thị
+         * @param {*} pageNumber: Số trang cần hiển thị
+         * @author: DUONGPV (04/10/2022)
+         */
         async onHandlePageChange(pageNumber) {
             try {
                 this.dataReady = false;
@@ -569,6 +578,11 @@ export default {
             }
         },
 
+        /**
+         * Thay đổi số lượng bản ghi trên mỗi trang
+         * @param {*} pageSize: Số lượng bản ghi trên trang
+         * @author: DUONGPV (04/10/2022)
+         */
         async onHandlePageSizeChange(pageSize) {
             try {
                 this.dataReady = false;
@@ -583,6 +597,11 @@ export default {
             }
         },
 
+        /**
+         * Lấy tất cả danh sách thông tin chứng từ theo từ khóa tìm kiếm
+         * @param {*} searchParams: Từ khóa cần tìm kiếm
+         * @author: DUONGPV (04/10/2022)
+         */
         async onHandleSearch(searchParams) {
             try {
                 this.dataReady = false;
@@ -597,6 +616,10 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện lấy lại dữ liệu
+         * @author: DUONGPV (04/10/2022)
+         */
         async onHandleReload() {
             try {
                 this.dataReady = false;
@@ -611,6 +634,11 @@ export default {
             }
         },
 
+        /**
+         * Lấy tất cả danh sách thông tin chứng từ theo trường cần lọc
+         * @param {*} filter: Trường cần lọc
+         * @author: DUONGPV (04/10/2022)
+         */
         async onHandleFilter(filter) {
             try {
                 this.filterValue = filter;
@@ -626,6 +654,10 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện render dữ liệu bảng chính
+         * @author: DUONGPV (04/10/2022)
+         */
         async renderTable() {
             try {
                 this.data = this.data.map((item) => {
@@ -671,6 +703,10 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện ẩn hiện giao diện collapse
+         * @author: DUONGPV (04/10/2022)
+         */
         setCollapse() {
             try {
                 this.isCollapseResponse = !this.isCollapseResponse;
@@ -679,6 +715,11 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện hiển thị thông tin chứng từ cần sửa
+         * @param {*} value: Giá trị chứng từ cần sửa
+         * @author: DUONGPV (04/10/2022)
+         */
         async onEdit(value) {
             try {
                 this.isLoading = true;
@@ -713,6 +754,11 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện mở popup cảnh báo chứng từ xóa
+         * @param {*} value: Giá trị chứng từ cần xóa
+         * @author: DUONGPV (04/10/2022)
+         */
         onDelete(value) {
             try {
                 this.popupData = {
@@ -747,6 +793,11 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện xóa thông tin chứng từ
+         * @param {*} value: Giá trị chứng từ cần xóa
+         * @author: DUONGPV (04/10/2022)
+         */
         async onHandleDelete(value) {
             try {
                 this.isShowPopup = false;
@@ -775,6 +826,10 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện đóng popup thông báo
+         * @author: DUONGPV (04/10/2022)
+         */
         onHandleHidePopup() {
             try {
                 this.isShowPopup = false;
@@ -804,6 +859,11 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện xem chi tiết thông tin chứng từ
+         * @param {*} value: Giá trị chứng từ cần xem chi tiết
+         * @author: DUONGPV (04/10/2022)
+         */
         async onDetail(value) {
             try {
                 this.isLoading = true;
@@ -839,6 +899,11 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện nhân bản dữ liệu đang có
+         * @param {*} value: Giá trị chứng từ cần nhân bản
+         * @author: DUONGPV (04/10/2022)
+         */
         async onReplication(value) {
             try {
                 this.isViewDetail = false;
@@ -873,6 +938,12 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện lưu thông tin chứng từ
+         * @param {*} type: Loại chứng từ cần lưu(0: Phiếu thu, 1: Phiếu chi)
+         * @param {*} typeSave: Kiểu lưu(0: Lưu xong đóng, 1: Lưu xong refresh object và giữ nguyên form)
+         * @author: DUONGPV (04/10/2022)
+         */
         async onSave(type, typeSave) {
             try {
                 this.setFieldReceiptPaymentErrorFocus(null);
@@ -964,6 +1035,11 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện mở popup modal
+         * @param {*} type: Loại chứng từ cần hiển thị(0: Phiếu thu, 1: Phiếu chi)
+         * @author: DUONGPV (04/10/2022)
+         */
         async onHandleShowModal(type) {
             try {
                 this.isLoading = true;
@@ -1046,6 +1122,12 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện lấy các giá trị cần hiển thị theo loại chứng từ
+         * @param {*} type: Loại chứng từ cần hiển thị(0: Phiếu thu, 1: Phiếu chi)
+         * @param {*} isNewCode: Cho phép lấy mã mới(True hoặc False)
+         * @author: DUONGPV (04/10/2022)
+         */
         async setValueModal(type, isNewCode) {
             try {
                 if (type == this.ENUM.TYPE_RECEIPT) {
@@ -1504,6 +1586,11 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện đóng popup modal
+         * @param {*} typeClose: Kiểu đóng(0: Đóng luôn, 1: Kiểm tra thay đổi và chờ xác nhận đóng)
+         * @author: DUONGPV (04/10/2022)
+         */
         onHandleHideModal(typeClose) {
             try {
                 let isChange = false;
@@ -1564,6 +1651,12 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện cập nhật giá trị đối tượng ReceiptPayment
+         * @param {*} valueField: Giá trị cần cập nhật
+         * @param {*} dataField: Trường thông tin cần cập nhật
+         * @author: DUONGPV (04/10/2022)
+         */
         setValueRecieptPayment(valueField, dataField) {
             try {
                 if (valueField && dataField == "account_object_id") {
@@ -1674,6 +1767,11 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện cập nhật giá trị đối tượng ReceiptPaymentDetail
+         * @param {*} value: Giá trị cần cập nhật
+         * @author: DUONGPV (04/10/2022)
+         */
         setValueRecieptPaymentDetail(value) {
             try {
                 this.receiptPaymentDetail = value;
@@ -1683,6 +1781,10 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện xuất khẩu dữ liệu
+         * @author: DUONGPV (04/10/2022)
+         */
         async exportData() {
             try {
                 var columnsExport = this.columns
@@ -1744,14 +1846,26 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện mở popup modal chỉnh sửa giao diện
+         * @author: DUONGPV (04/10/2022)
+         */
         onHandleShowSettingPage() {
             this.isShowModalSetting = true;
         },
 
+        /**
+         * Thực hiện đóng popup modal chỉnh sửa giao diện
+         * @author: DUONGPV (04/10/2022)
+         */
         onHandleHideSettingPage() {
             this.isShowModalSetting = false;
         },
 
+        /**
+         * Thực hiện lấy dữ liệu template
+         * @author: DUONGPV (04/10/2022)
+         */
         onLoadTemplate() {
             try {
                 if (localStorage.getItem("receipt_payment_template") === null) {
@@ -1765,6 +1879,11 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện lưu thông tin template
+         * @param {*} value: Giá trị template cần lưu
+         * @author: DUONGPV (04/10/2022)
+         */
         onSaveTemplate(value) {
             try {
                 this.columns = value;
@@ -1778,6 +1897,10 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện render dữ liệu bảng Hạch toán
+         * @author: DUONGPV (04/10/2022)
+         */
         renderAccountings() {
             try {
                 this.receiptPaymentDetail = this.receiptPaymentDetail.map(
@@ -1818,6 +1941,13 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện lưu thông tin lỗi khi người dùng đang thao tác trên form đối tượng ReceiptPayment
+         * @param {*} isError: True hoặc False
+         * @param {*} errorMessage: Message thông báo lỗi
+         * @param {*} dataField: Trường bị lỗi
+         * @author: DUONGPV (04/10/2022)
+         */
         setValidateReceiptPayment(isError, errorMessage, dataField) {
             try {
                 if (
@@ -1850,6 +1980,14 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện lưu thông tin lỗi khi người dùng đang thao tác trên form đối tượng ReceiptPaymentDetail
+         * @param {*} isError: True hoặc False
+         * @param {*} errorMessage: Message thông báo lỗi
+         * @param {*} dataField: Trường bị lỗi
+         * @param {*} rowIndex: Dòng có trường bị lỗi
+         * @author: DUONGPV (04/10/2022)
+         */
         setValidateReceiptPaymentDetail(
             isError,
             errorMessage,
@@ -1897,6 +2035,10 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện kiểm tra dữ liệu ReceiptPayment sau khi ấn lưu
+         * @author: DUONGPV (04/10/2022)
+         */
         async checkEmptyReceiptPayment() {
             try {
                 if (
@@ -1918,6 +2060,10 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện kiểm tra dữ liệu ReceiptPayment sau khi ấn lưu
+         * @author: DUONGPV (04/10/2022)
+         */
         async checkValidateReceiptPayment() {
             try {
                 await this.checkEmptyReceiptPayment();
@@ -1951,6 +2097,10 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện kiểm tra dữ liệu ReceiptPaymentDetail sau khi ấn lưu
+         * @author: DUONGPV (04/10/2022)
+         */
         async checkValidateReceiptPaymentDetail() {
             try {
                 if (this.receiptPaymentDetail.length == 0) {
@@ -2014,6 +2164,11 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện cập nhật giá trị trường lỗi đầu tiên cần focus của đối tượng ReceiptPayment
+         * @param {*} fieldError: Trường bị lỗi đầu tiền
+         * @author: DUONGPV (04/10/2022)
+         */
         setFieldReceiptPaymentErrorFocus(fieldError) {
             try {
                 this.fieldErrorReceiptPaymentFocus = fieldError;
@@ -2022,6 +2177,12 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện cập nhật giá trị trường lỗi đầu tiên cần focus của đối tượng ReceiptPaymentDetail
+         * @param {*} fieldError: Trường bị lỗi đầu tiền
+         * @param {*} rowIndex: Dòng có trường bị lỗi
+         * @author: DUONGPV (04/10/2022)
+         */
         setFieldReceiptPaymentDetailErrorFocus(fieldError, rowIndex) {
             try {
                 this.fieldErrorReceiptPaymentDetailFocus = {
@@ -2033,6 +2194,11 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện cập nhật giá trị popup để hiển thị thông báo
+         * @param {*} popupData: Dữ liệu của popup thông báo cần hiển thị
+         * @author: DUONGPV (04/10/2022)
+         */
         setPopupData(popupData) {
             try {
                 this.popupData = popupData;

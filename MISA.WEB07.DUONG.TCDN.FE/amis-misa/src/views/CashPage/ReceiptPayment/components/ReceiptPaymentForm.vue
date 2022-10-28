@@ -1146,6 +1146,11 @@ export default {
     },
 
     methods: {
+        /**
+         * Kiểm tra dữ liệu typeof date
+         * @param {*} nameDate: Tên trường có type là date
+         * @author: DUONGPV (04/10/2022)
+         */
         checkDate(nameDate) {
             try {
                 if (nameDate == "accounting_date") {
@@ -1164,14 +1169,27 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện đóng/mở combobox loại tiền tệ
+         * @author: DUONGPV (04/10/2022)
+         */
         onHandleShowButtonCombobox() {
             this.isShowButtonCombobox = !this.isShowButtonCombobox;
         },
 
+        /**
+         * Thực hiện đóng combobox loại tiền tệ
+         * @author: DUONGPV (04/10/2022)
+         */
         onHideButtonCombobox() {
             this.isShowButtonCombobox = false;
         },
 
+        /**
+         * Cập nhật giá trị rowSelected
+         * @param {*} index: Vị trí dòng đang selected
+         * @author: DUONGPV (04/10/2022)
+         */
         setRowSelected(index) {
             try {
                 this.rowSelected = index;
@@ -1180,6 +1198,10 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện tính tổng tiền
+         * @author: DUONGPV (04/10/2022)
+         */
         sumTotalMoney() {
             try {
                 var sum = 0;
@@ -1199,6 +1221,12 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện cập nhật giá trị theo từng row
+         * @param {*} value: Giá trị của trường cần cập nhật
+         * @param {*} dataField: Tên trường cần cập nhật
+         * @author: DUONGPV (04/10/2022)
+         */
         updateRow(value, dataField) {
             try {
                 if (
@@ -1233,6 +1261,10 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện thêm dòng trong bảng Hạch toán
+         * @author: DUONGPV (04/10/2022)
+         */
         addRow() {
             try {
                 if (!this.isViewDetail) {
@@ -1287,6 +1319,11 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện xóa dòng trong bảng Hạch toán
+         * @param {*} valueRow: Giá trị dòng cần xóa
+         * @author: DUONGPV (04/10/2022)
+         */
         removeRow(valueRow) {
             try {
                 if (!this.isViewDetail) {
@@ -1304,6 +1341,10 @@ export default {
             }
         },
 
+        /**
+         * Hiện popup cảnh báo xóa tất cả
+         * @author: DUONGPV (04/10/2022)
+         */
         actionRemoveAll() {
             try {
                 this.setPopupData({
@@ -1337,6 +1378,10 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện xóa tất cả cá dòng
+         * @author: DUONGPV (04/10/2022)
+         */
         removeAllRow() {
             try {
                 if (!this.isViewDetail) {
@@ -1359,6 +1404,12 @@ export default {
             }
         },
 
+        /**
+         * Cập nhật giá trị của trường account_object_id
+         * @param {*} value: Giá trị của trường account_object_id cần cập nhật
+         * @param {*} dataField: Tên trường cần cập nhật
+         * @author: DUONGPV (04/10/2022)
+         */
         async setDataAccountObject(value, dataField) {
             try {
                 await this.setValue(value, dataField);
@@ -1370,6 +1421,12 @@ export default {
             }
         },
 
+        /**
+         * Cập nhật giá trị của trường account_object_name
+         * @param {*} value: Giá trị của trường account_object_name cần cập nhật
+         * @param {*} dataField: Tên trường cần cập nhật
+         * @author: DUONGPV (04/10/2022)
+         */
         async setDataAccountObjectName(value, dataField) {
             try {
                 await this.setValue(value, dataField);
@@ -1380,6 +1437,12 @@ export default {
             }
         },
 
+        /**
+         * Cập nhật giá trị của trường reason
+         * @param {*} value: Giá trị của trường reason cần cập nhật
+         * @param {*} dataField: Tên trường cần cập nhật
+         * @author: DUONGPV (04/10/2022)
+         */
         async setDataReason(value, dataField) {
             try {
                 await this.setValue(value, dataField);
@@ -1390,6 +1453,10 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện enable các ô readonly
+         * @author: DUONGPV (04/10/2022)
+         */
         onHandleActionEdit() {
             try {
                 this.onHandleEdit(false);
@@ -1398,6 +1465,11 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện lưu thông tin chứng từ
+         * @param {*} type: Loại lưu(0: Lưu xong đóng, 1: Lưu xong refresh object và không đóng form)
+         * @author: DUONGPV (04/10/2022)
+         */
         onHandleActionSave(type) {
             try {
                 if (type == 1) {
@@ -1408,6 +1480,10 @@ export default {
             }
         },
 
+        /**
+         * Lấy thông tin ô button Cất và thêm, Cất và đóng, ...
+         * @author: DUONGPV (04/10/2022)
+         */
         getNameActionSave() {
             try {
                 if (localStorage.getItem("name_action_save") === null) {
@@ -1426,6 +1502,14 @@ export default {
             }
         },
 
+        /**
+         * Thực hiện cập nhật
+         * @param {*} nameButton: Giá trị tên button
+         * @param {*} nameTooltip: Giá trị tên ToolTip
+         * @param {*} paramFunction: Giá trị biến truyền trong function
+         * @param {*} isKeyCode: True hoặc False
+         * @author: DUONGPV (04/10/2022)
+         */
         setNameActionSave(nameButton, nameTooltip, paramFunction, isKeyCode) {
             try {
                 this.nameActionSave = {
@@ -1479,9 +1563,6 @@ export default {
 };
 </script>
 <style scoped>
-.modal__body-top {
-}
-
 .modal__body-top .main-infomation {
     background-color: #eceef1;
     padding: 8px 24px 20px;

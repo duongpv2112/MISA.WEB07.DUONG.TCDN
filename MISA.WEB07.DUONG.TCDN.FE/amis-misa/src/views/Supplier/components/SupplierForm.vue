@@ -1084,6 +1084,10 @@ export default {
         };
     },
     methods: {
+        /**
+         * Kiểm tra dữ liệu ngày cấp
+         * @author: DUONGPV (04/10/2022)
+         */
         checkValidateDate() {
             try {
                 var valueDate = new Date(this.account_object.identity_date);
@@ -1119,9 +1123,8 @@ export default {
         },
 
         /**
-         * Function kiểm tra người dùng nhấn các key để thao tác với modal
-         * @param {*} $event: Giá trị thẻ đang được chọn
-         * @author: DUONGPV (08/09/2022)
+         * Kiểm tra người dùng nhấn phím tắt
+         * @author: DUONGPV (04/10/2022)
          */
         eventHandleKey() {
             var keyCodePress = event;
