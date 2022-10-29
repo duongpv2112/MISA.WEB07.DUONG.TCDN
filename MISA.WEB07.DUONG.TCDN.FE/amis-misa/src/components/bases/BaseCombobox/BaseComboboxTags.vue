@@ -401,6 +401,7 @@ export default {
                             this.listSelected.length - 1,
                             1
                         );
+                        this.$emit("setValueList", this.dataInput);
                         event.stopPropagation();
                         break;
                     case keyCode.ArrowDown:

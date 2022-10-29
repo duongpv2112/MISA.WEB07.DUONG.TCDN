@@ -118,7 +118,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
         /// <param name="typeRecord">Loại bản ghi</param>
         /// <returns>Bản ghi được thêm thành công hay thất bại(true, false)</returns>
         /// Created by: DUONGPV (04/10/2022)
-        public async Task<bool> InsertOneRecord(ReceiptPaymentDTO record, int typeRecord)
+        public async Task<Guid> InsertOneRecord(ReceiptPaymentDTO record, int typeRecord)
         {
             // Khai báo tên stored procedure
 
@@ -198,7 +198,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                 }
                 else isInsertReceiptPaymentDetail = true;
             }
-            return isInsertReceiptPayment ? isInsertReceiptPaymentDetail ? true : false : false;
+            return isInsertReceiptPayment ? isInsertReceiptPaymentDetail ? newGuid : Guid.Empty : Guid.Empty;
         }
 
         /// <summary>
@@ -259,7 +259,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
         /// <param name="typeRecord">Loại bản ghi</param>
         /// <returns>Thông tin chi tiết một bản ghi</returns>
         /// Author: DUONGPV (04/10/2022)
-        public async Task<bool> UpdateOneRecord(Guid id, ReceiptPaymentDTO record, int typeRecord)
+        public async Task<Guid> UpdateOneRecord(Guid id, ReceiptPaymentDTO record, int typeRecord)
         {
             // Khai báo tên stored procedure INSERT
             var tableNamePrimary = "";
@@ -347,7 +347,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                     else isUpdateReceiptPaymentDetail = true;
                 }
             }
-            return isUpdateReceiptPayment ? isUpdateReceiptPaymentDetail ? true : false : false;
+            return isUpdateReceiptPayment ? isUpdateReceiptPaymentDetail ? id : Guid.Empty : Guid.Empty;
         }
 
         /// <summary>

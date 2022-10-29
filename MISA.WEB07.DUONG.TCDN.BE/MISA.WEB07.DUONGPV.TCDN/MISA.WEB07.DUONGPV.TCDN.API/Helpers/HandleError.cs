@@ -29,6 +29,13 @@ namespace MISA.WEB07.DUONGPV.TCDN.API.Helpers
 
         }
 
+        /// <summary>
+        /// Validate 1 entity trả về đối tượng chứa thông tin lỗi
+        /// </summary>
+        /// <param name="message">Message thông báo</param>
+        /// <param name="httpContext">Context khi gọi API sử dụng để lấy được traceId</param>
+        /// <returns>Đối tượng chứa thông tin lỗi trả về cho client</returns>
+        /// Created by: DUONGPV (04/10/2022)
         public static ErrorResult? ValidateEntity(object? message, HttpContext httpContext)
         {
             Console.WriteLine(message);
@@ -73,7 +80,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.API.Helpers
             var errorResult = new ErrorResult(
                     Common.Enums.ErrorCode.DuplicateCode,
                     String.Format(Common.Resources.Resource.UserMsg_DuplicateCode, nameField),
-                    Common.Resources.Resource.DevMsg_DuplicateCode,
+                    nameField,
                     "https://google.com.vn",
                     Activity.Current?.Id ?? httpContext?.TraceIdentifier);
             return errorResult;

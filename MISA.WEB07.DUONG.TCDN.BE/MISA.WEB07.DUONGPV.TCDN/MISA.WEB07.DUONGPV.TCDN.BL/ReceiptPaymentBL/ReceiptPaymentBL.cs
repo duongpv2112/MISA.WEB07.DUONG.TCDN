@@ -105,7 +105,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL
                 };
             }
             var isInsertSuccess = await _receiptPaymentDL.InsertOneRecord(record, typeRecord);
-            if (isInsertSuccess)
+            if (isInsertSuccess != Guid.Empty)
             {
                 return new ServiceResponse
                 {
@@ -213,7 +213,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL
                 };
             }
             var isInsertSuccess = await _receiptPaymentDL.UpdateOneRecord(id, record, typeRecord);
-            if (isInsertSuccess)
+            if (isInsertSuccess != Guid.Empty)
             {
                 return new ServiceResponse
                 {

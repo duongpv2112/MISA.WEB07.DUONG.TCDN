@@ -990,21 +990,29 @@ export default {
                                 } else {
                                     if (response.code == CODE.DuplicateCode) {
                                         this.popupData = {
-                                            typePopup: 1,
+                                            typePopup: 2,
                                             footerPopup: {
                                                 footerLeft: [
                                                     {
-                                                        buttonName: "Đồng ý",
+                                                        buttonName: "Không",
                                                         buttonAction:
                                                             this
                                                                 .onHandleHidePopup,
+                                                        classButton: [],
+                                                        valueFunction: "",
+                                                    },
+                                                ],
+                                                footerRight: [
+                                                    {
+                                                        buttonName: "Có",
+                                                        buttonAction:
+                                                            this.autoSetCode,
                                                         classButton: [
                                                             "btn-confirm",
                                                         ],
                                                         valueFunction: "",
                                                     },
                                                 ],
-                                                footerRight: [],
                                                 enterKeyFunc:
                                                     this.onHandleHidePopup,
                                                 valueEnterKeyFunc: "",
@@ -1012,7 +1020,7 @@ export default {
                                                     this.onHandleHidePopup,
                                             },
 
-                                            noticeMessage: response.userMsg,
+                                            noticeMessage: `Số chứng từ <${response.devMsg}> đã tồn tại. Nếu không tìm thấy số chứng từ <${response.devMsg}>. Vui lòng thực hiện tính năng bảo trì số chứng từ. Xem hướng dẫn tại đây. Bạn có muốn chương trình tự động tăng số chứng từ không?`,
                                         };
                                         this.isShowPopup = true;
                                     } else if (
@@ -1062,21 +1070,29 @@ export default {
                                 } else {
                                     if (response.code == CODE.DuplicateCode) {
                                         this.popupData = {
-                                            typePopup: 1,
+                                            typePopup: 2,
                                             footerPopup: {
                                                 footerLeft: [
                                                     {
-                                                        buttonName: "Đồng ý",
+                                                        buttonName: "Không",
                                                         buttonAction:
                                                             this
                                                                 .onHandleHidePopup,
+                                                        classButton: [],
+                                                        valueFunction: "",
+                                                    },
+                                                ],
+                                                footerRight: [
+                                                    {
+                                                        buttonName: "Có",
+                                                        buttonAction:
+                                                            this.autoSetCode,
                                                         classButton: [
                                                             "btn-confirm",
                                                         ],
                                                         valueFunction: "",
                                                     },
                                                 ],
-                                                footerRight: [],
                                                 enterKeyFunc:
                                                     this.onHandleHidePopup,
                                                 valueEnterKeyFunc: "",
@@ -1084,7 +1100,7 @@ export default {
                                                     this.onHandleHidePopup,
                                             },
 
-                                            noticeMessage: response.userMsg,
+                                            noticeMessage: `Số chứng từ <${response.devMsg}> đã tồn tại. Nếu không tìm thấy số chứng từ <${response.devMsg}>. Vui lòng thực hiện tính năng bảo trì số chứng từ. Xem hướng dẫn tại đây. Bạn có muốn chương trình tự động tăng số chứng từ không?`,
                                         };
                                         this.isShowPopup = true;
                                     } else if (
@@ -2272,6 +2288,27 @@ export default {
             try {
                 this.popupData = popupData;
                 this.isShowPopup = true;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        /**
+         * Thực hiện tự động tăng số chứng từ
+         * @author: DUONGPV (04/10/2022)
+         */
+        async autoSetCode() {
+            try {
+                await api
+                    .get(
+                        `${API_RESOURCE.RECEIPT_PAYMENT_GET_NEW_CODE}?typeRecord=` +
+                            this.ENUM.TYPE_RECEIPT
+                    )
+                    .then(async (data) => {
+                        this.receiptPayment.receipt_payment_number = data;
+                        this.isShowPopup = false;
+                        await this.onSave(this.typeVoucher);
+                    });
             } catch (error) {
                 console.log(error);
             }

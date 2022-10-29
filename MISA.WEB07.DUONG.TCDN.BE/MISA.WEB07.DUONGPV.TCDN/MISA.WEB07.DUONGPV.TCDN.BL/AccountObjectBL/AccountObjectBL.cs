@@ -71,7 +71,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL
                 }
             }
             var isInsertSuccess = await _accountObjectDL.InsertOneRecord(record);
-            if (isInsertSuccess)
+            if (isInsertSuccess != Guid.Empty)
             {
                 return new ServiceResponse
                 {
@@ -139,7 +139,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL
                 }
             }
             var isUpdateSuccess = await _accountObjectDL.UpdateOneRecord(id, record);
-            if (isUpdateSuccess)
+            if (isUpdateSuccess != Guid.Empty)
             {
                 return new ServiceResponse
                 {
