@@ -15,6 +15,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
     public class ReceiptPaymentDetail
     {
         #region Property
+
         /// <summary>
         /// ID Hạch toán
         /// </summary>
@@ -41,6 +42,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// Số tiền
         /// </summary>
+        [PositiveNumber("Số tiền hạch toán không được nhỏ hơn 0")]
         public decimal amount_money { get; set; }
 
         /// <summary>
@@ -56,7 +58,6 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// ID Chứng từ
         /// </summary>
-        [IsNotNullOrEmpty("ID chứng từ không tồn tại")]
         [ForeignKey("receipt_payment_id")]
         public Guid? receipt_payment_id { get; set; }
 

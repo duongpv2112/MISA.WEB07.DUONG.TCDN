@@ -16,6 +16,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
     public class ReceiptPayment
     {
         #region Property
+
         /// <summary>
         /// ID Chứng từ
         /// </summary>
@@ -74,11 +75,13 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// Số lượng file kèm 
         /// </summary>
+        [PositiveNumber("Số lượng file kèm không được nhỏ hơn 0")]
         public int adding_number { get; set; }
 
         /// <summary>
         /// Tổng tiền
         /// </summary>
+        [PositiveNumber("Tổng tiền không được nhỏ hơn 0")]
         public decimal total_money { get; set; }
 
         /// <summary>

@@ -12,7 +12,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL
         /// <param name="typeRecord">Loại bản ghi</param>
         /// <returns>Bản ghi được thêm thành công hay thất bại(true, false)</returns>
         /// Created by: DUONGPV (04/10/2022)
-        public Task<bool> InsertOneRecord(ReceiptPaymentDTO record, int typeRecord);
+        public Task<ServiceResponse> InsertOneRecord(ReceiptPaymentDTO record, int typeRecord);
 
         /// <summary>
         /// Lấy thông tin chi tiết một bản ghi
@@ -31,7 +31,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL
         /// <param name="typeRecord">Loại bản ghi</param>
         /// <returns>Thông tin chi tiết một bản ghi</returns>
         /// Author: DUONGPV (04/10/2022)
-        public Task<bool> UpdateOneRecord(Guid id, ReceiptPaymentDTO record, int typeRecord);
+        public Task<ServiceResponse> UpdateOneRecord(Guid id, ReceiptPaymentDTO record, int typeRecord);
 
         /// <summary>
         /// Xóa thông tin một bản ghi

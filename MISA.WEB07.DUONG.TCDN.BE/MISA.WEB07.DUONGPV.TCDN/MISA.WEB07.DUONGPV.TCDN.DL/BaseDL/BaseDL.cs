@@ -111,6 +111,30 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
             }
         }
 
+        /// <summary>
+        /// Kiểm tra mã có tồn tại
+        /// </summary>
+        /// <param name="valueCode">Giá trị của trường code</param>
+        /// <returns>Nếu tồn tại thì trả về true nếu không trả về false</returns>
+        /// Created by: DUONGPV (04/10/2022)
+        public virtual async Task<bool> CheckDuplicateCode(string? valueCode = "")
+        {
+            // Khai báo tên stored procedure CheckCode
+            string tableName = EntityUtilities.GetTableName<T>();
+            string getDataFilterStoredProcedureName = $"Func_{tableName}_CheckCode";
+
+            // Chuẩn bị tham số đầu vào cho stored procedure
+            var parametersGetPaging = new DynamicParameters();
+            parametersGetPaging.Add("@v_value", valueCode);
+
+            // Thực hiện gọi vào DB để chạy câu lệnh stored procedure
+            using (var npgSqlConnection = new NpgsqlConnection(DatabaseContext.ConnectionString))
+            {
+                var isDuplicate = await npgSqlConnection.QueryFirstOrDefaultAsync<bool>(getDataFilterStoredProcedureName, parametersGetPaging, commandType: CommandType.StoredProcedure);
+                return isDuplicate;
+            }
+        }
+
         #endregion
     }
 }

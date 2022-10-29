@@ -14,7 +14,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// ID Nhóm nhà cung cấp
         /// </summary>
-        [Key]
+        [PrimaryKey("supplier_group_id")]
         public Guid supplier_group_id { get; set; }
 
         /// <summary>

@@ -41,5 +41,12 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
         /// Created by: DUONGPV (04/10/2022)
         public Task<List<T>> ExportData(string? keyword = "", int? filter = null, string? orderBy = "");
 
+        /// <summary>
+        /// Kiểm tra mã có tồn tại
+        /// </summary>
+        /// <param name="valueCode">Giá trị của trường code</param>
+        /// <returns>Nếu tồn tại thì trả về true nếu không trả về false</returns>
+        /// Created by: DUONGPV (04/10/2022)
+        public Task<bool> CheckDuplicateCode(string? valueCode = "");
     }
 }

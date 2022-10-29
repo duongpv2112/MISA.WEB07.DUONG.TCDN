@@ -1,13 +1,5 @@
 ﻿using MISA.WEB07.DUONGPV.TCDN.Common.Attributes;
 using MISA.WEB07.DUONGPV.TCDN.Common.Enums;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
 {
@@ -18,6 +10,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
     public class AccountObject
     {
         #region Property
+
         /// <summary>
         /// ID Đối tượng
         /// </summary>
@@ -28,6 +21,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// Mã đối tượng
         /// </summary>
         [IsNotNullOrEmpty("Mã đối tượng không được trống")]
+        [UniqueKey("account_object_code")]
         public string account_object_code { get; set; }
 
         /// <summary>
@@ -71,7 +65,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// <summary>
         /// Ngày cấp CMND
         /// </summary>
-        [DateBiggerCurrent("identity_date")]
+        [DateBiggerCurrent("Ngày cấp CMND")]
         public string? identity_date { get; set; }
 
         /// <summary>

@@ -7,12 +7,16 @@ using System.Threading.Tasks;
 
 namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities.DTO
 {
+    /// <summary>
+    /// Đối tượng Nhà cung cấp DTO
+    /// </summary>
     public class SupplierDTO
     {
         /// <summary>
         /// Thông tin bản ghi nhà cung cấp
         /// </summary>
         public AccountObject? accountObject { get; set; }
+
         /// <summary>
         /// Danh sách bản ghi phụ
         /// </summary>

@@ -381,6 +381,7 @@ import {
 } from "@/views/CashPage/ReceiptPayment/constants/enums";
 import { API_RESOURCE } from "@/views/CashPage/ReceiptPayment/constants/api";
 import { common } from "@/libs/common/common";
+import { CODE } from "@/libs/enums/code";
 import api from "@/services/api";
 import template_default from "@/views/CashPage/ReceiptPayment/constants/template_default.json";
 import BaseButton from "@/components/bases/BaseButton/BaseButton.vue";
@@ -973,11 +974,9 @@ export default {
                                     type,
                                 bodyData
                             )
-                            .then(async (data) => {
-                                if (data) {
-                                    this.toast.success(
-                                        "Thêm bản ghi thành công!"
-                                    );
+                            .then(async (response) => {
+                                if (response && response.code == CODE.Success) {
+                                    this.toast.success(response.message);
                                     this.onHandleReload();
                                     if (typeSave && typeSave == 1) {
                                         await this.onHandleShowModal(
@@ -988,7 +987,43 @@ export default {
                                         this.isShowModal = false;
                                     }
                                     this.isShowPopup = false;
+                                } else {
+                                    if (response.code == CODE.DuplicateCode) {
+                                        this.popupData = {
+                                            typePopup: 1,
+                                            footerPopup: {
+                                                footerLeft: [
+                                                    {
+                                                        buttonName: "Đồng ý",
+                                                        buttonAction:
+                                                            this
+                                                                .onHandleHidePopup,
+                                                        classButton: [
+                                                            "btn-confirm",
+                                                        ],
+                                                        valueFunction: "",
+                                                    },
+                                                ],
+                                                footerRight: [],
+                                                enterKeyFunc:
+                                                    this.onHandleHidePopup,
+                                                valueEnterKeyFunc: "",
+                                                escKeyFunc:
+                                                    this.onHandleHidePopup,
+                                            },
+
+                                            noticeMessage: response.userMsg,
+                                        };
+                                        this.isShowPopup = true;
+                                    } else if (
+                                        response.code == CODE.ActionField
+                                    ) {
+                                        this.toast.error(response.userMsg);
+                                    }
                                 }
+                            })
+                            .catch((error) => {
+                                this.toast.error(error.response.data.userMsg);
                             });
                     } else if (this.receiptPayment.is_edit) {
                         if (bodyData.receiptPayment.account_object_id == null) {
@@ -1011,11 +1046,9 @@ export default {
                                     type,
                                 bodyData
                             )
-                            .then(async (data) => {
-                                if (data) {
-                                    this.toast.success(
-                                        "Sửa bản ghi thành công!"
-                                    );
+                            .then(async (response) => {
+                                if (response && response.code == CODE.Success) {
+                                    this.toast.success(response.message);
                                     this.onHandleReload();
                                     if (typeSave && typeSave == 1) {
                                         await this.onHandleShowModal(
@@ -1026,7 +1059,43 @@ export default {
                                         this.isShowModal = false;
                                     }
                                     this.isShowPopup = false;
+                                } else {
+                                    if (response.code == CODE.DuplicateCode) {
+                                        this.popupData = {
+                                            typePopup: 1,
+                                            footerPopup: {
+                                                footerLeft: [
+                                                    {
+                                                        buttonName: "Đồng ý",
+                                                        buttonAction:
+                                                            this
+                                                                .onHandleHidePopup,
+                                                        classButton: [
+                                                            "btn-confirm",
+                                                        ],
+                                                        valueFunction: "",
+                                                    },
+                                                ],
+                                                footerRight: [],
+                                                enterKeyFunc:
+                                                    this.onHandleHidePopup,
+                                                valueEnterKeyFunc: "",
+                                                escKeyFunc:
+                                                    this.onHandleHidePopup,
+                                            },
+
+                                            noticeMessage: response.userMsg,
+                                        };
+                                        this.isShowPopup = true;
+                                    } else if (
+                                        response.code == CODE.ActionField
+                                    ) {
+                                        this.toast.error(response.userMsg);
+                                    }
                                 }
+                            })
+                            .catch((error) => {
+                                this.toast.error(error.response.data.userMsg);
                             });
                     }
                 }

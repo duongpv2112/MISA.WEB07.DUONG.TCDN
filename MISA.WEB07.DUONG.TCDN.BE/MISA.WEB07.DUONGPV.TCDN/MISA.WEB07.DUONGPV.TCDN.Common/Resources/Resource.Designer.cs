@@ -61,6 +61,24 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Xóa.
+        /// </summary>
+        public static string DeleteAction {
+            get {
+                return ResourceManager.GetString("DeleteAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xóa thông tin bản ghi thành công.
+        /// </summary>
+        public static string DeleteRecordSuccess {
+            get {
+                return ResourceManager.GetString("DeleteRecordSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Action failed.
         /// </summary>
         public static string DevMsg_ActionFailed {
@@ -124,11 +142,38 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Danh sách chứng từ chi tiết không được để trống.
+        /// </summary>
+        public static string ErrorListReceiptPaymentDetail {
+            get {
+                return ResourceManager.GetString("ErrorListReceiptPaymentDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Trường {0} không đúng định dạng.
         /// </summary>
         public static string ErrorPhoneNumber {
             get {
                 return ResourceManager.GetString("ErrorPhoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thêm mới.
+        /// </summary>
+        public static string InsertAction {
+            get {
+                return ResourceManager.GetString("InsertAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thêm mới bản ghi thành công.
+        /// </summary>
+        public static string InsertRecordSuccess {
+            get {
+                return ResourceManager.GetString("InsertRecordSuccess", resourceCulture);
             }
         }
         
@@ -142,6 +187,51 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Đối tượng nhóm nhà cung cấp có mã {0} không tồn tại.
+        /// </summary>
+        public static string NotExitsSupplierGroup {
+            get {
+                return ResourceManager.GetString("NotExitsSupplierGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đối tượng nhà cung cấp có mã {0} không tồn tại.
+        /// </summary>
+        public static string NotExitsVendor {
+            get {
+                return ResourceManager.GetString("NotExitsVendor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ngày hạch toán phải lớn hơn hoặc bằng Ngày chứng từ &lt;{0}&gt;. Xin vui lòng kiểm tra lại..
+        /// </summary>
+        public static string ReceiptPaymentDateBiggerAccountingDate {
+            get {
+                return ResourceManager.GetString("ReceiptPaymentDateBiggerAccountingDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sửa.
+        /// </summary>
+        public static string UpdateAction {
+            get {
+                return ResourceManager.GetString("UpdateAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sửa thông tin bản ghi thành công.
+        /// </summary>
+        public static string UpdateRecordSuccess {
+            get {
+                return ResourceManager.GetString("UpdateRecordSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} dữ liệu không thành công.
         /// </summary>
         public static string UserMsg_ActionFailed {
@@ -151,7 +241,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} đã tồn tại trong hệ thống.
+        ///   Looks up a localized string similar to {0} đã tồn tại trong hệ thống, vui lòng kiểm tra lại..
         /// </summary>
         public static string UserMsg_DuplicateCode {
             get {
@@ -174,6 +264,15 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Resources {
         public static string UserMsg_ValidateFailed {
             get {
                 return ResourceManager.GetString("UserMsg_ValidateFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mã nhà cung cấp.
+        /// </summary>
+        public static string VendorCode {
+            get {
+                return ResourceManager.GetString("VendorCode", resourceCulture);
             }
         }
     }

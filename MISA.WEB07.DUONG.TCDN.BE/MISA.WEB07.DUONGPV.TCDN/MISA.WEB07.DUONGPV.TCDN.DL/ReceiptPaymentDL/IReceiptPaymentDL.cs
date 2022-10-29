@@ -49,5 +49,22 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
         /// <param name="typeRecord">Loại bản ghi</param>
         /// Author: DUONGPV (04/10/2022)
         public Task<string> GetNewCode(int typeRecord);
+
+        /// <summary>
+        /// Kiểm tra mã code có phải của bản ghi này không
+        /// </summary>
+        /// <param name="id">ID của bản ghi cần lấy</param>
+        /// <param name="receiptPaymentNumber">Mã code của bản ghi cần kiểm tra</param>
+        /// <returns>True hoặc False</returns>
+        /// Author: DUONGPV (04/10/2022)
+        public Task<bool> CheckExitsRecord(Guid id, string? receiptPaymentNumber);
+
+        /// <summary>
+        /// Kiểm tra thông tin ReceiptPaymentNumberDetail có tồn tại không
+        /// </summary>
+        /// <param name="id">ID của bản ghi cần lấy</param>
+        /// <returns>True hoặc False</returns>
+        /// Author: DUONGPV (04/10/2022)
+        public Task<bool> CheckExitsDetailRecord(Guid id);
     }
 }

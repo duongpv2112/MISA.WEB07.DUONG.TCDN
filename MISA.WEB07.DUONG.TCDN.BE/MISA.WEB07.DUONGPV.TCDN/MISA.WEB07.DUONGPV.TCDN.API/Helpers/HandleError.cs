@@ -16,15 +16,26 @@ namespace MISA.WEB07.DUONGPV.TCDN.API.Helpers
         /// <param name="msException">Đối tượng exception custom gặp phải</param>
         /// <param name="httpContext">Context khi gọi API sử dụng để lấy được traceId</param>
         /// <returns>Đối tượng chứa thông tin lỗi trả về cho client</returns>
-        /// Created by: DUONGPV (25/08/2022)
+        /// Created by: DUONGPV (04/10/2022)
         public static ErrorResult? ValidateEntity(MISAException msException, HttpContext httpContext)
         {
             Console.WriteLine(msException.Data);
             return new ErrorResult(
                 Common.Enums.ErrorCode.InvalidInput,
                 Common.Resources.Resource.UserMsg_ValidateFailed,
-                Common.Resources.Resource.DevMsg_ValidateFailed,
-                msException.Data,
+                msException.ErrorsMessage,
+                "https://google.com.vn",
+                Activity.Current?.Id ?? httpContext?.TraceIdentifier);
+
+        }
+
+        public static ErrorResult? ValidateEntity(object? message, HttpContext httpContext)
+        {
+            Console.WriteLine(message);
+            return new ErrorResult(
+                Common.Enums.ErrorCode.InvalidInput,
+                Common.Resources.Resource.UserMsg_ValidateFailed,
+                message,
                 "https://google.com.vn",
                 Activity.Current?.Id ?? httpContext?.TraceIdentifier);
 
@@ -36,7 +47,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.API.Helpers
         /// <param name="exception">Đối tượng exception gặp phải</param>
         /// <param name="httpContext">Context khi gọi API sử dụng để lấy được traceId</param>
         /// <returns>Đối tượng chứa thông tin lỗi trả về cho client</returns>
-        /// Created by: DUONGPV (25/08/2022)
+        /// Created by: DUONGPV (04/10/2022)
         public static ErrorResult? GenerateExceptionResult(Exception exception, HttpContext httpContext)
         {
             Console.WriteLine(exception.Message);
@@ -44,7 +55,6 @@ namespace MISA.WEB07.DUONGPV.TCDN.API.Helpers
                 Common.Enums.ErrorCode.Exception,
                 Common.Resources.Resource.UserMsg_Exception,
                 Common.Resources.Resource.DevMsg_Exception,
-                "Catched an exception",
                 "https://google.com.vn",
                 Activity.Current?.Id ?? httpContext?.TraceIdentifier);
         }
@@ -52,30 +62,59 @@ namespace MISA.WEB07.DUONGPV.TCDN.API.Helpers
         /// <summary>
         /// Sinh ra đối tượng lỗi trả về khi gặp lỗi trùng mã
         /// </summary>
-        /// <param name="exception">Đối tượng exception gặp phải</param>
+        /// <param name="nameField">Tên trường bị duplicate</param>
+        /// <param name="httpContext">Context khi gọi API sử dụng để lấy được traceId</param>
+        /// <returns>Đối tượng chứa thông tin lỗi trả về cho client</returns>
+        /// Created by: DUONGPV (04/10/2022)
+        public static ErrorResult? GenerateDuplicateCodeErrorResult(object? nameField, HttpContext httpContext)
+        {
+            Console.WriteLine(Common.Resources.Resource.DevMsg_DuplicateCode);
+
+            var errorResult = new ErrorResult(
+                    Common.Enums.ErrorCode.DuplicateCode,
+                    String.Format(Common.Resources.Resource.UserMsg_DuplicateCode, nameField),
+                    Common.Resources.Resource.DevMsg_DuplicateCode,
+                    "https://google.com.vn",
+                    Activity.Current?.Id ?? httpContext?.TraceIdentifier);
+            return errorResult;
+        }
+
+        /// <summary>
+        /// Sinh ra đối tượng lỗi trả về khi gặp lỗi trùng mã
+        /// </summary>
+        /// <param name="nameAction">Tên action thực hiện không thành công</param>
+        /// <param name="httpContext">Context khi gọi API sử dụng để lấy được traceId</param>
+        /// <returns>Đối tượng chứa thông tin lỗi trả về cho client</returns>
+        /// Created by: DUONGPV (04/10/2022)
+        public static ErrorResult? AcctionFieldErrorResult(object? nameAction, HttpContext httpContext)
+        {
+            Console.WriteLine(Common.Resources.Resource.DevMsg_ActionFailed);
+
+            var errorResult = new ErrorResult(
+                    Common.Enums.ErrorCode.ActionField,
+                    String.Format(Common.Resources.Resource.UserMsg_ActionFailed, nameAction),
+                    Common.Resources.Resource.DevMsg_ActionFailed,
+                    "https://google.com.vn",
+                    Activity.Current?.Id ?? httpContext?.TraceIdentifier);
+            return errorResult;
+        }
+
+        /// <summary>
+        /// Sinh ra đối tượng lỗi trả về khi gặp lỗi trùng mã
+        /// </summary>
+        /// <param name="npgsqlException">Đối tượng exception của DB gặp phải</param>
         /// <param name="httpContext">Context khi gọi API sử dụng để lấy được traceId</param>
         /// <returns>Đối tượng chứa thông tin lỗi trả về cho client</returns>
         /// Created by: DUONGPV (25/08/2022)
-        //public static ErrorResult? GenerateDuplicateCodeErrorResult(NpgsqlException npgsqlException, HttpContext httpContext)
-        //{
-        //    if (npgsqlException.ErrorCode == NpgsqlEr.DuplicateKeyEntry)
-        //    {
-        //        var errorResult = new ErrorResult(
-        //            Common.Enums.ErrorCode.DuplicateCode,
-        //            Common.Resouces.Resouces.ErrorMessageDuplicate,
-        //            $"{mySqlException.Message}",
-        //            "https://google.com.vn",
-        //            Activity.Current?.Id ?? httpContext?.TraceIdentifier);
-        //        return errorResult;
-        //    }
-
-        //    Console.WriteLine(mySqlException.Message);
-        //    return new ErrorResult(
-        //        Common.Enums.ErrorCode.Exception,
-        //        Common.Resouces.Resouces.ErrorMessageException,
-        //        "Catched an exception",
-        //        "https://google.com.vn",
-        //        Activity.Current?.Id ?? httpContext?.TraceIdentifier);
-        //}
+        public static ErrorResult? GenerateNpgsqlExceptionResult(NpgsqlException npgsqlException, HttpContext httpContext)
+        {
+            Console.WriteLine(npgsqlException.Message);
+            return new ErrorResult(
+                Common.Enums.ErrorCode.Exception,
+                Common.Resources.Resource.UserMsg_Exception,
+                Common.Resources.Resource.DevMsg_Exception,
+                "https://google.com.vn",
+                Activity.Current?.Id ?? httpContext?.TraceIdentifier);
+        }
     }
 }

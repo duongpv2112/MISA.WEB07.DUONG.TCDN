@@ -17,6 +17,22 @@
     }
 
     /// <summary>
+    /// Attribute dùng để xác định 1 property là unique
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public class UniqueKeyAttribute : Attribute
+    {
+        public string UniqueKeyName;
+
+        public UniqueKeyAttribute(string uniqueKeyName)
+        {
+            UniqueKeyName = uniqueKeyName;
+        }
+
+        public string Name { get { return UniqueKeyName; } }
+    }
+
+    /// <summary>
     /// Attribute dùng để xác định 1 property không được trống
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
@@ -99,6 +115,48 @@
         public string Message;
 
         public MISAPhoneAttribute(string errorMessage)
+        {
+            Message = errorMessage;
+        }
+
+        public string ErrorMessage { get { return Message; } }
+    }
+
+    /// <summary>
+    /// Attribute dùng để xác định tên table
+    /// </summary>
+    [AttributeUsage(AttributeTargets.All)]
+    public class MISATableAttribute : Attribute
+    {
+        public string NameTable;
+
+        public string NameTableConstraint;
+
+        public MISATableAttribute(string name)
+        {
+            NameTable = name;
+        }
+
+        public MISATableAttribute(string name, string nameConstraint)
+        {
+            NameTable = name;
+            NameTableConstraint = nameConstraint;
+        }
+
+        public string Name { get { return NameTable; } }
+
+        public string NameConstraint { get { return NameTableConstraint; } }
+    }
+
+    /// <summary>
+    /// Attribute dùng để xác định số có phải là số dương không
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public class PositiveNumberAttribute : Attribute
+    {
+        public string Message;
+
+        public PositiveNumberAttribute(string errorMessage)
         {
             Message = errorMessage;
         }

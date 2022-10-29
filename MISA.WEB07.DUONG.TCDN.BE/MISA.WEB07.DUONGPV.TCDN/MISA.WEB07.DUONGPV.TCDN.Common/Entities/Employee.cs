@@ -17,6 +17,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
     public class Employee
     {
         #region Property
+
         /// <summary>
         /// ID Nhân viên
         /// </summary>

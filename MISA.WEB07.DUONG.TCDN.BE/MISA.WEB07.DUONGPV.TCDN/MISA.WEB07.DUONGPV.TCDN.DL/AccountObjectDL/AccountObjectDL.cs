@@ -116,6 +116,59 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
         }
 
         /// <summary>
+        /// Kiểm tra mã code có phải của bản ghi này không
+        /// </summary>
+        /// <param name="id">ID của bản ghi cần lấy</param>
+        /// <param name="accountObjectCode">Mã code của bản ghi cần kiểm tra</param>
+        /// <returns>True hoặc False</returns>
+        /// Author: DUONGPV (04/10/2022)
+        public async Task<bool> CheckExitsRecord(Guid id, string? accountObjectCode)
+        {
+            // Khai báo tên stored procedure INSERT
+            string insertAccountObjectStoredProcedureName = $"Func_AccountObject_GetOne";
+
+            // Chuẩn bị tham số đầu vào của stored procedure
+            var parameterAccountObjects = new DynamicParameters();
+            var keyAccountObjectProperty = typeof(AccountObject).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(PrimaryKeyAttribute), true).Count() > 0);
+            parameterAccountObjects.Add($"@v_{keyAccountObjectProperty?.Name}", id);
+
+            // Thực hiện gọi vào DB để chạy câu lệnh stored procedure với tham số đầu vào ở trên
+
+            using (var npgSqlConnection = new NpgsqlConnection(DatabaseContext.ConnectionString))
+            {
+                var recordAccountObject = await npgSqlConnection.QueryFirstOrDefaultAsync<AccountObject>(insertAccountObjectStoredProcedureName, parameterAccountObjects, commandType: System.Data.CommandType.StoredProcedure);
+                bool isExits = recordAccountObject.account_object_code == accountObjectCode;
+                return isExits;
+            }
+        }
+
+        /// <summary>
+        /// Kiểm tra thông tin SupplierDetail có tồn tại không
+        /// </summary>
+        /// <param name="id">ID của bản ghi cần lấy</param>
+        /// <returns>True hoặc False</returns>
+        /// Author: DUONGPV (04/10/2022)
+        public async Task<bool> CheckExitsDetailRecord(Guid id)
+        {
+            // Khai báo tên stored procedure INSERT
+            string getOneStoredProcedureName = $"Func_SupplierGroup_GetOne";
+
+            // Chuẩn bị tham số đầu vào của stored procedure
+            var parameters = new DynamicParameters();
+            var keyProperty = typeof(SupplierGroup).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(PrimaryKeyAttribute), true).Count() > 0);
+            parameters.Add($"@v_{keyProperty?.Name}", id);
+
+            // Thực hiện gọi vào DB để chạy câu lệnh stored procedure với tham số đầu vào ở trên
+
+            using (var npgSqlConnection = new NpgsqlConnection(DatabaseContext.ConnectionString))
+            {
+                var record = await npgSqlConnection.QueryFirstOrDefaultAsync<SupplierGroup>(getOneStoredProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+                bool isExits = record != null && record.supplier_group_id == id;
+                return isExits;
+            }
+        }
+
+        /// <summary>
         /// Cập nhật thông tin chi tiết một bản ghi
         /// </summary>
         /// <param name="id">ID của bản ghi cần lấy</param>

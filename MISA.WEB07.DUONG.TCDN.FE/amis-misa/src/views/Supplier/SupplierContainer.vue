@@ -288,6 +288,7 @@ import { SUPPLIER_TEXT_CONFIG } from "@/views/Supplier/constants/resource";
 import { TYPE_CLOSE } from "@/views/Supplier/constants/type-close";
 import { common } from "@/libs/common/common";
 import template_default from "@/views/Supplier/constants/template_default.json";
+import { CODE } from "@/libs/enums/code";
 import api from "@/services/api";
 import SupplierGrid from "./components/SupplierGrid.vue";
 import SupplierForm from "./components/SupplierForm.vue";
@@ -891,29 +892,110 @@ export default {
                     };
                     if (this.account_object.isEdit) {
                         let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}/${this.account_object.account_object_id}`;
-                        await api.put(urlFilter, bodyData).then((response) => {
-                            if (response) {
-                                this.isShowPopup = false;
-                                this.toast.success("Sửa bản ghi thành công!");
-                            }
-                        });
+                        await api
+                            .put(urlFilter, bodyData)
+                            .then((response) => {
+                                if (response && response.code == CODE.Success) {
+                                    this.isShowPopup = false;
+                                    this.toast.success(response.message);
+                                    if (type && type == 1) {
+                                        this.isLoadingForm = true;
+                                        this.onHandleShowModal();
+                                    } else {
+                                        this.isShowModal = false;
+                                    }
+                                    this.onHandleReload();
+                                } else {
+                                    if (response.code == CODE.DuplicateCode) {
+                                        this.popupData = {
+                                            typePopup: 1,
+                                            footerPopup: {
+                                                footerLeft: [
+                                                    {
+                                                        buttonName: "Đồng ý",
+                                                        buttonAction:
+                                                            this
+                                                                .onHandleHidePopup,
+                                                        classButton: [
+                                                            "btn-confirm",
+                                                        ],
+                                                        valueFunction: "",
+                                                    },
+                                                ],
+                                                footerRight: [],
+                                                enterKeyFunc:
+                                                    this.onHandleHidePopup,
+                                                valueEnterKeyFunc: "",
+                                                escKeyFunc:
+                                                    this.onHandleHidePopup,
+                                            },
+
+                                            noticeMessage: response.userMsg,
+                                        };
+                                        this.isShowPopup = true;
+                                    } else if (
+                                        response.code == CODE.ActionField
+                                    ) {
+                                        this.toast.error(response.userMsg);
+                                    }
+                                }
+                            })
+                            .catch((error) => {
+                                this.toast.error(error.response.data.userMsg);
+                            });
                     } else if (this.account_object.isAdd) {
                         delete bodyData.accountObject["account_object_id"];
-                        let urlFilter = `${API_RESOURCE.PAGING_DATA_SUPPLIER}`;
-                        await api.post(urlFilter, bodyData).then((response) => {
-                            if (response) {
-                                this.isShowPopup = false;
-                                this.toast.success("Thêm bản ghi thành công!");
-                            }
-                        });
+                        await api
+                            .post(API_RESOURCE.PAGING_DATA_SUPPLIER, bodyData)
+                            .then((response) => {
+                                if (response && response.code == CODE.Success) {
+                                    this.isShowPopup = false;
+                                    this.toast.success(response.message);
+                                    if (type && type == 1) {
+                                        this.isLoadingForm = true;
+                                        this.onHandleShowModal();
+                                    } else {
+                                        this.isShowModal = false;
+                                    }
+                                    this.onHandleReload();
+                                } else {
+                                    if (response.code == CODE.DuplicateCode) {
+                                        this.popupData = {
+                                            typePopup: 1,
+                                            footerPopup: {
+                                                footerLeft: [
+                                                    {
+                                                        buttonName: "Đồng ý",
+                                                        buttonAction:
+                                                            this
+                                                                .onHandleHidePopup,
+                                                        classButton: [
+                                                            "btn-confirm",
+                                                        ],
+                                                        valueFunction: "",
+                                                    },
+                                                ],
+                                                footerRight: [],
+                                                enterKeyFunc:
+                                                    this.onHandleHidePopup,
+                                                valueEnterKeyFunc: "",
+                                                escKeyFunc:
+                                                    this.onHandleHidePopup,
+                                            },
+                                            noticeMessage: response.userMsg,
+                                        };
+                                        this.isShowPopup = true;
+                                    } else if (
+                                        response.code == CODE.ActionField
+                                    ) {
+                                        this.toast.error(response.userMsg);
+                                    }
+                                }
+                            })
+                            .catch((error) => {
+                                this.toast.error(error.response.data.userMsg);
+                            });
                     }
-                    if (type && type == 1) {
-                        this.isLoadingForm = true;
-                        this.onHandleShowModal();
-                    } else {
-                        this.isShowModal = false;
-                    }
-                    this.onHandleReload();
                 }
             } catch (error) {
                 console.log(error);

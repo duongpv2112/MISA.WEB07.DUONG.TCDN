@@ -10,6 +10,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
     public class Account
     {
         #region Property
+
         /// <summary>
         /// ID Tài khoản
         /// </summary>

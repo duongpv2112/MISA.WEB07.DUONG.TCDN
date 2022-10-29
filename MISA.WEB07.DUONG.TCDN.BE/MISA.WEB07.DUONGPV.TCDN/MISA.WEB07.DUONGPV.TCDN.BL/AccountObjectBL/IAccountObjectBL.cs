@@ -11,7 +11,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL
         /// <param name="record">Đối tượng bản ghi cần thêm mới</param>
         /// <returns>Bản ghi insert thành công hay thất bại (True, False)</returns>
         /// Author: DUONGPV (04/10/2022)
-        public Task<bool> InsertOneRecord(SupplierDTO record);
+        public Task<ServiceResponse> InsertOneRecord(SupplierDTO record);
 
         /// <summary>
         /// Lấy thông tin chi tiết một bản ghi
@@ -28,7 +28,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.BL
         /// <param name="record">Đối tượng bản ghi cần thêm mới</param>
         /// <returns>Thông tin chi tiết một bản ghi</returns>
         /// Author: DUONGPV (04/10/2022)
-        public Task<bool> UpdateOneRecord(Guid id, SupplierDTO record);
+        public Task<ServiceResponse> UpdateOneRecord(Guid id, SupplierDTO record);
 
         /// <summary>
         /// Xóa thông tin một bản ghi

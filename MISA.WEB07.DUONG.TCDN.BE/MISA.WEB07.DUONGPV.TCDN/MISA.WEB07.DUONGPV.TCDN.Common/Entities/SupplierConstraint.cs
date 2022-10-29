@@ -16,6 +16,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
     public class SupplierConstraint
     {
         #region Property
+
         /// <summary>
         /// ID Nhà cung cấp
         /// </summary>
