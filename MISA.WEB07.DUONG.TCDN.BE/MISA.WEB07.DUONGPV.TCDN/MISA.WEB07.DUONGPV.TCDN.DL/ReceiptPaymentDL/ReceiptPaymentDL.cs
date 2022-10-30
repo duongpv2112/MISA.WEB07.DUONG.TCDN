@@ -2,6 +2,7 @@
 using MISA.WEB07.DUONGPV.TCDN.Common.Attributes;
 using MISA.WEB07.DUONGPV.TCDN.Common.Entities;
 using MISA.WEB07.DUONGPV.TCDN.Common.Entities.DTO;
+using MISA.WEB07.DUONGPV.TCDN.Common.Enums;
 using MISA.WEB07.DUONGPV.TCDN.Common.Utilities;
 using Npgsql;
 using System.ComponentModel.DataAnnotations;
@@ -48,9 +49,12 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                     break;
             }
 
-            string getDataFilterStoredProcedureName = $"Func_{tableName}_GetPaging";
-            string getTotalRecordStoredProcedureName = $"Func_{tableName}_TotalRecord";
-            string getTotalMoneyStoredProcedureName = $"Func_{tableName}_TotalMoney";
+            //string getDataFilterStoredProcedureName = $"Func_{tableName}_GetPaging";
+            //string getTotalRecordStoredProcedureName = $"Func_{tableName}_TotalRecord";
+            //string getTotalMoneyStoredProcedureName = $"Func_{tableName}_TotalMoney";
+            string sqlCommand = $"select * from func_{tableName}_getpaging({pageSize}, {(pageNumber - 1) * pageSize}, '%{keyword}%', ''); " +
+                $"select * from func_{tableName}_totalrecord('%{keyword}%'); " +
+                $"select * from func_{tableName}_totalmoney('%{keyword}%');";
 
             var parametersGetPaging = new DynamicParameters();
             parametersGetPaging.Add("@v_offset", (pageNumber - 1) * pageSize);
@@ -68,12 +72,16 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
             // Thực hiện gọi vào DB để chạy câu lệnh stored procedure
             using (var npgSqlConnection = new NpgsqlConnection(DatabaseContext.ConnectionString))
             {
-                var multipleResults = await npgSqlConnection.QueryAsync<dynamic>(getDataFilterStoredProcedureName, parametersGetPaging, commandType: CommandType.StoredProcedure);
-                var totalRecord = await npgSqlConnection.QueryFirstAsync<long>(getTotalRecordStoredProcedureName, parametersTotalRecord, commandType: CommandType.StoredProcedure);
-                var totalMoney = await npgSqlConnection.QueryFirstAsync<long>(getTotalMoneyStoredProcedureName, parametersGetPaging, commandType: CommandType.StoredProcedure);
+                var multipleResults = await npgSqlConnection.QueryMultipleAsync(sqlCommand);
+                //var multipleResults = await npgSqlConnection.QueryMultipleAsync(getDataFilterStoredProcedureName, parametersGetPaging, commandType: CommandType.StoredProcedure);
+                //var totalRecord = await npgSqlConnection.QueryFirstAsync<long>(getTotalRecordStoredProcedureName, parametersTotalRecord, commandType: CommandType.StoredProcedure);
+                //var totalMoney = await npgSqlConnection.QueryFirstAsync<long>(getTotalMoneyStoredProcedureName, parametersGetPaging, commandType: CommandType.StoredProcedure);
                 if (multipleResults != null)
                 {
-                    var listRecord = multipleResults.ToList();
+                    var listRecord = multipleResults.Read<dynamic>().ToList();
+                    var totalRecord = multipleResults.Read<long>().Single();
+                    var totalMoney = multipleResults.Read<long>().Single();
+                    //var listRecord = multipleResults.ToList();
                     int totalPage = 0;
                     if ((int)totalRecord % pageSize != 0)
                     {
@@ -126,11 +134,11 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
             var tableNameReference = "";
             switch (typeRecord)
             {
-                case 0:
+                case (int)TypeVoucher.Receipt:
                     tableNamePrimary = "Receipt";
                     tableNameReference = "ReceiptDetail";
                     break;
-                case 1:
+                case (int)TypeVoucher.Payment:
                     tableNamePrimary = "Payment";
                     tableNameReference = "PaymentDetail";
                     break;
@@ -157,7 +165,6 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
             parametersReceiptPayment.Add($"@v_{keyReceiptPaymentProperty?.Name}", newGuid);
 
             bool isInsertReceiptPayment = false;
-            bool isInsertReceiptPaymentDetail = false;
 
             using (var npgSqlConnection = new NpgsqlConnection(DatabaseContext.ConnectionString))
             {
@@ -169,25 +176,46 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                     {
                         try
                         {
+                            List<string> listInsertSupplierDetail = new List<string>();
                             foreach (var dataItem in record.receiptPaymentDetails)
                             {
-                                var propertiesReceiptPaymentDetail = typeof(ReceiptPaymentDetail).GetProperties();
-                                var parametersReceiptPaymentDetail = new DynamicParameters();
-                                foreach (var property in propertiesReceiptPaymentDetail)
+                                if (typeRecord == (int)TypeVoucher.Receipt)
                                 {
-                                    string propertyName = $"@v_{property.Name}";
-                                    var propertyValue = property.GetValue(dataItem);
-                                    parametersReceiptPaymentDetail.Add(propertyName, propertyValue);
+                                    if (dataItem.account_object_id != null)
+                                    {
+                                        listInsertSupplierDetail.Add(
+                                        $"INSERT INTO receipt_detail(accouting_id, reason, debt_account, credit_account, amount_money, account_object_id, account_object_name, receipt_id, created_date, created_by, modified_date, modified_by) " +
+                                        $"VALUES('{Guid.NewGuid()}', '{dataItem.reason}', {dataItem.debt_account}, {dataItem.credit_account}, {dataItem.amount_money}, '{dataItem.account_object_id}', '{dataItem.account_object_name}', '{newGuid}', now(), 'admin', now(),  'admin');");
+                                    }
+                                    else
+                                    {
+                                        listInsertSupplierDetail.Add(
+                                        $"INSERT INTO receipt_detail(accouting_id, reason, debt_account, credit_account, amount_money, account_object_id, account_object_name, receipt_id, created_date, created_by, modified_date, modified_by) " +
+                                        $"VALUES('{Guid.NewGuid()}', '{dataItem.reason}', {dataItem.debt_account}, {dataItem.credit_account}, {dataItem.amount_money}, null, '{dataItem.account_object_name}', '{newGuid}', now(), 'admin', now(),  'admin');");
+                                    }
+
+                                }
+                                else if (typeRecord == (int)TypeVoucher.Payment)
+                                {
+                                    if (dataItem.account_object_id != null)
+                                    {
+                                        listInsertSupplierDetail.Add(
+                                        $"INSERT INTO payment_detail(accouting_id, reason, debt_account, credit_account, amount_money, account_object_id, account_object_name, payment_id, created_date, created_by, modified_date, modified_by) " +
+                                        $"VALUES('{Guid.NewGuid()}', '{dataItem.reason}', {dataItem.debt_account}, {dataItem.credit_account}, {dataItem.amount_money}, '{dataItem.account_object_id}', '{dataItem.account_object_name}', '{newGuid}', now(), 'admin', now(),  'admin');");
+                                    }
+                                    else
+                                    {
+                                        listInsertSupplierDetail.Add(
+                                        $"INSERT INTO payment_detail(accouting_id, reason, debt_account, credit_account, amount_money, account_object_id, account_object_name, payment_id, created_date, created_by, modified_date, modified_by) " +
+                                        $"VALUES('{Guid.NewGuid()}', '{dataItem.reason}', {dataItem.debt_account}, {dataItem.credit_account}, {dataItem.amount_money}, null, '{dataItem.account_object_name}', '{newGuid}', now(), 'admin', now(),  'admin');");
+                                    }
+
                                 }
 
-                                var keyReceiptPaymentDetailProperty = typeof(ReceiptPaymentDetail).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(PrimaryKeyAttribute), true).Count() > 0);
-                                parametersReceiptPaymentDetail.Add($"@v_{keyReceiptPaymentDetailProperty?.Name}", Guid.NewGuid());
-
-                                var keyRefReceiptPaymentDetailProperty = typeof(ReceiptPaymentDetail).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(ForeignKeyAttribute), true).Count() > 0);
-                                parametersReceiptPaymentDetail.Add($"@v_{keyRefReceiptPaymentDetailProperty?.Name}", newGuid);
-
-                                isInsertReceiptPaymentDetail = await npgSqlConnection.QueryFirstAsync<bool>(insertReferenceStoredProcedureName, parametersReceiptPaymentDetail, commandType: System.Data.CommandType.StoredProcedure);
                             }
+                            string sqlInsertCommand = $"{string.Join(" ", listInsertSupplierDetail)}";
+                            await npgSqlConnection.ExecuteAsync(sqlInsertCommand);
+
                             transaction.Commit();
                         }
                         catch
@@ -196,9 +224,8 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                         }
                     }
                 }
-                else isInsertReceiptPaymentDetail = true;
             }
-            return isInsertReceiptPayment ? isInsertReceiptPaymentDetail ? newGuid : Guid.Empty : Guid.Empty;
+            return isInsertReceiptPayment ? newGuid : Guid.Empty;
         }
 
         /// <summary>
@@ -296,7 +323,6 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
             parametersReceiptPayment.Add($"@v_{keyReceiptPaymentProperty?.Name}", id);
 
             bool isUpdateReceiptPayment = false;
-            bool isUpdateReceiptPaymentDetail = false;
 
             // Thực hiện gọi vào DB để chạy câu lệnh stored procedure với tham số đầu vào ở trên
 
@@ -305,49 +331,114 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                 npgSqlConnection.Open();
                 isUpdateReceiptPayment = await npgSqlConnection.QueryFirstAsync<bool>(updateReceiptPaymentStoredProcedureName, parametersReceiptPayment, commandType: System.Data.CommandType.StoredProcedure);
 
-                bool isDeleteReceiptPaymentDetail = false;
-                var keyRefReceiptPaymentDetailProperty = typeof(ReceiptPaymentDetail).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(ForeignKeyAttribute), true).Count() > 0);
-                var parametersReceiptPaymentDetailDelete = new DynamicParameters();
-                parametersReceiptPaymentDetailDelete.Add($"@v_{keyRefReceiptPaymentDetailProperty?.Name}", id);
-
-                isDeleteReceiptPaymentDetail = await npgSqlConnection.QueryFirstAsync<bool>(deleteReceiptPaymentDetailStoredProcedureName, parametersReceiptPaymentDetailDelete, commandType: System.Data.CommandType.StoredProcedure);
-
-                if (isDeleteReceiptPaymentDetail)
+                if (record.receiptPaymentDetails?.Count > 0)
                 {
-                    if (record.receiptPaymentDetails?.Count > 0)
+                    using (NpgsqlTransaction transaction = npgSqlConnection.BeginTransaction())
                     {
-                        using (NpgsqlTransaction transaction = npgSqlConnection.BeginTransaction())
+                        try
                         {
-                            try
+                            List<string> listInsertSupplierDetail = new List<string>();
+                            foreach (var dataItem in record.receiptPaymentDetails)
                             {
-                                foreach (var dataItem in record.receiptPaymentDetails)
+                                if (typeRecord == (int)TypeVoucher.Receipt)
                                 {
-                                    var propertiesReceiptPaymentDetail = typeof(ReceiptPaymentDetail).GetProperties();
-                                    var parametersReceiptPaymentDetail = new DynamicParameters();
-                                    foreach (var property in propertiesReceiptPaymentDetail)
+                                    switch (dataItem.state)
                                     {
-                                        string propertyName = $"@v_{property.Name}";
-                                        var propertyValue = property.GetValue(dataItem);
-                                        parametersReceiptPaymentDetail.Add(propertyName, propertyValue);
+                                        case StateCode.Delete:
+                                            listInsertSupplierDetail.Add(
+                                                $"DELETE FROM receipt_detail WHERE accouting_id = {dataItem.accounting_id};");
+                                            break;
+                                        case StateCode.Insert:
+                                            if (dataItem.account_object_id != null)
+                                            {
+                                                listInsertSupplierDetail.Add(
+                                                    $"INSERT INTO receipt_detail(accouting_id, reason, debt_account, credit_account, amount_money, account_object_id, account_object_name, receipt_id, created_date, created_by, modified_date, modified_by) " +
+                                                    $"VALUES('{Guid.NewGuid()}', '{dataItem.reason}', {dataItem.debt_account}, {dataItem.credit_account}, {dataItem.amount_money}, '{dataItem.account_object_id}', '{dataItem.account_object_name}', '{id}', now(), 'admin', now(),  'admin');");
+                                            }
+                                            else
+                                            {
+                                                listInsertSupplierDetail.Add(
+                                                    $"INSERT INTO receipt_detail(accouting_id, reason, debt_account, credit_account, amount_money, account_object_id, account_object_name, receipt_id, created_date, created_by, modified_date, modified_by) " +
+                                                    $"VALUES('{Guid.NewGuid()}', '{dataItem.reason}', {dataItem.debt_account}, {dataItem.credit_account}, {dataItem.amount_money}, null, '{dataItem.account_object_name}', '{id}', now(), 'admin', now(),  'admin');");
+                                            }
+                                            break;
+                                        case StateCode.Update:
+                                            if (dataItem.account_object_id != null)
+                                            {
+                                                listInsertSupplierDetail.Add(
+                                                    $"UPDATE receipt_detail " +
+                                                    $"SET reason='{dataItem.reason}', debt_account='{dataItem.debt_account}', credit_account='{dataItem.credit_account}', amount_money={dataItem.amount_money}, account_object_id='{dataItem.account_object_id}', account_object_name='{dataItem.account_object_name}', modified_date=now(), modified_by='admin' " +
+                                                    $"WHERE accouting_id='{dataItem.accounting_id}';");
+                                            }
+                                            else
+                                            {
+                                                listInsertSupplierDetail.Add(
+                                                    $"UPDATE receipt_detail " +
+                                                    $"SET reason='{dataItem.reason}', debt_account='{dataItem.debt_account}', credit_account='{dataItem.credit_account}', amount_money={dataItem.amount_money}, account_object_id=null, account_object_name='{dataItem.account_object_name}', modified_date=now(), modified_by='admin' " +
+                                                    $"WHERE accouting_id='{dataItem.accounting_id}';");
+                                            }
+                                            break;
+                                        case StateCode.NoChange:
+                                            break;
                                     }
-                                    var keyReceiptPaymentDetailProperty = typeof(ReceiptPaymentDetail).GetProperties().FirstOrDefault(prop => prop.GetCustomAttributes(typeof(PrimaryKeyAttribute), true).Count() > 0);
-                                    parametersReceiptPaymentDetail.Add($"@v_{keyReceiptPaymentDetailProperty?.Name}", Guid.NewGuid());
-                                    parametersReceiptPaymentDetail.Add($"@v_{keyRefReceiptPaymentDetailProperty?.Name}", id);
-
-                                    isUpdateReceiptPaymentDetail = await npgSqlConnection.QueryFirstAsync<bool>(insertReceiptPaymentDetailStoredProcedureName, parametersReceiptPaymentDetail, commandType: System.Data.CommandType.StoredProcedure);
                                 }
-                                transaction.Commit();
+                                else if (typeRecord == (int)TypeVoucher.Payment)
+                                {
+                                    switch (dataItem.state)
+                                    {
+                                        case StateCode.Delete:
+                                            listInsertSupplierDetail.Add(
+                                                $"DELETE FROM payment_detail WHERE accouting_id = '{dataItem.accounting_id}';");
+                                            break;
+                                        case StateCode.Insert:
+                                            if (dataItem.account_object_id != null)
+                                            {
+                                                listInsertSupplierDetail.Add(
+                                                    $"INSERT INTO payment_detail(accouting_id, reason, debt_account, credit_account, amount_money, account_object_id, account_object_name, payment_id, created_date, created_by, modified_date, modified_by) " +
+                                                    $"VALUES('{Guid.NewGuid()}', '{dataItem.reason}', {dataItem.debt_account}, {dataItem.credit_account}, {dataItem.amount_money}, '{dataItem.account_object_id}', '{dataItem.account_object_name}', '{id}', now(), 'admin', now(),  'admin');");
+                                            }
+                                            else
+                                            {
+                                                listInsertSupplierDetail.Add(
+                                                    $"INSERT INTO payment_detail(accouting_id, reason, debt_account, credit_account, amount_money, account_object_id, account_object_name, payment_id, created_date, created_by, modified_date, modified_by) " +
+                                                    $"VALUES('{Guid.NewGuid()}', '{dataItem.reason}', {dataItem.debt_account}, {dataItem.credit_account}, {dataItem.amount_money}, null, '{dataItem.account_object_name}', '{id}', now(), 'admin', now(),  'admin');");
+                                            }
+                                            break;
+                                        case StateCode.Update:
+                                            if (dataItem.account_object_id != null)
+                                            {
+                                                listInsertSupplierDetail.Add(
+                                                    $"UPDATE payment_detail " +
+                                                    $"SET reason='{dataItem.reason}', debt_account='{dataItem.debt_account}', credit_account='{dataItem.credit_account}', amount_money={dataItem.amount_money}, account_object_id='{dataItem.account_object_id}', account_object_name='{dataItem.account_object_name}', modified_date=now(), modified_by='admin' " +
+                                                    $"WHERE accouting_id='{dataItem.accounting_id}';");
+                                            }
+                                            else
+                                            {
+                                                listInsertSupplierDetail.Add(
+                                                    $"UPDATE payment_detail " +
+                                                    $"SET reason='{dataItem.reason}', debt_account='{dataItem.debt_account}', credit_account='{dataItem.credit_account}', amount_money={dataItem.amount_money}, account_object_id=null, account_object_name='{dataItem.account_object_name}', modified_date=now(), modified_by='admin' " +
+                                                    $"WHERE accouting_id='{dataItem.accounting_id}';");
+                                            }
+                                            break;
+                                        case StateCode.NoChange:
+                                            break;
+                                    }
+                                }
+
                             }
-                            catch
-                            {
-                                transaction.Rollback();
-                            }
+                            string sqlInsertCommand = $"{string.Join(" ", listInsertSupplierDetail)}";
+                            var result = await npgSqlConnection.ExecuteAsync(sqlInsertCommand);
+
+                            transaction.Commit();
+                        }
+                        catch
+                        {
+                            transaction.Rollback();
                         }
                     }
-                    else isUpdateReceiptPaymentDetail = true;
                 }
             }
-            return isUpdateReceiptPayment ? isUpdateReceiptPaymentDetail ? id : Guid.Empty : Guid.Empty;
+            return isUpdateReceiptPayment ? id : Guid.Empty;
         }
 
         /// <summary>

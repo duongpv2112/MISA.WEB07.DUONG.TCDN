@@ -1,4 +1,5 @@
 ﻿using MISA.WEB07.DUONGPV.TCDN.Common.Attributes;
+using MISA.WEB07.DUONGPV.TCDN.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

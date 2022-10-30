@@ -65,6 +65,7 @@ export default {
         firstFocus: Boolean,
         isFieldErrorFocus: Boolean,
         patternValidate: String,
+        paramFunction: null
     },
 
     emits: ["setValue", "setValidateData"],
@@ -114,7 +115,7 @@ export default {
                 if (this.isInputNumber) {
                     this.valueInput = this.valueInput.replace(/\D+/g, "");
                 }
-                this.$emit("setValue", this.valueInput, dataField);
+                this.$emit("setValue", this.valueInput, dataField, this.paramFunction);
             } catch (error) {
                 console.log(error);
             }

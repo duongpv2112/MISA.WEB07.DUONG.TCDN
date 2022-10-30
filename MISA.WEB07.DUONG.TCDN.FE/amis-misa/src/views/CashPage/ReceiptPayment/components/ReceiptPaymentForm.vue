@@ -595,7 +595,9 @@
                                     class="table-row"
                                     v-for="(
                                         item, indextr
-                                    ) in receiptPaymentDetail"
+                                    ) in receiptPaymentDetail.filter((item) => {
+                                        return item.state != 3;
+                                    })"
                                     :key="item.id"
                                     :class="{
                                         'bg-selected': rowSelected == indextr,
@@ -647,6 +649,7 @@
                                                 column.dataInput.autocomplete
                                             "
                                             :tabindex="12"
+                                            :paramFunction="item.index"
                                             @setValue="updateRow"
                                         />
 
@@ -701,7 +704,7 @@
                                                 fieldDetailFocus?.fieldError ==
                                                     column.dataField
                                             "
-                                            :paramFunction="indextr"
+                                            :paramFunction="item.index"
                                             :tabindex="12"
                                             @setValue="updateRow"
                                             @setValidateData="
@@ -974,6 +977,7 @@ import BaseTooltip from "@/components/bases/BaseTooltip/BaseTooltip.vue";
 import BaseButton from "@/components/bases/BaseButton/BaseButton.vue";
 import BaseInput from "@/components/bases/BaseInput/BaseInput.vue";
 import BaseComboboxTable from "@/components/bases/BaseCombobox/BaseComboboxTable.vue";
+import { STATE_CODE } from "@/libs/enums/state";
 
 export default {
     name: "ReceiptPaymentForm",
@@ -1094,6 +1098,7 @@ export default {
         },
 
         accountings(newValue) {
+            console.log(newValue);
             this.receiptPaymentDetail = newValue;
         },
 
@@ -1207,12 +1212,14 @@ export default {
                 var sum = 0;
                 this.receiptPaymentDetail.map((item) => {
                     var money = 0;
-                    if (typeof item.amount_money == "string") {
+                    if(item.state != STATE_CODE.Delete){
+                        if (typeof item.amount_money == "string") {
                         money = item.amount_money.replace(/\D+/g, "");
                     } else {
                         money = Math.ceil(item.amount_money);
                     }
                     return (sum += Number(money));
+                    }
                 });
                 this.receiptPaymentForm.total_money = sum;
                 this.dataFooter.data = sum;
@@ -1227,7 +1234,7 @@ export default {
          * @param {*} dataField: Tên trường cần cập nhật
          * @author: DUONGPV (04/10/2022)
          */
-        updateRow(value, dataField) {
+        updateRow(value, dataField, index) {
             try {
                 if (
                     typeof value == "object" &&
@@ -1235,7 +1242,7 @@ export default {
                     (dataField == "debt_account" ||
                         dataField == "credit_account")
                 ) {
-                    this.receiptPaymentDetail[this.rowSelected][dataField] =
+                    this.receiptPaymentDetail[index][dataField] =
                         value.account_number;
                 } else if (
                     typeof value == "object" &&
@@ -1243,17 +1250,19 @@ export default {
                     (dataField == "account_object_id" ||
                         dataField == "account_object_code")
                 ) {
-                    this.receiptPaymentDetail[this.rowSelected][dataField] =
+                    this.receiptPaymentDetail[index][dataField] =
                         value[dataField];
-                    this.receiptPaymentDetail[this.rowSelected][
-                        "account_object_name"
-                    ] = value["account_object_name"];
+                    this.receiptPaymentDetail[index]["account_object_name"] =
+                        value["account_object_name"];
                 } else if (dataField == "amount_money") {
-                    this.receiptPaymentDetail[this.rowSelected][dataField] =
-                        Number(value);
+                    this.receiptPaymentDetail[index][dataField] = Number(value);
                 } else {
-                    this.receiptPaymentDetail[this.rowSelected][dataField] =
-                        value;
+                    this.receiptPaymentDetail[index][dataField] = value;
+                }
+                if (
+                    this.receiptPaymentDetail[index].state != STATE_CODE.Insert
+                ) {
+                    this.receiptPaymentDetail[index].state = STATE_CODE.Update;
                 }
                 this.setListValue(this.receiptPaymentDetail);
             } catch (error) {
@@ -1281,6 +1290,7 @@ export default {
                             account_object_id: "",
                             account_object_code: "",
                             account_object_name: "",
+                            state: STATE_CODE.Insert,
                         });
                     } else {
                         this.receiptPaymentDetail.push({
@@ -1309,6 +1319,7 @@ export default {
                                 this.receiptPaymentDetail[
                                     this.receiptPaymentDetail.length - 1
                                 ].account_object_name,
+                            state: STATE_CODE.Insert,
                         });
                     }
                     this.setRowSelected(this.receiptPaymentDetail.length - 1);
@@ -1330,9 +1341,10 @@ export default {
                     let listData = this.receiptPaymentDetail.map((item) => {
                         return item;
                     });
-                    this.receiptPaymentDetail = listData.filter((item) => {
-                        return item != valueRow;
+                    let index = listData.findIndex((item) => {
+                        return item == valueRow;
                     });
+                    this.receiptPaymentDetail[index].state = STATE_CODE.Delete;
                     this.setListValue(this.receiptPaymentDetail);
                     this.keyAccountingComponent += 1;
                 }
@@ -1385,16 +1397,22 @@ export default {
         removeAllRow() {
             try {
                 if (!this.isViewDetail) {
-                    this.receiptPaymentDetail = [
-                        {
-                            id: common.createUUID(),
-                            reason:
-                                this.typeVoucher == 0
-                                    ? "Thu tiền của"
-                                    : "Chi tiền cho",
-                            amount_money: 0,
-                        },
-                    ];
+                    this.receiptPaymentDetail.forEach((item) => {
+                        item.state = STATE_CODE.Delete;
+                    });
+                    this.receiptPaymentDetail.push({
+                        id: common.createUUID(),
+                        reason:
+                            this.typeVoucher == 0
+                                ? "Thu tiền của"
+                                : "Chi tiền cho",
+                        amount_money: 0,
+                        debt_account: "",
+                        credit_account: "",
+                        account_object_code: "",
+                        account_object_name: "",
+                        state: STATE_CODE.Insert
+                    });
                     this.setRowSelected(0);
                     this.setListValue(this.receiptPaymentDetail);
                     this.onHandleHidePopup();

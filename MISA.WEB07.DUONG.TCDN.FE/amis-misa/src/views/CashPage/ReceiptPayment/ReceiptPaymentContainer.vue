@@ -393,6 +393,7 @@ import ReceiptPaymentForm from "./components/ReceiptPaymentForm.vue";
 import BasePopup from "@/components/bases/BasePopup/BasePopup.vue";
 import BaseModalSetting from "@/components/bases/BaseModalSetting/BaseModalSetting.vue";
 import BaseLoading from "@/components/bases/BaseLoading/BaseLoading.vue";
+import { STATE_CODE } from "@/libs/enums/state";
 
 export default {
     name: "ReceiptPaymentContainer",
@@ -732,6 +733,9 @@ export default {
                         this.receiptPayment = data.receiptPayment;
                         this.receiptPaymentDetail = data.receiptPaymentDetails;
                     });
+                    this.receiptPaymentDetail.forEach((item) => {
+                        item.isInDataBase = true;
+                    });
                     this.receiptPayment.is_edit = true;
                     this.receiptPayment.is_add = false;
                     await this.setValueModal(0);
@@ -742,6 +746,9 @@ export default {
                     await api.get(urlGetOne).then((data) => {
                         this.receiptPayment = data.receiptPayment;
                         this.receiptPaymentDetail = data.receiptPaymentDetails;
+                    });
+                    this.receiptPaymentDetail.forEach((item) => {
+                        item.isInDataBase = true;
                     });
                     this.receiptPayment.is_edit = true;
                     this.receiptPayment.is_add = false;
@@ -875,6 +882,9 @@ export default {
                         this.receiptPayment = data.receiptPayment;
                         this.receiptPaymentDetail = data.receiptPaymentDetails;
                     });
+                    this.receiptPaymentDetail.forEach((item) => {
+                        item.isInDataBase = true;
+                    });
                     this.receiptPayment.is_edit = true;
                     this.receiptPayment.is_add = false;
                     await this.setValueModal(0);
@@ -886,6 +896,9 @@ export default {
                     await api.get(urlGetOne).then((data) => {
                         this.receiptPayment = data.receiptPayment;
                         this.receiptPaymentDetail = data.receiptPaymentDetails;
+                    });
+                    this.receiptPaymentDetail.forEach((item) => {
+                        item.isInDataBase = true;
                     });
                     this.receiptPayment.is_edit = true;
                     this.receiptPayment.is_add = false;
@@ -916,6 +929,9 @@ export default {
                         this.receiptPayment = data.receiptPayment;
                         this.receiptPaymentDetail = data.receiptPaymentDetails;
                     });
+                    this.receiptPaymentDetail.forEach((item) => {
+                        item.isInDataBase = true;
+                    });
                     this.receiptPayment.is_edit = false;
                     this.receiptPayment.is_add = true;
                     await this.setValueModal(0, true);
@@ -926,6 +942,9 @@ export default {
                     await api.get(urlGetOne).then((data) => {
                         this.receiptPayment = data.receiptPayment;
                         this.receiptPaymentDetail = data.receiptPaymentDetails;
+                    });
+                    this.receiptPaymentDetail.forEach((item) => {
+                        item.isInDataBase = true;
                     });
                     this.receiptPayment.is_edit = false;
                     this.receiptPayment.is_add = true;
@@ -968,6 +987,24 @@ export default {
                     };
                     if (this.receiptPayment.is_add) {
                         delete bodyData.receiptPayment.receipt_payment_id;
+                        bodyData.receiptPaymentDetails =
+                            bodyData.receiptPaymentDetails.filter((item) => {
+                                return item.state != 3;
+                            });
+                        bodyData.receiptPaymentDetails.forEach((item) => {
+                            if (
+                                item.account_object_id == null ||
+                                item.account_object_id == ""
+                            ) {
+                                delete item.account_object_id;
+                            }
+                            if (
+                                item.accounting_id == null ||
+                                item.accounting_id == ""
+                            ) {
+                                delete item.accounting_id;
+                            }
+                        });
                         await api
                             .post(
                                 `${API_RESOURCE.PAGING_DATA_RECEIPT_PAYMENT}?typeRecord=` +
@@ -1040,12 +1077,22 @@ export default {
                         if (bodyData.receiptPayment.employee_id == null) {
                             delete bodyData.receiptPayment.employee_id;
                         }
+                        bodyData.receiptPaymentDetails =
+                            bodyData.receiptPaymentDetails.filter((item) => {
+                                return item.state != 3 || item.isInDataBase;
+                            });
                         bodyData.receiptPaymentDetails.forEach((item) => {
                             if (
                                 item.account_object_id == null ||
                                 item.account_object_id == ""
                             ) {
                                 delete item.account_object_id;
+                            }
+                            if (
+                                item.accounting_id == null ||
+                                item.accounting_id == ""
+                            ) {
+                                delete item.accounting_id;
                             }
                         });
                         await api
@@ -1161,6 +1208,7 @@ export default {
                                 this.receiptPayment.account_object_code,
                             account_object_name:
                                 this.receiptPayment.account_object_name,
+                            state: STATE_CODE.Insert,
                         },
                     ];
                 } else if (type == this.ENUM.TYPE_PAYMENT) {
@@ -1195,6 +1243,7 @@ export default {
                                 this.receiptPayment.account_object_code,
                             account_object_name:
                                 this.receiptPayment.account_object_name,
+                            state: STATE_CODE.Insert,
                         },
                     ];
                 }
@@ -1665,6 +1714,7 @@ export default {
                     }
                     this.titleHeaderModal = `Phiếu chi ${this.receiptPayment.receipt_payment_number}`;
                 }
+                console.log(this.receiptPaymentDetail);
                 this.renderAccountings();
             } catch (error) {
                 console.log(error);
@@ -1989,13 +2039,17 @@ export default {
         renderAccountings() {
             try {
                 this.receiptPaymentDetail = this.receiptPaymentDetail.map(
-                    (item) => {
+                    (item, index) => {
                         if (typeof item.amount_money == "string") {
                             item.amount_money = Number(
                                 item.amount_money.replace(/\D+/g, "")
                             );
                         }
                         return {
+                            accounting_id: item.accounting_id
+                                ? item.accounting_id
+                                : null,
+                            index: index,
                             reason: item.reason,
                             debt_account: item.debt_account,
                             credit_account: item.credit_account,
@@ -2010,6 +2064,12 @@ export default {
                             created_by: item.created_by,
                             modified_date: item.modified_date,
                             modified_by: item.modified_by,
+                            state: item.state
+                                ? item.state
+                                : STATE_CODE.NoChange,
+                            isInDataBase: item.isInDataBase
+                                ? item.isInDataBase
+                                : null,
                         };
                     }
                 );
@@ -2188,7 +2248,10 @@ export default {
          */
         async checkValidateReceiptPaymentDetail() {
             try {
-                if (this.receiptPaymentDetail.length == 0) {
+                var newListDetail = this.receiptPaymentDetail.filter((item) => {
+                    return item.state != STATE_CODE.Delete;
+                });
+                if (newListDetail.length == 0) {
                     await this.setValidateReceiptPaymentDetail(
                         true,
                         "Bạn phải nhập chứng từ chi tiết",
@@ -2197,7 +2260,10 @@ export default {
                     );
                 } else {
                     this.receiptPaymentDetail.forEach(async (item, index) => {
-                        if (item.debt_account == "") {
+                        if (
+                            item.debt_account == "" &&
+                            item.state != STATE_CODE.Delete
+                        ) {
                             await this.setValidateReceiptPaymentDetail(
                                 true,
                                 "Tài khoản nợ không được để trống!",
@@ -2206,7 +2272,10 @@ export default {
                             );
                         }
 
-                        if (item.credit_account == "") {
+                        if (
+                            item.credit_account == "" &&
+                            item.state != STATE_CODE.Delete
+                        ) {
                             await this.setValidateReceiptPaymentDetail(
                                 true,
                                 "Tài khoản có không được để trống!",

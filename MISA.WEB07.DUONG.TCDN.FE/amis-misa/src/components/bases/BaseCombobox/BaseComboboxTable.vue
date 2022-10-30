@@ -269,7 +269,7 @@ export default {
          * @author: DUONGPV (08/09/2022)
          */
         onHandleChangeInputData() {
-            this.$emit("setValue", this.textInput, this.propValue);
+            this.$emit("setValue", this.textInput, this.propValue, this.paramFunction);
 
             if (this.textInput) {
                 this.checkData.isInValid = true;
@@ -321,9 +321,9 @@ export default {
                 // const value = item[this.dataField];
                 this.textInput = text;
                 this.isShowListData = false;
-                this.$emit("setValue", item, this.propValue);
+                this.$emit("setValue", item, this.propValue, this.paramFunction);
                 if (this.propText) {
-                    this.$emit("setValue", item, this.propText);
+                    this.$emit("setValue", item, this.propText, this.paramFunction);
                 }
                 this.checkData.isInValid = false;
                 this.checkData.errorMessage = "";

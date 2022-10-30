@@ -1,4 +1,5 @@
 ﻿using MISA.WEB07.DUONGPV.TCDN.Common.Attributes;
+using MISA.WEB07.DUONGPV.TCDN.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -80,6 +81,11 @@ namespace MISA.WEB07.DUONGPV.TCDN.Common.Entities
         /// Người sửa gần nhất
         /// </summary>
         public string? modified_by { get; set; }
+
+        /// <summary>
+        /// Trạng thái bản ghi
+        /// </summary>
+        public StateCode state { get; set; }
 
         #endregion
     }

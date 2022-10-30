@@ -33,8 +33,11 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
         {
             // Khai báo tên stored procedure GET ALL
             string tableName = EntityUtilities.GetTableName<T>();
-            string getDataFilterStoredProcedureName = $"Func_{tableName}_GetPaging";
-            string getTotalRecordStoredProcedureName = $"Func_{tableName}_TotalRecord";
+            //string getDataFilterStoredProcedureName = $"Func_{tableName}_GetPaging";
+            //string getTotalRecordStoredProcedureName = $"Func_{tableName}_TotalRecord";
+
+            string sqlCommand = $"select * from func_{tableName}_getpaging({pageSize}, {(pageNumber - 1) * pageSize}, '%{keyword}%', ''); " +
+                $"select * from func_{tableName}_totalrecord('%{keyword}%'); ";
 
             // Chuẩn bị tham số đầu vào cho stored procedure
             var parametersGetPaging = new DynamicParameters();
@@ -49,11 +52,14 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
             // Thực hiện gọi vào DB để chạy câu lệnh stored procedure
             using (var npgSqlConnection = new NpgsqlConnection(DatabaseContext.ConnectionString))
             {
-                var multipleResults = await npgSqlConnection.QueryAsync<dynamic>(getDataFilterStoredProcedureName, parametersGetPaging, commandType: CommandType.StoredProcedure);
-                var totalRecord = await npgSqlConnection.QueryFirstAsync<long>(getTotalRecordStoredProcedureName, parametersTotalRecord, commandType: CommandType.StoredProcedure);
+                var multipleResults = await npgSqlConnection.QueryMultipleAsync(sqlCommand);
+                //var multipleResults = await npgSqlConnection.QueryAsync<dynamic>(getDataFilterStoredProcedureName, parametersGetPaging, commandType: CommandType.StoredProcedure);
+                //var totalRecord = await npgSqlConnection.QueryFirstAsync<long>(getTotalRecordStoredProcedureName, parametersTotalRecord, commandType: CommandType.StoredProcedure);
                 if (multipleResults != null)
                 {
-                    var listRecord = multipleResults.ToList();
+                    var listRecord = multipleResults.Read<dynamic>().ToList();
+                    var totalRecord = multipleResults.Read<long>().Single();
+                    //var listRecord = multipleResults.ToList();
                     int totalPage = 0;
                     if ((int)totalRecord % pageSize != 0)
                     {
