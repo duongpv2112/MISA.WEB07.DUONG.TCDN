@@ -28,4 +28,16 @@ export const RECEIPT_PAYMENT_TEXT_CONFIG = {
     RECEIPT_NUMBER_FIELD: "Số phiếu thu",
     PAYMENT_DATE_FIELD: "Ngày phiếu chi",
     PAYMENT_NUMBER_FIELD: "Số phiếu chi",
+
+    /* POPUP */
+    POPUP_CLOSE_BTN: "Đóng",
+    POPUP_NO_BTN: "Không",
+    POPUP_YES_BTN: "Có",
+    POPUP_CONFIRM_BTN: "Đồng ý",
+    POPUP_CANCEL_BTN: "Hủy",
+    POPUP_TEXT_CHANGE_BTN: "Dữ liệu đã bị thay đổi. Bạn có muốn cất không?",
+
+
+    /* ACTION */
+    DELETE_SUCCESS: "Xóa thông tin bản ghi thành công"
 };

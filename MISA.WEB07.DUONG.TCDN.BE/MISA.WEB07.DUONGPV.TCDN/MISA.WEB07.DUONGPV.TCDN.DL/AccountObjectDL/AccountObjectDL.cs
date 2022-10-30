@@ -281,7 +281,7 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
         /// Author: DUONGPV (04/10/2022)
         public async Task<string> GetNewCode()
         {
-            // Khai báo tên stored procedure INSERT
+            // Khai báo tên stored procedure GET NEW CODE
             string getNewCodeStoredProcedureName = $"Func_AccountObject_GetNewCode";
 
             // Thực hiện gọi vào DB để chạy câu lệnh stored procedure với tham số đầu vào ở trên

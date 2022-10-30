@@ -106,8 +106,8 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
 
             // Chuẩn bị tham số đầu vào cho stored procedure
             var parametersGetPaging = new DynamicParameters();
-            parametersGetPaging.Add("@v_keyword", keyword == null ? "" : keyword);
-            parametersGetPaging.Add("@v_sort", orderBy == null ? "" : orderBy);
+            parametersGetPaging.Add("@v_keyword", keyword == null ? "%%" : $"%{keyword}%");
+            parametersGetPaging.Add("@v_sort", orderBy == null ? "%%" : $"%{orderBy}%");
 
             // Thực hiện gọi vào DB để chạy câu lệnh stored procedure
             using (var npgSqlConnection = new NpgsqlConnection(DatabaseContext.ConnectionString))

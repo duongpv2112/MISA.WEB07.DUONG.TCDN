@@ -17,7 +17,7 @@
                                 :dataField="listField.tax_code"
                                 :valueField="account_object.tax_code"
                                 :fieldName="RESOURCE.SUPPLIER_TAXCODE_FIELD_LBL"
-                                :maxlength="20"
+                                :maxlength="50"
                                 :isReadonly="isViewDetail"
                                 :firstFocus="typeSupplier == 0 ? true : false"
                                 :isInputNumberString="true"
@@ -42,7 +42,7 @@
                                 :dataField="listField.account_object_code"
                                 :valueField="account_object.account_object_code"
                                 :fieldName="RESOURCE.SUPPLIER_CODE_FIELD_LBL"
-                                :maxlength="20"
+                                :maxlength="100"
                                 :firstFocus="typeSupplier == 1 ? true : false"
                                 :isRequired="true"
                                 :isReadonly="isViewDetail"
@@ -73,6 +73,7 @@
                                 :isFieldErrorFocus="
                                     fieldFocus == listField.account_object_name
                                 "
+                                :maxlength="128"
                                 :tabindex="5"
                                 :autocomplete="'off'"
                                 @setValue="setValue"
@@ -143,6 +144,7 @@
                                             :isRequired="true"
                                             :isReadonly="isViewDetail"
                                             :tabindex="5"
+                                            :maxlength="128"
                                             :autocomplete="'off'"
                                             @setValue="setValue"
                                             @setValidateData="setValidateData"
@@ -165,6 +167,7 @@
                                 :numberRow="2"
                                 :isReadonly="isViewDetail"
                                 :tabindex="7"
+                                :maxlength="255"
                                 @setValue="setValue"
                             />
                         </div>
@@ -191,6 +194,7 @@
                                     fieldFocus == listField.telephone_number
                                 "
                                 :tabindex="3"
+                                :maxlength="50"
                                 :autocomplete="'off'"
                                 @setValue="setValue"
                                 @setValidateData="setValidateData"
@@ -210,6 +214,7 @@
                                 :fieldName="RESOURCE.SUPPLIER_WEBSITE_FIELD_LBL"
                                 :isReadonly="isViewDetail"
                                 :tabindex="4"
+                                :maxlength="200"
                                 :autocomplete="'off'"
                                 @setValue="setValue"
                             />
@@ -356,6 +361,7 @@
                                                 :isReadonly="isViewDetail"
                                                 :tabindex="10"
                                                 :autocomplete="'off'"
+                                                :maxlength="128"
                                                 @setValue="setValue"
                                             />
                                         </div>
@@ -380,6 +386,7 @@
                                             "
                                             :tabindex="12"
                                             :autocomplete="'off'"
+                                            :maxlength="100"
                                             @setValue="setValue"
                                             @setValidateData="setValidateData"
                                         />
@@ -408,6 +415,7 @@
                                             "
                                             :tabindex="13"
                                             :autocomplete="'off'"
+                                            :maxlength="50"
                                             @setValue="setValue"
                                             @setValidateData="setValidateData"
                                         />
@@ -434,6 +442,7 @@
                                         RESOURCE.SUPPLIER_REPRESENTATIVE_FIELD_LBL
                                     "
                                     :tabindex="11"
+                                    :maxlength="50"
                                     :isReadonly="isViewDetail"
                                     :autocomplete="'off'"
                                     @setValue="setValue"

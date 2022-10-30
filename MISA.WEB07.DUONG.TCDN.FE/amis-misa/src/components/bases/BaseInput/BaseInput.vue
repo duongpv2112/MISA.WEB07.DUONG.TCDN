@@ -13,7 +13,7 @@
             :class="{
                 modal__control: true,
                 'input-number': isInputNumber,
-                'border-red': checkData.isInValid,
+                'border-red': checkData.isInValid || isFieldErrorFocus,
             }"
             :type="type"
             :ref="dataField"
@@ -33,8 +33,8 @@
             @keypress="isInputNumberString ? onKeyPressInputData() : null"
         />
         <BaseTooltip
-            v-if="checkData.isInValid"
-            :content="checkData.errorMessage"
+            v-if="checkData.isInValid || isFieldErrorFocus"
+            :content="checkData.errorMessage ? checkData.errorMessage : dataError"
             :className="['tooltip-default', 'tooltip-input__validate']"
         />
     </div>
@@ -64,6 +64,7 @@ export default {
         isReadonly: Boolean,
         firstFocus: Boolean,
         isFieldErrorFocus: Boolean,
+        dataError: null,
         patternValidate: String,
         paramFunction: null
     },

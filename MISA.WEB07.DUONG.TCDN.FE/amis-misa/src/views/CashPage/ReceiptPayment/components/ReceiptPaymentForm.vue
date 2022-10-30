@@ -107,6 +107,7 @@
                                     :isReadonly="isViewDetail"
                                     :autocomplete="'off'"
                                     :tabindex="2"
+                                    :maxlength="128"
                                     @setValue="setDataAccountObjectName"
                                 />
                                 <BaseInput
@@ -136,6 +137,7 @@
                                     :isReadonly="isViewDetail"
                                     :autocomplete="'off'"
                                     :tabindex="4"
+                                    :maxlength="128"
                                     @setValue="setValue"
                                 />
                                 <BaseInput
@@ -157,6 +159,7 @@
                                     :isReadonly="isViewDetail"
                                     :autocomplete="'off'"
                                     :tabindex="5"
+                                    :maxlength="255"
                                     @setValue="setValue"
                                 />
                                 <BaseInput
@@ -174,6 +177,7 @@
                                     :isReadonly="isViewDetail"
                                     :autocomplete="'off'"
                                     :tabindex="7"
+                                    :maxlength="255"
                                     @setValue="setDataReason"
                                 />
                                 <div class="d-flex col-12">
@@ -280,6 +284,7 @@
                                         :isReadonly="isViewDetail"
                                         :autocomplete="'off'"
                                         :tabindex="8"
+                                        :maxlength="255"
                                         @setValue="setDataReason"
                                     />
 
@@ -374,10 +379,13 @@
                                                 />
                                                 <BaseTooltip
                                                     v-if="
-                                                        validateDateAD?.isInValid
+                                                        validateDateAD?.isInValid ||
+                                                        fieldFocus ==
+                                                            'accounting_date'
                                                     "
                                                     :content="
-                                                        validateDateAD?.errorMessage
+                                                        validateDateAD?.errorMessage ||
+                                                        messageFieldFocus
                                                     "
                                                     :className="[
                                                         'tooltip-default',
@@ -495,7 +503,9 @@
                                             fieldFocus ==
                                             'receipt_payment_number'
                                         "
+                                        :dataError="messageFieldFocus"
                                         :autocomplete="'off'"
+                                        :maxlength="20"
                                         :tabindex="typeVoucher == 0 ? 10 : 8"
                                         @setValue="setValue"
                                         @setValidateData="
@@ -650,6 +660,7 @@
                                             "
                                             :tabindex="12"
                                             :paramFunction="item.index"
+                                            :maxlength="255"
                                             @setValue="updateRow"
                                         />
 
@@ -817,7 +828,7 @@
                         'mr-12',
                     ]"
                     :contentTooltip="'Sửa (Ctrl + E)'"
-                    :classNameTooltip="['tooltip-default']"
+                    :classNameTooltip="['tooltip-default-top']"
                     :functionz="onHandleActionEdit"
                 />
 
@@ -848,7 +859,7 @@
                         'button-primary',
                     ]"
                     :contentTooltip="'Ghi sổ (Ctrl + G)'"
-                    :classNameTooltip="['tooltip-default']"
+                    :classNameTooltip="['tooltip-default-top']"
                 />
                 <div class="d-flex" v-if="!isViewDetail">
                     <BaseButton
@@ -1003,6 +1014,7 @@ export default {
         setValidateReceiptPayment: Function,
         setValidateReceiptPaymentDetail: Function,
         fieldFocus: null,
+        messageFieldFocus: null,
         fieldDetailFocus: null,
         setPopupData: Function,
         onHandleHidePopup: Function,
@@ -1098,7 +1110,6 @@ export default {
         },
 
         accountings(newValue) {
-            console.log(newValue);
             this.receiptPaymentDetail = newValue;
         },
 
@@ -1212,13 +1223,13 @@ export default {
                 var sum = 0;
                 this.receiptPaymentDetail.map((item) => {
                     var money = 0;
-                    if(item.state != STATE_CODE.Delete){
+                    if (item.state != STATE_CODE.Delete) {
                         if (typeof item.amount_money == "string") {
-                        money = item.amount_money.replace(/\D+/g, "");
-                    } else {
-                        money = Math.ceil(item.amount_money);
-                    }
-                    return (sum += Number(money));
+                            money = item.amount_money.replace(/\D+/g, "");
+                        } else {
+                            money = Math.ceil(item.amount_money);
+                        }
+                        return (sum += Number(money));
                     }
                 });
                 this.receiptPaymentForm.total_money = sum;
@@ -1411,7 +1422,7 @@ export default {
                         credit_account: "",
                         account_object_code: "",
                         account_object_name: "",
-                        state: STATE_CODE.Insert
+                        state: STATE_CODE.Insert,
                     });
                     this.setRowSelected(0);
                     this.setListValue(this.receiptPaymentDetail);
@@ -1554,6 +1565,7 @@ export default {
          */
         eventHandleKey($event) {
             if ($event.ctrlKey) {
+                $event.preventDefault();
                 if ($event.keyCode == 83) {
                     if ($event.shiftKey) {
                         this.onSave(this.typeVoucher, 1);
@@ -1565,11 +1577,15 @@ export default {
                         );
                     } else {
                         $event.preventDefault();
-                        this.onSave(this.typeVoucher);
+                        if (!this.isViewDetail) {
+                            this.onSave(this.typeVoucher);
+                        }
                     }
                 } else if ($event.keyCode == 81) {
                     this.onSave(this.typeVoucher);
                     this.setNameActionSave("Cất và Đóng", "Ctrl + Q", 1, true);
+                } else if($event.keyCode == 69){
+                    this.onHandleActionEdit();
                 }
             }
             if ($event.keyCode == 27) {

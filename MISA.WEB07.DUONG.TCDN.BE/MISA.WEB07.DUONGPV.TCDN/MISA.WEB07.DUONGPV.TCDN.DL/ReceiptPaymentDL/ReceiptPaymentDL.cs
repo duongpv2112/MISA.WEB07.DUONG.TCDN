@@ -346,20 +346,20 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                                     {
                                         case StateCode.Delete:
                                             listInsertSupplierDetail.Add(
-                                                $"DELETE FROM receipt_detail WHERE accouting_id = {dataItem.accounting_id};");
+                                                $"DELETE FROM receipt_detail WHERE accouting_id = '{dataItem.accounting_id}';");
                                             break;
                                         case StateCode.Insert:
                                             if (dataItem.account_object_id != null)
                                             {
                                                 listInsertSupplierDetail.Add(
                                                     $"INSERT INTO receipt_detail(accouting_id, reason, debt_account, credit_account, amount_money, account_object_id, account_object_name, receipt_id, created_date, created_by, modified_date, modified_by) " +
-                                                    $"VALUES('{Guid.NewGuid()}', '{dataItem.reason}', {dataItem.debt_account}, {dataItem.credit_account}, {dataItem.amount_money}, '{dataItem.account_object_id}', '{dataItem.account_object_name}', '{id}', now(), 'admin', now(),  'admin');");
+                                                    $"VALUES('{Guid.NewGuid()}', '{dataItem.reason}', '{dataItem.debt_account}', '{dataItem.credit_account}', {dataItem.amount_money}, '{dataItem.account_object_id}', '{dataItem.account_object_name}', '{id}', now(), 'admin', now(),  'admin');");
                                             }
                                             else
                                             {
                                                 listInsertSupplierDetail.Add(
                                                     $"INSERT INTO receipt_detail(accouting_id, reason, debt_account, credit_account, amount_money, account_object_id, account_object_name, receipt_id, created_date, created_by, modified_date, modified_by) " +
-                                                    $"VALUES('{Guid.NewGuid()}', '{dataItem.reason}', {dataItem.debt_account}, {dataItem.credit_account}, {dataItem.amount_money}, null, '{dataItem.account_object_name}', '{id}', now(), 'admin', now(),  'admin');");
+                                                    $"VALUES('{Guid.NewGuid()}', '{dataItem.reason}', '{dataItem.debt_account}', '{dataItem.credit_account}', {dataItem.amount_money}, null, '{dataItem.account_object_name}', '{id}', now(), 'admin', now(),  'admin');");
                                             }
                                             break;
                                         case StateCode.Update:
@@ -395,13 +395,13 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
                                             {
                                                 listInsertSupplierDetail.Add(
                                                     $"INSERT INTO payment_detail(accouting_id, reason, debt_account, credit_account, amount_money, account_object_id, account_object_name, payment_id, created_date, created_by, modified_date, modified_by) " +
-                                                    $"VALUES('{Guid.NewGuid()}', '{dataItem.reason}', {dataItem.debt_account}, {dataItem.credit_account}, {dataItem.amount_money}, '{dataItem.account_object_id}', '{dataItem.account_object_name}', '{id}', now(), 'admin', now(),  'admin');");
+                                                    $"VALUES('{Guid.NewGuid()}', '{dataItem.reason}', '{dataItem.debt_account}', '{dataItem.credit_account}', {dataItem.amount_money}, '{dataItem.account_object_id}', '{dataItem.account_object_name}', '{id}', now(), 'admin', now(),  'admin');");
                                             }
                                             else
                                             {
                                                 listInsertSupplierDetail.Add(
                                                     $"INSERT INTO payment_detail(accouting_id, reason, debt_account, credit_account, amount_money, account_object_id, account_object_name, payment_id, created_date, created_by, modified_date, modified_by) " +
-                                                    $"VALUES('{Guid.NewGuid()}', '{dataItem.reason}', {dataItem.debt_account}, {dataItem.credit_account}, {dataItem.amount_money}, null, '{dataItem.account_object_name}', '{id}', now(), 'admin', now(),  'admin');");
+                                                    $"VALUES('{Guid.NewGuid()}', '{dataItem.reason}', '{dataItem.debt_account}', '{dataItem.credit_account}', {dataItem.amount_money}, null, '{dataItem.account_object_name}', '{id}', now(), 'admin', now(),  'admin');");
                                             }
                                             break;
                                         case StateCode.Update:
@@ -610,8 +610,8 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
 
             // Chuẩn bị tham số đầu vào cho stored procedure
             var parametersExportData = new DynamicParameters();
-            parametersExportData.Add("@v_keyword", keyword == null ? "" : keyword);
-            parametersExportData.Add("@v_sort", orderBy == null ? "" : orderBy);
+            parametersExportData.Add("@v_keyword", keyword == null ? "%%" : $"%{keyword}%");
+            parametersExportData.Add("@v_sort", orderBy == null ? "%%" : $"%{orderBy}%");
 
             // Thực hiện gọi vào DB để chạy câu lệnh stored procedure
             using (var npgSqlConnection = new NpgsqlConnection(DatabaseContext.ConnectionString))
