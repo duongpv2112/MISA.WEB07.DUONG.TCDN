@@ -146,8 +146,10 @@ export default {
     emits: ["setValue", "setValidateData"],
 
     created() {
-        this.pageNumber = 1;
-        this.pageSize = 20;
+        if (this.url) {
+            this.pageNumber = 1;
+            this.pageSize = 20;
+        }
     },
 
     mounted() {
@@ -155,7 +157,7 @@ export default {
         if (this.value) {
             this.textInput = this.value;
         }
-        
+
         if (this.firstFocus) {
             this.$refs[this.dataField].focus();
         }
@@ -224,7 +226,7 @@ export default {
                 this.$refs.scrollComponent.scrollTop +
                     this.$refs.scrollComponent.clientHeight >=
                     this.$refs.scrollComponent.scrollHeight - 2 &&
-                !this.isDataNull
+                !this.isDataNull && this.url
             ) {
                 this.pageNumber += 1;
                 this.getData(this.pageNumber, this.keyWord, true);
@@ -237,7 +239,7 @@ export default {
                 event.keyCode != keyCode.ArrowUp &&
                 event.keyCode != keyCode.Enter &&
                 event.keyCode != keyCode.ESC &&
-                event.keyCode != keyCode.Tab
+                event.keyCode != keyCode.Tab && this.url
             ) {
                 if (this.timer) {
                     clearTimeout(this.timer);
@@ -269,7 +271,12 @@ export default {
          * @author: DUONGPV (08/09/2022)
          */
         onHandleChangeInputData() {
-            this.$emit("setValue", this.textInput, this.propValue, this.paramFunction);
+            this.$emit(
+                "setValue",
+                this.textInput,
+                this.propValue,
+                this.paramFunction
+            );
 
             if (this.textInput) {
                 this.checkData.isInValid = true;
@@ -294,7 +301,7 @@ export default {
             }
 
             this.onHandleSearch(this.textInput);
-            if (this.dataCombobox.length == 0) {
+            if (this.dataCombobox.length == 0 && this.url) {
                 this.getData(this.pageNumber);
             }
 
@@ -321,9 +328,19 @@ export default {
                 // const value = item[this.dataField];
                 this.textInput = text;
                 this.isShowListData = false;
-                this.$emit("setValue", item, this.propValue, this.paramFunction);
+                this.$emit(
+                    "setValue",
+                    item,
+                    this.propValue,
+                    this.paramFunction
+                );
                 if (this.propText) {
-                    this.$emit("setValue", item, this.propText, this.paramFunction);
+                    this.$emit(
+                        "setValue",
+                        item,
+                        this.propText,
+                        this.paramFunction
+                    );
                 }
                 this.checkData.isInValid = false;
                 this.checkData.errorMessage = "";
@@ -359,7 +376,7 @@ export default {
                         this.setPosition();
                         this.isShowListData = true;
                         event.stopPropagation();
-                        if (this.dataCombobox.length == 0) {
+                        if (this.dataCombobox.length == 0 && this.url) {
                             this.getData(this.pageNumber);
                         }
                         elToFocus =
@@ -379,7 +396,7 @@ export default {
                         this.setPosition();
                         this.isShowListData = true;
                         event.stopPropagation();
-                        if (this.dataCombobox.length == 0) {
+                        if (this.dataCombobox.length == 0 && this.url) {
                             this.getData(this.pageNumber);
                         }
                         elToFocus =

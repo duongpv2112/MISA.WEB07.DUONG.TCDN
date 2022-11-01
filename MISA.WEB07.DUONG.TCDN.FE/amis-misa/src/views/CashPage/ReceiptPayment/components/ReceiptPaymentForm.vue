@@ -660,7 +660,7 @@
                                             "
                                             :tabindex="12"
                                             :paramFunction="item.index"
-                                            :maxlength="255"
+                                            :maxlength="column.dataInput.maxlength"
                                             @setValue="updateRow"
                                         />
 
@@ -673,6 +673,7 @@
                                                 !isViewDetail
                                             "
                                             :url="column.dataCombobox.url"
+                                            :listData="column.dataCombobox.listData"
                                             :propValue="
                                                 column.dataCombobox.propValue
                                             "
@@ -1565,7 +1566,6 @@ export default {
          */
         eventHandleKey($event) {
             if ($event.ctrlKey) {
-                $event.preventDefault();
                 if ($event.keyCode == 83) {
                     if ($event.shiftKey) {
                         this.onSave(this.typeVoucher, 1);

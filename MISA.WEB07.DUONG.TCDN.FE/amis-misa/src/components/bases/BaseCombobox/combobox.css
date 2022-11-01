@@ -123,6 +123,10 @@
     height: 32px;
 }
 
+.combobox .combobox-table td:first-child {
+    justify-content: flex-start !important;
+}
+
 .combobox .combobox-table th:nth-child(2) {
     width: 250px;
 }

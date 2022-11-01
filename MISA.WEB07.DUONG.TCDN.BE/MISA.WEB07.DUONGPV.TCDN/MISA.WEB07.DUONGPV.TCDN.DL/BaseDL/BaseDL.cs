@@ -36,8 +36,8 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
             //string getDataFilterStoredProcedureName = $"Func_{tableName}_GetPaging";
             //string getTotalRecordStoredProcedureName = $"Func_{tableName}_TotalRecord";
 
-            string sqlCommand = $"select * from func_{tableName}_getpaging({pageSize}, {(pageNumber - 1) * pageSize}, '%{keyword}%', ''); " +
-                $"select * from func_{tableName}_totalrecord('%{keyword}%'); ";
+            string sqlCommand = $"select * from func_{tableName}_getpaging(@v_limit, @v_offset, @v_keyword, @v_sort); " +
+                $"select * from func_{tableName}_totalrecord(@v_keyword); ";
 
             // Chuẩn bị tham số đầu vào cho stored procedure
             var parametersGetPaging = new DynamicParameters();
@@ -46,13 +46,13 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
             parametersGetPaging.Add("@v_keyword", keyword == null ? "" : keyword);
             parametersGetPaging.Add("@v_sort", orderBy == null ? "" : orderBy);
 
-            var parametersTotalRecord = new DynamicParameters();
-            parametersTotalRecord.Add("@v_keyword", keyword == null ? "" : keyword);
+            //var parametersTotalRecord = new DynamicParameters();
+            //parametersTotalRecord.Add("@v_keyword", keyword == null ? "%%" : $"%{keyword}%");
 
             // Thực hiện gọi vào DB để chạy câu lệnh stored procedure
             using (var npgSqlConnection = new NpgsqlConnection(DatabaseContext.ConnectionString))
             {
-                var multipleResults = await npgSqlConnection.QueryMultipleAsync(sqlCommand);
+                var multipleResults = await npgSqlConnection.QueryMultipleAsync(sqlCommand, parametersGetPaging);
                 //var multipleResults = await npgSqlConnection.QueryAsync<dynamic>(getDataFilterStoredProcedureName, parametersGetPaging, commandType: CommandType.StoredProcedure);
                 //var totalRecord = await npgSqlConnection.QueryFirstAsync<long>(getTotalRecordStoredProcedureName, parametersTotalRecord, commandType: CommandType.StoredProcedure);
                 if (multipleResults != null)
@@ -106,8 +106,8 @@ namespace MISA.WEB07.DUONGPV.TCDN.DL
 
             // Chuẩn bị tham số đầu vào cho stored procedure
             var parametersGetPaging = new DynamicParameters();
-            parametersGetPaging.Add("@v_keyword", keyword == null ? "%%" : $"%{keyword}%");
-            parametersGetPaging.Add("@v_sort", orderBy == null ? "%%" : $"%{orderBy}%");
+            parametersGetPaging.Add("@v_keyword", keyword == null ? "" : keyword);
+            parametersGetPaging.Add("@v_sort", orderBy == null ? "" : orderBy);
 
             // Thực hiện gọi vào DB để chạy câu lệnh stored procedure
             using (var npgSqlConnection = new NpgsqlConnection(DatabaseContext.ConnectionString))
